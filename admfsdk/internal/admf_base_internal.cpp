@@ -85,7 +85,7 @@ void Vec2_internal::load(bson_iter_t *iter) //save
         else if (keyName == yKey)
         {
             y_ = (ADMF_FLOAT)bson_iter_as_double(&child);
-            ;
+
         }
     }
 }

@@ -24,12 +24,17 @@ namespace admf_internal {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorData_internal);
     public:
         virtual admf::String getType() override; //"null",
+        virtual admf::ADMF_INT getIndex() override;
         virtual admf::BaseColorDataSolid getSolid() override;
         virtual admf::BaseColorDataMulti getMulti() override;
+#ifdef ADMF_EDIT
+        virtual void setIndex(admf::ADMF_INT index) override;
+#endif
     private:
         std::shared_ptr<String_internal> type_;
         std::shared_ptr<BaseColorDataSolid_internal> solid_;
         std::shared_ptr<BaseColorDataMulti_internal> multi_;
+        admf::ADMF_INT index_;
     };
 
     class BaseColorDataSolid_internal : public admf::BaseColorDataSolid_, public Base_internal
@@ -74,10 +79,16 @@ namespace admf_internal {
         virtual admf::String getName() override; //"(166,202,240)",
         virtual admf::String getType() override; //"RGB",
         virtual admf::String getValue() override; //"166,202,240",
+        virtual admf::ADMF_BYTE isOriginal() override; //0 => false ,
+#ifdef ADMF_EDIT
+        virtual void setOriginal(admf::ADMF_BYTE isOriginal) override;
+#endif
     private:
         std::shared_ptr<String_internal> name_;
         std::shared_ptr<String_internal> type_;
         std::shared_ptr<String_internal> value_;
+        admf::ADMF_BYTE isOriginal_;
+
     };
 
     class BaseColorDataMulti_internal : public admf::BaseColorDataMulti_, public Base_internal
@@ -87,7 +98,6 @@ namespace admf_internal {
         virtual admf::Array<admf::BaseColorDataMultiBlock> getBlockArray() override;
     private:
         std::shared_ptr<Array_internal<admf::BaseColorDataMultiBlock>> blockArray_;
-    public:
     };
 
 
@@ -96,27 +106,24 @@ namespace admf_internal {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorDataMultiBlock_internal);
     public:
         virtual admf::String getName() override;
-        virtual admf::String getColorSpace() override; //"sRGB",
-        virtual admf::Vec2 getDpi() override;
-        virtual admf::ADMF_INT getWidth() override;
-        virtual admf::ADMF_INT getHeight() override;
-        virtual admf::String getValue() override; //"166,202,240",
+        virtual admf::Array<admf::BaseColorDataMultiBlockMask> getMaskArray() override;
 
     private:
         std::shared_ptr<String_internal> name_;
-        std::shared_ptr<String_internal> colorSpace_;
-        std::shared_ptr<Vec2_internal> dpi_;
+        std::shared_ptr<Array_internal<admf::BaseColorDataMultiBlockMask>> maskArray_;
+    };
 
-        admf::ADMF_FLOAT width_ = 0;
-        admf::ADMF_FLOAT height_ = 0;
-        std::shared_ptr<String_internal> value_;
 
-#ifdef ADMF_EDIT
+    class BaseColorDataMultiBlockMask_internal : public admf::BaseColorDataMultiBlockMask_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorDataMultiBlockMask_internal);
     public:
-        virtual void setWidth(admf::ADMF_INT width) override;
-        virtual void setHeight(admf::ADMF_INT height) override;
-#endif
+        virtual admf::String getMaskPath() override;
+        virtual admf::String getValue() override;
 
+    private:
+        std::shared_ptr<String_internal> maskPath_;
+        std::shared_ptr<String_internal> value_;
 
     };
 }

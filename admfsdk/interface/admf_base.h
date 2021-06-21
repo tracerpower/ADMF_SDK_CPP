@@ -93,6 +93,7 @@ namespace admf
     ADMF_DEF(BaseColorDataSolidBlock);
     ADMF_DEF(BaseColorDataMulti);
     ADMF_DEF(BaseColorDataMultiBlock);
+    ADMF_DEF(BaseColorDataMultiBlockMask);
 
     ADMF_DEF(BaseColor);
     ADMF_DEF(Normal);

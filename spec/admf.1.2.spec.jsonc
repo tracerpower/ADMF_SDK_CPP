@@ -20,7 +20,7 @@
                         },
                         "color": {
                             "type": "null", //null / multi / solid
-                            "index": 0, //色卡 index
+                            "index": 0, //当前生效的色卡 index
                             "solid": {
                                 "colorSpace": "srgb",
                                 "value": {
@@ -47,42 +47,22 @@
                                     }
                                 ]
                             },
-                            "multi": {
-                                "block": [
+                            "multi": { //多色改色方案/色卡
+                                "block": [ //改色方案/色卡数组
                                     {
-                                        "name": "multi_1",
-                                        "value": [
+                                        "name": "multi_1", //色卡名字
+                                        "value": //多色改色的path数组
+                                        [
                                             {
-                                                "path": "/textures/PANTONE 20-0060TPM_ChangeColor0.PNG",
-                                                "colorSpace": "sRGB",
-                                                "dpi": {
-                                                    "x": 300.0,
-                                                    "y": 300.0
-                                                },
-                                                "width": 30.0,
-                                                "height": 25.0,
+                                                "mask": "/textures/PANTONE 20-0060TPM_ChangeColor0.PNG", //和diffuser纹理一样大小的图片，通过非透明区域来识别需要改色的区域
                                                 "value": "166,202,240" //所改颜色值
                                             },
                                             {
-                                                "path": "/textures/PANTONE 20-0060TPM_ChangeColor1.PNG", //改色块划分。
-                                                "colorSpace": "sRGB",
-                                                "dpi": {
-                                                    "x": 300.0,
-                                                    "y": 300.0
-                                                },
-                                                "width": 30.0,
-                                                "height": 25.0,
+                                                "mask": "/textures/PANTONE 20-0060TPM_ChangeColor1.PNG", //改色块划分。
                                                 "value": "166,202,240"
                                             },
                                             {
-                                                "path": "/textures/PANTONE 20-0060TPM_ChangeColor2.PNG", //改色块划分。
-                                                "colorSpace": "sRGB",
-                                                "dpi": {
-                                                    "x": 300.0,
-                                                    "y": 300.0
-                                                },
-                                                "width": 30.0,
-                                                "height": 25.0,
+                                                "mask": "/textures/PANTONE 20-0060TPM_ChangeColor2.PNG", //改色块划分。
                                                 "value": "166,202,240"
                                             },
                                         ]
@@ -91,14 +71,7 @@
                                         "name": "multi_2",
                                         "value": [
                                             {
-                                                "path": "/textures/PANTONE 20-0060TPM_ChangeColor0.PNG",
-                                                "colorSpace": "sRGB",
-                                                "dpi": {
-                                                    "x": 300.0,
-                                                    "y": 300.0
-                                                },
-                                                "width": 30.0,
-                                                "height": 25.0,
+                                                "mask": "/textures/PANTONE 20-0060TPM_ChangeColor0.PNG",
                                                 "value": "166,202,240" //所改颜色值
                                             },
                                         ]

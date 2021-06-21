@@ -19,8 +19,12 @@ namespace admf
     {
     public:
         ///    获取类型
-        ///    @return    返回类型
+        ///    @return    返回当前生效的改色类型
         virtual String getType() = 0; //"null",
+
+        ///    获取类型
+        ///    @return    返回当前生效的改色色卡index
+        virtual ADMF_INT getIndex() = 0; //"null",
 
         ///    获取实色/单色改色数据
         ///    @return    返回改色数据
@@ -31,6 +35,14 @@ namespace admf
         ///    @return    返回多色改色数据
         ///    @see BaseColorDataMulti
         virtual BaseColorDataMulti getMulti() = 0;
+
+#ifdef ADMF_EDIT
+        ///    获取类型
+        ///    @param  index 当前生效的色卡index
+        virtual void setIndex(ADMF_INT index) = 0;
+#endif
+
+
     };
 
     /// 单色改色数据
@@ -105,6 +117,13 @@ namespace admf
         ///    获取色卡值
         ///    @return    返回色卡值
         virtual String getValue() = 0; //"166,202,240",
+
+        ///    是否原色(不做去色和改色)
+        ///    @return    返回色卡值
+        virtual ADMF_BYTE isOriginal() = 0; //0 => false ,
+#ifdef ADMF_EDIT
+        virtual void setOriginal(ADMF_BYTE isOriginal) = 0;
+#endif
     };
 
     /// 多色改色数据
@@ -113,13 +132,13 @@ namespace admf
     public:
 
         ///    获取多重改色块数组
-        ///    @return    返回多重改色块数组
+        ///    @return    返回多重改色方案数组
         virtual admf::Array<BaseColorDataMultiBlock> getBlockArray() = 0;
 
 
     };
 
-    /// 多色改色数据块
+    /// 多色改色方案
     class BaseColorDataMultiBlock_
     {
     public:
@@ -127,35 +146,24 @@ namespace admf
         ///    @return    返回名字
         virtual admf::String getName() = 0;
 
-        ///    获取色卡色域
-        ///    @return    返回色域
-        virtual admf::String getColorSpace() = 0; //"sRGB",
-
-        ///    获取色卡Dpi
-        ///    @return    返回Dpi
-        virtual admf::Vec2 getDpi() = 0;
-
-
-        virtual admf::ADMF_INT getWidth() = 0;
-
-        virtual admf::ADMF_INT getHeight() = 0;
-
         ///    获取色卡颜色值
         ///    @return    返回颜色值
-        virtual admf::String getValue() = 0; //"166,202,240",
-
-#ifdef ADMF_EDIT
-    public:
-
-        /// 设置Width
-        /// @param width width
-        virtual void setWidth(ADMF_INT width) = 0;
-
-        /// 设置Width
-        /// @param height width
-        virtual void setHeight(ADMF_INT height) = 0;
-#endif
+        virtual admf::Array<BaseColorDataMultiBlockMask> getMaskArray() = 0;
     };
+
+    /// 多色改色方案Mask数据
+    class BaseColorDataMultiBlockMask_
+    {
+    public:
+        ///    获取多色改色的Mask文件名
+        ///    @return    返回Mask文件名
+        virtual admf::String getMaskPath() = 0;
+
+        ///    获取改色颜色值
+        ///    @return    返回改色颜色值
+        virtual admf::String getValue() = 0; //"166,202,240",
+    };
+    
 
 }
 

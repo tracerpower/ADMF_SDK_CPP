@@ -29,6 +29,7 @@ void BaseColorData_internal::load(bson_iter_t *iter) //save
     std::string typeKey = getNewKey("type");
     std::string solidKey = getNewKey("solid");
     std::string multiKey = getNewKey("multi");
+    std::string indexKey = getNewKey("index");
 
     while (bson_iter_next(&child))
     {
@@ -46,6 +47,10 @@ void BaseColorData_internal::load(bson_iter_t *iter) //save
         else if (keyName == multiKey)
         {
             multi_ = std::make_shared<BaseColorDataMulti_internal>(admfIndex_, &child);
+        }
+        else if (keyName == indexKey)
+        {
+            index_ = (ADMF_INT)bson_iter_as_int64(&child);
         }
     }
 }
@@ -65,10 +70,12 @@ void BaseColorData_internal::save(bson_t* doc)
 	std::string typeKey = getNewKey("type");
 	std::string solidKey = getNewKey("solid");
 	std::string multiKey = getNewKey("multi");
+    std::string indexKey = getNewKey("index");
 
 	ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, solidKey, solid_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, multiKey, multi_);
+    ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
 }
 #endif
 
@@ -81,10 +88,24 @@ BaseColorDataSolid BaseColorData_internal::getSolid()
 {
     return BaseColorDataSolid(solid_);
 }
+
 BaseColorDataMulti BaseColorData_internal::getMulti()
 {
     return BaseColorDataMulti(multi_);
 }
+
+
+admf::ADMF_INT BaseColorData_internal::getIndex()
+{
+    return index_;
+}
+
+#ifdef ADMF_EDIT
+void BaseColorData_internal::setIndex(ADMF_INT index)
+{
+    index_ = index;
+}
+#endif
 
 void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
 {
@@ -253,6 +274,7 @@ void BaseColorDataSolidBlock_internal::load(bson_iter_t *iter) //save
     std::string nameKey = getNewKey("name");
     std::string typeKey = getNewKey("type");
     std::string valueKey = getNewKey("value");
+    std::string isOriginalKey = getNewKey("isOriginal");
 
     while (bson_iter_next(&child))
     {
@@ -270,6 +292,10 @@ void BaseColorDataSolidBlock_internal::load(bson_iter_t *iter) //save
         else if (keyName == valueKey)
         {
             value_ = std::make_shared<String_internal>(admfIndex_, &child);
+        }
+        else if (keyName == isOriginalKey)
+        {
+            isOriginal_ = (ADMF_BYTE)bson_iter_as_int64(&child);
         }
     }
 }
@@ -289,10 +315,12 @@ void BaseColorDataSolidBlock_internal::save(bson_t *doc)
     std::string nameKey = getNewKey("name");
     std::string typeKey = getNewKey("type");
     std::string valueKey = getNewKey("value");
+    std::string isOriginalKey = getNewKey("isOriginal");
 
     ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
     ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
     ADMF_BSON_APPEND_STRING(doc, valueKey, value_);
+    ADMF_BSON_APPEND_INT32(doc, isOriginalKey, isOriginal_);
 }
 #endif
 String BaseColorDataSolidBlock_internal::getName() //"(166,202,240)",
@@ -309,6 +337,18 @@ String BaseColorDataSolidBlock_internal::getValue() //"166,202,240",
 {
     return value_;
 }
+
+ADMF_BYTE BaseColorDataSolidBlock_internal::isOriginal()
+{
+    return isOriginal_;
+}
+
+#ifdef ADMF_EDIT
+void BaseColorDataSolidBlock_internal::setOriginal(admf::ADMF_BYTE isOriginal)
+{
+    isOriginal_ = isOriginal;
+}
+#endif
 
 void BaseColorDataMulti_internal::load(bson_iter_t *iter) //save
 {
@@ -361,11 +401,12 @@ void BaseColorDataMulti_internal::load(bson_iter_t *iter) //save
 void BaseColorDataMulti_internal::initMissed()
 {
 
-
 }
 #ifdef ADMF_EDIT
 void BaseColorDataMulti_internal::save(bson_t *doc)
 {
+    std::string blockKey = getNewKey("block");
+    ADMF_BSON_APPEND_ARRAY(doc, blockKey, blockArray_, BaseColorDataMultiBlock_internal);
 }
 #endif
 
@@ -379,6 +420,11 @@ Array<BaseColorDataMultiBlock> BaseColorDataMulti_internal::getBlockArray()
 
 void BaseColorDataMultiBlock_internal::load(bson_iter_t *iter) //save
 {
+
+    maskArray_ = std::make_shared<Array_internal<admf::BaseColorDataMultiBlockMask>>([this]() {
+        return std::make_shared<BaseColorDataMultiBlockMask_internal>(admfIndex_, nullptr);
+    });
+
     if (iter == nullptr)
         return;
 
@@ -390,11 +436,7 @@ void BaseColorDataMultiBlock_internal::load(bson_iter_t *iter) //save
         return;
 
     std::string nameKey = getNewKey("name");
-    std::string colorSpaceKey = getNewKey("colorSpace");
-    std::string dpiKey = getNewKey("dpi");
-    std::string widthKey = getNewKey("width");
-    std::string heightKey = getNewKey("height");
-    std::string valueKey = getNewKey("value");
+    std::string maskKey = getNewKey("mask");
 
     while (bson_iter_next(&child))
     {
@@ -405,25 +447,26 @@ void BaseColorDataMultiBlock_internal::load(bson_iter_t *iter) //save
         {
             name_ = std::make_shared<String_internal>(admfIndex_, &child);
         }
-        else if (keyName == dpiKey)
+        if (keyName == maskKey)
         {
-            dpi_ = std::make_shared<Vec2_internal>(admfIndex_, &child);
-        }
-        else if (keyName == widthKey)
-        {
-            width_ = (ADMF_FLOAT)bson_iter_as_double(&child);
-        }
-        else if (keyName == heightKey)
-        {
-            height_ = (ADMF_FLOAT)bson_iter_as_double(&child);
-        }
-        else if (keyName == colorSpaceKey)
-        {
-            colorSpace_ = std::make_shared<String_internal>(admfIndex_, &child);
-        }
-        else if (keyName == valueKey)
-        {
-            value_ = std::make_shared<String_internal>(admfIndex_, &child);
+            if (!BSON_ITER_HOLDS_ARRAY(&child))
+                continue;
+            bson_t b;
+            uint32_t len;
+            const uint8_t *data;
+            bson_iter_array(&child, &len, &data);
+            if (!bson_init_static(&b, data, len))
+                continue;
+
+            bson_iter_t iter_;
+            if (!bson_iter_init(&iter_, &b))
+                continue;
+
+            while (bson_iter_next(&iter_))
+            {
+                auto mask = std::make_shared<BaseColorDataMultiBlockMask_internal>(admfIndex_, &iter_);
+                maskArray_->pushBack(mask);
+            }
         }
     }
 }
@@ -432,30 +475,16 @@ void BaseColorDataMultiBlock_internal::initMissed()
 {
     if (!name_)
         name_ = std::make_shared<String_internal>(admfIndex_);
-    if (!colorSpace_)
-        colorSpace_ = std::make_shared<String_internal>(admfIndex_);
-    if (!dpi_)
-        dpi_ = std::make_shared<Vec2_internal>(admfIndex_);
-    if (!value_)
-        value_ = std::make_shared<String_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
 void BaseColorDataMultiBlock_internal::save(bson_t *doc)
 {
     std::string nameKey = getNewKey("name");
-    std::string colorSpaceKey = getNewKey("colorSpace");
-    std::string dpiKey = getNewKey("dpi");
-    std::string widthKey = getNewKey("width");
-    std::string heightKey = getNewKey("height");
-    std::string valueKey = getNewKey("value");
+    std::string maskKey = getNewKey("mask");
 
     ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
-    ADMF_BSON_APPEND_STRING(doc, colorSpaceKey, colorSpace_);
-    ADMF_BSON_APPEND_DOCUMENT(doc, dpiKey, dpi_);
-    ADMF_BSON_APPEND_DOUBLE(doc, widthKey, width_);
-    ADMF_BSON_APPEND_DOUBLE(doc, heightKey, height_);
-    ADMF_BSON_APPEND_STRING(doc, valueKey, value_);
+    ADMF_BSON_APPEND_ARRAY(doc, maskKey, maskArray_, BaseColorDataMultiBlockMask_internal);
 }
 #endif
 
@@ -464,39 +493,72 @@ String BaseColorDataMultiBlock_internal::getName()
 {
     return name_;
 }
-String BaseColorDataMultiBlock_internal::getColorSpace()
+
+Array<BaseColorDataMultiBlockMask> BaseColorDataMultiBlock_internal::getMaskArray()
 {
-    return colorSpace_;
+    return maskArray_;
 }
 
-Vec2 BaseColorDataMultiBlock_internal::getDpi()
+
+void BaseColorDataMultiBlockMask_internal::load(bson_iter_t *iter) //save
 {
-    return dpi_;
+    if (iter == nullptr)
+        return;
+
+    if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+        return;
+
+    bson_iter_t child;
+    if (!bson_iter_recurse(iter, &child))
+        return;
+
+    std::string maskPathKey = getNewKey("maskPath");
+    std::string valueKey = getNewKey("value");
+
+    while (bson_iter_next(&child))
+    {
+        std::string keyName = bson_iter_key(&child);
+        assert(bson_iter_value(&child) != nullptr);
+        //printf("Found element key: \"%s\"\n", keyName.c_str());
+        if (keyName == maskPathKey)
+        {
+            maskPath_ = std::make_shared<String_internal>(admfIndex_, &child);
+        }
+        else if (keyName == valueKey)
+        {
+            value_ = std::make_shared<String_internal>(admfIndex_, &child);
+        }
+
+    }
 }
 
-ADMF_INT BaseColorDataMultiBlock_internal::getWidth()
+void BaseColorDataMultiBlockMask_internal::initMissed()
 {
-    return width_;
-}
-
-ADMF_INT BaseColorDataMultiBlock_internal::getHeight()
-{
-    return height_;
-}
-
-String BaseColorDataMultiBlock_internal::getValue()
-{
-    return value_;
+    if (!maskPath_)
+        maskPath_ = std::make_shared<String_internal>(admfIndex_);
+    if (!value_)
+        value_ = std::make_shared<String_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
+void BaseColorDataMultiBlockMask_internal::save(bson_t *doc)
+{
+    std::string maskPathKey = getNewKey("maskPath");
+    std::string valueKey = getNewKey("value");
 
-void BaseColorDataMultiBlock_internal::setWidth(ADMF_INT width)
-{
-    width_ = width;
-}
-void BaseColorDataMultiBlock_internal::setHeight(ADMF_INT height)
-{
-    height_ = height;
+
+    ADMF_BSON_APPEND_STRING(doc, maskPathKey, maskPath_);
+    ADMF_BSON_APPEND_STRING(doc, valueKey, value_);
+
 }
 #endif
+
+String BaseColorDataMultiBlockMask_internal::getMaskPath()
+{
+    return maskPath_;
+}
+
+String BaseColorDataMultiBlockMask_internal::getValue()
+{
+    return value_;
+}
