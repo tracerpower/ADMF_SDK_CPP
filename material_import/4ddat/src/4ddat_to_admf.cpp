@@ -550,6 +550,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     //solid colorCards
     admf::BaseColorDataSolidBlock block = baseColorSolidBlock->append();
     block->setOriginal(true);
+    baseColorData->getType()->setString("solid");
+    baseColorData->setIndex(0);
 
     if (_hasDiffuseColor)
     {
@@ -565,6 +567,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             block->getName()->setString(os_.str().c_str());
             block->getType()->setString("RGB");
             block->getValue()->setString(os.str().c_str());
+            baseColorData->setIndex(1);
         }
     }
     
