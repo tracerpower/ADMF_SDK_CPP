@@ -794,7 +794,7 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
     auto sideLayer = material->getSideLayer();
     extractLayer(layersPath,  sideLayer, "_side");
 
-    admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
+    //admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
     FreeImage_DeInitialise();
     printf("\nexport %s to dir %s finished\n", admfFilePath, dir_);
     return true;
