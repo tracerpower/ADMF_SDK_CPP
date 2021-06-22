@@ -34,7 +34,7 @@ namespace admf_internal {
         std::shared_ptr<String_internal> type_;
         std::shared_ptr<BaseColorDataSolid_internal> solid_;
         std::shared_ptr<BaseColorDataMulti_internal> multi_;
-        admf::ADMF_INT index_;
+        admf::ADMF_INT index_  = 0;
     };
 
     class BaseColorDataSolid_internal : public admf::BaseColorDataSolid_, public Base_internal
@@ -87,7 +87,7 @@ namespace admf_internal {
         std::shared_ptr<String_internal> name_;
         std::shared_ptr<String_internal> type_;
         std::shared_ptr<String_internal> value_;
-        admf::ADMF_BYTE isOriginal_;
+        admf::ADMF_BYTE isOriginal_ = 0;
 
     };
 

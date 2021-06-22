@@ -38,12 +38,19 @@ namespace admf_internal {
         
         virtual admf::LayerBasic getBasic() override;
         virtual admf::LayerSpec getSpec() override;
+
+        virtual admf::ADMF_BYTE isEnabled() override;
+#ifdef ADMF_EDIT
+        virtual void setEnabled(admf::ADMF_BYTE enabled) override;
+#endif
     private:
         std::shared_ptr<String_internal> type_;
         std::shared_ptr<String_internal> shader_;
         std::shared_ptr<BinaryData_internal> preview_;
         std::shared_ptr<LayerBasic_internal> basic_;
         std::shared_ptr<LayerSpec_internal> spec_;
+        admf::ADMF_BYTE enabled_ = 0;
+
     };
     
     

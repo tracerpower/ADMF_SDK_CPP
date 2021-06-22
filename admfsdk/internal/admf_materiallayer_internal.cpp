@@ -30,6 +30,7 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
     std::string previewKey = getNewKey("preview");
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
+    std::string enabledKey = getNewKey("enabled");
 
     while (bson_iter_next(&child))
     {
@@ -56,6 +57,11 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
         else if (keyName == specKey)
         {
             spec_ = std::make_shared<LayerSpec_internal>(admfIndex_, &child);
+        }
+        else if (keyName == enabledKey)
+        {
+            enabled_ = (ADMF_BYTE)bson_iter_as_int64(&child);
+
         }
     }
 }
@@ -85,12 +91,14 @@ void MaterialLayer_internal::save(bson_t *doc)
     std::string previewKey = getNewKey("preview");
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
+    std::string enabledKey = getNewKey("enabled");
 
     ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
     ADMF_BSON_APPEND_STRING(doc, shaderKey, shader_);
     ADMF_BSON_APPEND_BINARY(doc, previewKey, preview_);
     ADMF_BSON_APPEND_DOCUMENT(doc, basicKey, basic_);
     ADMF_BSON_APPEND_DOCUMENT(doc, specKey, spec_);
+    ADMF_BSON_APPEND_INT32(doc, enabledKey, enabled_);
 }
 #endif
 String MaterialLayer_internal::getType() //"Fabric",
@@ -116,6 +124,17 @@ LayerSpec MaterialLayer_internal::getSpec()
 {
     return LayerSpec(spec_);
 }
+
+admf::ADMF_BYTE MaterialLayer_internal::isEnabled()
+{
+    return enabled_;
+}
+#ifdef ADMF_EDIT
+void MaterialLayer_internal::setEnabled(admf::ADMF_BYTE enabled) 
+{
+    enabled_ = enabled;
+}
+#endif
 
 void LayerSpec_internal::load(bson_iter_t *iter) //save
 {

@@ -254,6 +254,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     
     auto layerArray = admfMaterial->getLayerArray();
     auto layer = layerArray->append();
+    layer->setEnabled(true);
     
     
     
@@ -523,8 +524,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             
             auto binary = texture->getBinaryData();
             binary->updateFromFile(tmpFileName, true);
-            texture->setWidth(w);
-            texture->setHeight(h);
+            //texture->setWidth(w);
+           // texture->setHeight(h);
             texture->setChannels(c);
             texture->setElementSize(elementsSize);
         
@@ -534,7 +535,10 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         }
     }
 
-    //colorCards
+    //solid colorCards
+    admf::BaseColorDataSolidBlock block = baseColorSolidBlock->append();
+    block->setOriginal(true);
+
     if (_hasDiffuseColor)
     {
         if (_needAdjustColor || !hasDiffuseTexture)
@@ -571,10 +575,16 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
     
     I4DBaseSerializerPtr serializer = All4DdatSerializerInterface::tryGetSerializer(filename);
     if (serializer == nullptr)
+    {
+        printf("serializer == nullptr\n");
         return false;
+    }
     
     if (!serializer->openFile(filename))
+    {
+        printf("%s open failed\n", filename_);
         return false;
+    }
     
     std::unique_ptr<char,function<void(char*)>> _(new char,[serializer](char*p)->void{
         serializer->release();
@@ -583,7 +593,10 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
     
     auto outDatasHead = serializer->getFileHeaderData();
     if (outDatasHead == nullptr)
+    {
+        printf("outDatasHead not found\n");
         return false;
+    }
     
     assert(outDatasHead->materialNum == 1);
     
@@ -596,15 +609,18 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
         MaterialEntryInfo& materialEntryInfo = matEntities[i];
         
         auto result = materialEntryInfoToAdmf(filename, materialEntryInfo, outTextureDatas, admfFilePath);
+        printf("convert %s to %s success\n", filename.c_str(), admfFilePath.c_str());
         return result == admf::ADMF_SUCCESS;
         
     }
+    printf("convert %s to %s fail\n", filename.c_str(), admfFilePath.c_str());
     return false;
 }
 
 void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer)
 {
-
+    if (!layer->isEnabled())
+        return;
     
     auto basic = layer->getBasic();
     
@@ -652,18 +668,22 @@ void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer
 
 bool extractAdmf(const char* admfFilePath, const char* dir_)
 {
-    
-    if (admfFilePath == nullptr || dir_ == nullptr || strlen(admfFilePath) == 0|| strlen(dir_) == 0)
+    printf("\nexport %s to dir %s\n", admfFilePath, dir_);
+    if (admfFilePath == nullptr || dir_ == nullptr || strlen(admfFilePath) == 0 || strlen(dir_) == 0)
         return false;
     std::string dir(dir_);
 #if (defined __APPLE__) || (defined _WIN32)
 #ifdef __APPLE__
-	namespace fs = std::__fs::filesystem;
+    namespace fs = std::__fs::filesystem;
 #else
-	namespace fs = std::filesystem;
+    namespace fs = std::filesystem;
 #endif
     if (!fs::exists(dir))
+    {
+        printf("dir %s not exist\n", dir_);
         return false;
+    }
+
 #else
     struct stat st;
     if(stat(dir_,&st) == 0)
@@ -681,6 +701,13 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
     admf::ADMF_RESULT result;
     admf_internal::ADMF_internal::ADMFJsons admfJsons;
     auto admf = admf_internal::ADMF_internal::loadFromFile(admfFilePath, result, &admfJsons);
+    if (!admf)
+	{
+        printf("admf %s open failed\n", admfFilePath);
+		return false;
+	}
+        
+
     {
         std::ofstream jsonFile(dir + "/material.json");
         jsonFile << admfJsons.material;
@@ -697,14 +724,15 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
         std::ofstream jsonFile(dir + "/physics.json");
         jsonFile << admfJsons.physics;
     }
-    
+    std::string layersPath = dir;
+    /*
     std::string layersPath = dir + "/textures";
 #ifdef _WIN32
     _mkdir(layersPath.c_str());
 #else
     mkdir(layersPath.c_str(), 0777);
 #endif
-    
+    */
     auto material = admf->getMaterial();
     auto layerArray = material->getLayerArray();
     auto layersCount = layerArray->size();
@@ -718,5 +746,6 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
 
     admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
     FreeImage_DeInitialise();
+    printf("\nexport %s to dir %s finished\n", admfFilePath, dir_);
     return true;
 }

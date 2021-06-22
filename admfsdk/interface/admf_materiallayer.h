@@ -36,6 +36,16 @@ namespace admf
         ///   获取材质Spec
         ///    @return    返回材质Spec
         virtual LayerSpec getSpec() = 0;
+
+		///   是否启用
+		///    @return    是否启用
+        virtual ADMF_BYTE isEnabled() = 0;
+
+#ifdef ADMF_EDIT
+		///   设置是否启用
+        ///    @return    设置是否启用
+		virtual void setEnabled(admf::ADMF_BYTE enabled) = 0;
+#endif
     };
 
     /// 材质层数据类

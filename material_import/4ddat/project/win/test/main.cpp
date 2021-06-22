@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     std::string fourDdatCompressedFilePath = argv[1];//R"(D:\temp\20-0073TPM.4Ddat)";
     std::string destFolderPath = argv[2]; // R"(D:\temp\1111\1.admf)";
     bool success = _4ddatToAdmf(fourDdatCompressedFilePath.c_str(), destFolderPath.c_str());
-    extractAdmf(destFolderPath.c_str(), argv[3]);//R"(D:\temp\1111\1)");
+    if (success)
+        extractAdmf(destFolderPath.c_str(), argv[3]);//R"(D:\temp\1111\1)");
     return 0;
 }
