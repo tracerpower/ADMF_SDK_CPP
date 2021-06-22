@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "admfsdk", "..\..\..\..\..\p
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4ddat_to_admf", "..\4ddat_to_admf.vcxproj", "{C8AB1234-C1FF-40DB-8C60-E1212C6FBDB3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "changecolor", "..\..\..\..\changecolor\project\linux\changecolor.vcxproj", "{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -119,6 +121,30 @@ Global
 		{C8AB1234-C1FF-40DB-8C60-E1212C6FBDB3}.Release|x86.ActiveCfg = Release|x86
 		{C8AB1234-C1FF-40DB-8C60-E1212C6FBDB3}.Release|x86.Build.0 = Release|x86
 		{C8AB1234-C1FF-40DB-8C60-E1212C6FBDB3}.Release|x86.Deploy.0 = Release|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM.ActiveCfg = Debug|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM.Build.0 = Debug|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM.Deploy.0 = Debug|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM64.Build.0 = Debug|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x64.ActiveCfg = Debug|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x64.Build.0 = Debug|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x64.Deploy.0 = Debug|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x86.ActiveCfg = Debug|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x86.Build.0 = Debug|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Debug|x86.Deploy.0 = Debug|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM.ActiveCfg = Release|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM.Build.0 = Release|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM.Deploy.0 = Release|ARM
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM64.ActiveCfg = Release|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM64.Build.0 = Release|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|ARM64.Deploy.0 = Release|ARM64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x64.ActiveCfg = Release|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x64.Build.0 = Release|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x64.Deploy.0 = Release|x64
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x86.ActiveCfg = Release|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x86.Build.0 = Release|x86
+		{DDD27ECA-6691-4ADA-8C27-6B9B17469D99}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

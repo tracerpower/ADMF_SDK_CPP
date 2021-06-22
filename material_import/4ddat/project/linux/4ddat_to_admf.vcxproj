@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0"
-  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
       <Configuration>Debug</Configuration>
@@ -120,6 +119,9 @@
     <ProjectReference Include="..\..\..\..\project\linux\admfsdk.vcxproj">
       <Project>{0de26d23-e2da-48bd-b4e0-59506c2c8c1f}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\changecolor\project\linux\changecolor.vcxproj">
+      <Project>{ddd27eca-6691-4ada-8c27-6b9b17469d99}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\3rd\FreeImage\FreeImage.h" />
@@ -144,7 +146,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -153,7 +155,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -162,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -171,7 +173,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -180,7 +182,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -189,7 +191,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -198,7 +200,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -207,7 +209,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LINUX_ROOT)/4Ddat/Source/4Ddat/Include;$(LINUX_ROOT)/4Ddat/Source/4Ddat/Linux;$(LINUX_ROOT)/4Ddat/External/source/RenderCore/Private/Include;$(LINUX_ROOT)/4Ddat/Source/3rdParty;../../src/3rd;$(LINUX_ROOT)/admfsdk/admfsdk/interface;$(LINUX_ROOT)/admfsdk/admfsdk/internal;$(LINUX_ROOT)/admfsdk/3rd/ZipLib;$(LINUX_ROOT)/changecolor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
