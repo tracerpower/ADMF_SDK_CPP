@@ -162,6 +162,8 @@ namespace admf_internal
         virtual admf::Vec2 getDpi() override;
         virtual admf::ADMF_FLOAT getWidth() override;
         virtual admf::ADMF_FLOAT getHeight() override;
+		virtual admf::ADMF_FLOAT getPhysicalWidth() override;
+		virtual admf::ADMF_FLOAT getPhysicalHeight() override;
         virtual admf::ADMF_UINT getChannels() override {return channels_;};
         virtual admf::ADMF_UINT getElementSize() override {return elementSize_;};;
 
@@ -174,6 +176,8 @@ namespace admf_internal
         std::shared_ptr<Vec2_internal> dpi_;
         admf::ADMF_FLOAT width_ = 0;
         admf::ADMF_FLOAT height_ = 0;
+		admf::ADMF_FLOAT physicalWidth_ = 0;
+		admf::ADMF_FLOAT physicalHeight_ = 0;
         admf::ADMF_UINT channels_ = 0;
         admf::ADMF_UINT elementSize_ = 0;
         std::shared_ptr<String_internal> typeName_;
@@ -184,6 +188,8 @@ namespace admf_internal
     public:
         virtual void setWidth(admf::ADMF_FLOAT width) override {width_ = width;};
         virtual void setHeight(admf::ADMF_FLOAT height) override {height_ = height;};
+		virtual void setPhysicalWidth(admf::ADMF_FLOAT width) override { physicalWidth_ = width; };
+		virtual void setPhysicalHeight(admf::ADMF_FLOAT height) override { physicalHeight_ = height; };
         virtual void setChannels(admf::ADMF_UINT channels) override {channels_ = channels;};
         virtual void setElementSize(admf::ADMF_UINT elementSize) override {elementSize_ = elementSize;};;
 #endif

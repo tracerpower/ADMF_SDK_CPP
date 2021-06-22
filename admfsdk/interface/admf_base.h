@@ -245,6 +245,10 @@ namespace admf
         ///    @return      返回贴图高度
         ///    @see ADMFFLOAT
         virtual ADMF_FLOAT getHeight() = 0;
+
+        virtual ADMF_FLOAT getPhysicalWidth() = 0;
+
+        virtual ADMF_FLOAT getPhysicalHeight() = 0;
         ///获取通道数
         virtual ADMF_UINT getChannels() = 0;
         ///获取每个通道字节数
@@ -258,6 +262,9 @@ namespace admf
         ///                 获取贴图高度
         ///                 @param height 设置的高度
         virtual void setHeight(ADMF_FLOAT height) = 0;
+		
+        virtual void setPhysicalWidth(ADMF_FLOAT width) = 0;
+        virtual void setPhysicalHeight(ADMF_FLOAT height) = 0;
         ///设置通道数
         virtual void setChannels(ADMF_UINT channels) = 0;
         ///设置每个通道字节数

@@ -458,6 +458,8 @@ void Texture_internal::load(bson_iter_t *iter) //save
     std::string dpiKey = getNewKey("dpi");
     std::string widthKey = getNewKey("width");
     std::string heightKey = getNewKey("height");
+	std::string physicalWidthKey = getNewKey("physicalWidth");
+	std::string physicalHeightKey = getNewKey("physicalHeight");
     std::string channelsKey = getNewKey("channels");
     std::string elementSizeKey = getNewKey("elementSize");
     //std::string typeKey = getNewKey("type");
@@ -487,6 +489,14 @@ void Texture_internal::load(bson_iter_t *iter) //save
         {
             height_ = (ADMF_FLOAT)bson_iter_as_double(&child);
         }
+		else if (keyName == physicalWidthKey)
+		{
+			physicalWidth_ = (ADMF_FLOAT)bson_iter_as_double(&child);
+		}
+		else if (keyName == physicalHeightKey)
+		{
+			physicalHeight_ = (ADMF_FLOAT)bson_iter_as_double(&child);
+		}
         else if (keyName == channelsKey)
         {
             channels_ = (ADMF_UINT)bson_iter_as_int64(&child);
@@ -522,8 +532,11 @@ void Texture_internal::save(bson_t *doc)
     std::string dpiKey = getNewKey("dpi");
     std::string widthKey = getNewKey("width");
     std::string heightKey = getNewKey("height");
+	std::string physicalWidthKey = getNewKey("physicalWidth");
+	std::string physicalHeightKey = getNewKey("physicalHeight");
     std::string channelsKey = getNewKey("channels");
     std::string elementSizeKey = getNewKey("elementSize");
+
     //std::string typeKey = getNewKey("type");
 
     ADMF_BSON_APPEND_BINARY(doc, pathKey, binaryData_);
@@ -531,6 +544,8 @@ void Texture_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, dpiKey, dpi_);
     ADMF_BSON_APPEND_DOUBLE(doc, widthKey, width_);
     ADMF_BSON_APPEND_DOUBLE(doc, heightKey, height_);
+	ADMF_BSON_APPEND_DOUBLE(doc, physicalWidthKey, physicalWidth_);
+	ADMF_BSON_APPEND_DOUBLE(doc, physicalHeightKey, physicalHeight_);
     ADMF_BSON_APPEND_INT32(doc, channelsKey, channels_);
     ADMF_BSON_APPEND_INT32(doc, elementSizeKey, elementSize_);
 }
@@ -622,3 +637,11 @@ ADMF_FLOAT Texture_internal::getHeight()
     return height_;
 }
 
+ADMF_FLOAT Texture_internal::getPhysicalWidth()
+{
+    return physicalWidth_;
+}
+ADMF_FLOAT Texture_internal::getPhysicalHeight()
+{
+    return physicalHeight_;
+}
