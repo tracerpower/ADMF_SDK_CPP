@@ -540,6 +540,14 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
                 texture->setPhysicalHeight(1/scaleY);
             texture->setChannels(c);
             texture->setElementSize(elementsSize);
+
+            auto dpi = texture->getDpi();
+            auto dpi_x = (w * 25.4) * scaleX;
+            auto dpi_y = (h * 25.4) * scaleY;
+            dpi->setX(dpi_x);
+            dpi->setY(dpi_y);
+
+
         
             tempFiles.emplace_back(tmpFileName);
             
