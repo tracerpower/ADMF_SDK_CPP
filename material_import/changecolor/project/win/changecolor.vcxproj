@@ -19,14 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\hyperrender\Source\4Ddat\Win32\4Ddat.vcxproj">
-      <Project>{1027efb9-fc6a-4ed0-98a2-9d75e9c2d99b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\project\win\admfsdk.vcxproj">
-      <Project>{581e4150-6960-48a5-86cb-fce2bb63befc}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\changecolor.cpp" />
   </ItemGroup>
   <ItemGroup>

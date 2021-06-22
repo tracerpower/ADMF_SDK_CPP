@@ -532,10 +532,12 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             
             auto binary = texture->getBinaryData();
             binary->updateFromFile(tmpFileName, true);
+            texture->setWidth(w);
+            texture->setHeight(h);
             if (scaleX > 0)
-                texture->setWidth(1/ scaleX);
+                texture->setPhysicalWidth(1/ scaleX);
             if (scaleY > 0)
-                texture->setHeight(1/scaleY);
+                texture->setPhysicalHeight(1/scaleY);
             texture->setChannels(c);
             texture->setElementSize(elementsSize);
         
@@ -548,6 +550,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     //solid colorCards
     admf::BaseColorDataSolidBlock block = baseColorSolidBlock->append();
     block->setOriginal(true);
+    baseColorData->getType()->setString("solid");
+    baseColorData->setIndex(0);
 
     if (_hasDiffuseColor)
     {
@@ -563,6 +567,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             block->getName()->setString(os_.str().c_str());
             block->getType()->setString("RGB");
             block->getValue()->setString(os.str().c_str());
+            baseColorData->setIndex(1);
         }
     }
     
@@ -683,7 +688,7 @@ void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer
         {
             CHANGE_COLOR::Result result = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
             needExportDiffuse = false;
-            exportChangeColor(pathName + "/change_color" + layerIndex + ".json", result);
+            exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
         }
         ExportImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
         free(dataBuff);
@@ -788,11 +793,11 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
     auto layersCount = layerArray->size();
     for (int i = 0; i < layersCount; i++) {
         auto layer = layerArray->get(i);
-        extractLayer(layersPath, layer, i==0 ? "":("_"+std::to_string(i)).c_str());
+        extractLayer(layersPath, layer, i==0 ? "":std::to_string(i).c_str());
     }
     
     auto sideLayer = material->getSideLayer();
-    extractLayer(layersPath,  sideLayer, "_side");
+    extractLayer(layersPath,  sideLayer, "Side");
 
     //admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
     FreeImage_DeInitialise();
