@@ -56,5 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="..\..\..\changecolor\project\win\changecolor.vcxproj" />
   </ItemGroup>
 </Project>

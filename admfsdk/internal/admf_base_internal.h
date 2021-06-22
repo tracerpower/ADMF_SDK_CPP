@@ -44,6 +44,7 @@ namespace admf_internal
 
     class Vec2_internal : public admf::Vec2_, public Base_internal
     {
+        friend class LayerTransform_internal;
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(Vec2_internal);
     public:
         virtual admf::ADMF_FLOAT getX() override;

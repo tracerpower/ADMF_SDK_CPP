@@ -35,7 +35,10 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
+#include "changecolor.h"
+#include <iomanip>
 
 const String TexChannel_Unknown        = "Unknown";
 const String TexChannel_Color        = "uTexColor";
@@ -283,13 +286,18 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     
     auto spec = layer->getSpec();
     auto specRefraction = spec->getRefraction();
-    
+
+ 
     auto* uv0Scale = matInfo.FindPropertyVarient("uv0Scale");
+    float scaleX = -1;
+    float scaleY = -1;
     if (uv0Scale && uv0Scale->type == RenderCore::MVarient::VEC2)
     {
         auto transformScale = transform->getScale();
         transformScale->setX(uv0Scale->vec2.x);
         transformScale->setY(uv0Scale->vec2.y);
+        scaleX = uv0Scale->vec2.x;
+        scaleY = uv0Scale->vec2.y;
     }
     
     auto* uv0Offset = matInfo.FindPropertyVarient("uv0Offset");
@@ -524,8 +532,10 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             
             auto binary = texture->getBinaryData();
             binary->updateFromFile(tmpFileName, true);
-            //texture->setWidth(w);
-           // texture->setHeight(h);
+            if (scaleX > 0)
+                texture->setWidth(1/ scaleX);
+            if (scaleY > 0)
+                texture->setHeight(1/scaleY);
             texture->setChannels(c);
             texture->setElementSize(elementsSize);
         
@@ -616,8 +626,8 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
     printf("convert %s to %s fail\n", filename.c_str(), admfFilePath.c_str());
     return false;
 }
-
-void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer)
+void exportChangeColor(const std::string& path, const CHANGE_COLOR::Result& result);
+void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer, const std::string& layerIndex)
 {
     if (!layer->isEnabled())
         return;
@@ -630,12 +640,21 @@ void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer
         if (texture)
         {
             auto binary = texture->getBinaryData();
-            auto len = binary->getDataLength();
-            if (len > 0)
-                textureVector.push_back(texture);
+            if (binary)
+            {
+				auto len = binary->getDataLength();
+				if (len > 0)
+				{
+					textureVector.push_back(texture);
+					return true;
+				}
+            }
+
         }
+        return false;
     };
-    vectorLambda(basic->getBaseColor()->getTexture());
+    auto needExportDiffuse = vectorLambda(basic->getBaseColor()->getTexture());
+    //这句必须在最前
     vectorLambda(basic->getAlpha()->getTexture());
     vectorLambda(basic->getNormal()->getTexture());
     vectorLambda(basic->getSpecular()->getTexture());
@@ -659,10 +678,41 @@ void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer
         auto dataLen = binaryData->getDataLength();
         unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
         binaryData->getData(dataBuff, dataLen);
+
+        if (needExportDiffuse)
+        {
+            CHANGE_COLOR::Result result = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
+            needExportDiffuse = false;
+            exportChangeColor(pathName + "/change_color" + layerIndex + ".json", result);
+        }
         ExportImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
         free(dataBuff);
         //binaryData->exportToFile(texturePath.c_str());
         delete[] nameBuff;
+    }
+}
+
+void exportChangeColor(const std::string& path, const CHANGE_COLOR::Result& result)
+{
+    try {
+        std::ofstream out(path);
+        out << "{" << std::endl;
+        out << "\t\"hasDiffuseMap\": true," << std::endl;
+        out << "\t\"bottomS\": " << std::setprecision(20) << result.bottomS << "," << std::endl;
+		out << "\t\"bottomV\": " << std::setprecision(20) << result.bottomV << "," << std::endl;
+        out << "\t\"meanS\": " << std::setprecision(20) << result.meanS << "," << std::endl;
+		out << "\t\"meanV\": " << std::setprecision(20) << result.meanV << "," << std::endl;
+        out << "\t\"kS\": " << std::setprecision(20) << result.kS << "," << std::endl;
+        out << "\t\"kV\": " << std::setprecision(20) << result.kV  << std::endl;
+        out << "}" << std::endl;
+        out.close();
+
+
+
+
+    }
+    catch (...) {
+
     }
 }
 
@@ -738,11 +788,11 @@ bool extractAdmf(const char* admfFilePath, const char* dir_)
     auto layersCount = layerArray->size();
     for (int i = 0; i < layersCount; i++) {
         auto layer = layerArray->get(i);
-        extractLayer(layersPath, layer);
+        extractLayer(layersPath, layer, i==0 ? "":("_"+std::to_string(i)).c_str());
     }
     
     auto sideLayer = material->getSideLayer();
-    extractLayer(layersPath,  sideLayer);
+    extractLayer(layersPath,  sideLayer, "_side");
 
     admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
     FreeImage_DeInitialise();

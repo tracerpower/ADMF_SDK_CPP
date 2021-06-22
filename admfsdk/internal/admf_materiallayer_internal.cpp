@@ -415,7 +415,13 @@ void LayerTransform_internal::initMissed()
     if (!offset_)
         offset_ = std::make_shared<Vec2_internal>(admfIndex_);
     if (!scale_)
+    {
         scale_ = std::make_shared<Vec2_internal>(admfIndex_);
+        scale_->x_ = 1.0;
+        scale_->y_ = 1.0;
+    }
+
+ 
 }
 #ifdef ADMF_EDIT
 void LayerTransform_internal::save(bson_t *doc)
