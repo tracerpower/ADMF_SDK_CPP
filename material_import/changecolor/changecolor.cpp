@@ -181,7 +181,7 @@ namespace  CHANGE_COLOR {
 		std::vector<float> minV(threadCount);
 		std::fill(minV.begin(), minV.end(), 255.f);
 
-		std::atomic<int> workDone = 0;
+		std::atomic<int> workDone{ 0 };
 		int width = std::min(300, picWidth);
 		int height = std::min(300, picHeight);
 		// note: all thread running this lambda will done in this scope, wo se use ref capture
