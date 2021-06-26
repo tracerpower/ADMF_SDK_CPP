@@ -11,7 +11,7 @@
 namespace  CHANGE_COLOR {
 	struct DYNAMIC_OUTPUT Result
 	{
-		float bottomS, bottomV, meanS, meanV, kS, kV;
+		double bottomS, bottomV, meanS, meanV, kS, kV;
 	};
 	Result DYNAMIC_OUTPUT wrap(const std::string& loadPath);
 	Result DYNAMIC_OUTPUT changeColor(unsigned char* data, int picWidth, int picHeight, int picChannel);
