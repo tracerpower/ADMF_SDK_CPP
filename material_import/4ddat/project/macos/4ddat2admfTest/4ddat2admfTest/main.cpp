@@ -6,6 +6,7 @@
 //
 
 #include "4ddat_to_admf.hpp"
+#include "exportadmf.h"
 #include <string>
 
 int main(int argc, const char * argv[]) {

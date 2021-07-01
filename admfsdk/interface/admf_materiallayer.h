@@ -43,7 +43,7 @@ namespace admf
 
 #ifdef ADMF_EDIT
 		///   设置是否启用
-        ///    @return    设置是否启用
+        ///    @return   设置是否启用
 		virtual void setEnabled(admf::ADMF_BYTE enabled) = 0;
 #endif
     };

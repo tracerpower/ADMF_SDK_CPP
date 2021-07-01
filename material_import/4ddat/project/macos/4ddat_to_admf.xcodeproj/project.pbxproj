@@ -176,7 +176,8 @@
 				B1ECDC2A26130CE000EAC0A3 /* lz4 */,
 				B1ECDBFF2612FA7D00EAC0A3 /* FreeImage */,
 			);
-			path = 3rd;
+			name = 3rd;
+			path = ../../3rd;
 			sourceTree = "<group>";
 		};
 		B1ECDBFF2612FA7D00EAC0A3 /* FreeImage */ = {
@@ -488,8 +489,8 @@
 				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../../src/3rd/FreeImage/lib/macos",
-					"$(SRCROOT)/../../src/3rd/FreeImage",
+					"$(SRCROOT)/../../../3rd/FreeImage/lib/macos",
+					"$(SRCROOT)/../../../3rd/FreeImage",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -520,8 +521,8 @@
 				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../../src/3rd/FreeImage/lib/macos",
-					"$(SRCROOT)/../../src/3rd/FreeImage",
+					"$(SRCROOT)/../../../3rd/FreeImage/lib/macos",
+					"$(SRCROOT)/../../../3rd/FreeImage",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

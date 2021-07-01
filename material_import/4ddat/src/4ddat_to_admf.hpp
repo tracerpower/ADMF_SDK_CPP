@@ -15,4 +15,4 @@
 
 
 extern "C" bool _4ddatToAdmf(const char* filename, const char* admfFilePath);
-extern "C" bool extractAdmf(const char* admfFilePath, const char* dir);
+

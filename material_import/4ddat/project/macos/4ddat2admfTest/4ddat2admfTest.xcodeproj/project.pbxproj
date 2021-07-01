@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B1B64408260D6D5300CADA90 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1B64407260D6D5300CADA90 /* main.cpp */; };
 		B1ECDC1F26130BDE00EAC0A3 /* lib4ddat_to_admf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1B64415260D6D6F00CADA90 /* lib4ddat_to_admf.a */; };
+		B1F0411F268D629D0073DC6C /* libexportadmf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1F0411E268D628E0073DC6C /* libexportadmf.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +26,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = B13E69F3260C744C002BEB0A;
 			remoteInfo = 4ddat_to_admf;
+		};
+		B1F0411D268D628E0073DC6C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B165411E268D529B00D6F168;
+			remoteInfo = exportadmf;
+		};
+		B1F04131268D67D30073DC6C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B13E69F3260C744C002BEB0A;
+			remoteInfo = exportadmf;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -44,6 +59,7 @@
 		B1B64404260D6D5300CADA90 /* 4ddat2admfTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 4ddat2admfTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1B64407260D6D5300CADA90 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B1B6440F260D6D6F00CADA90 /* 4ddat_to_admf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = 4ddat_to_admf.xcodeproj; path = ../4ddat_to_admf.xcodeproj; sourceTree = "<group>"; };
+		B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = exportadmf.xcodeproj; path = ../../../../exportadmf/project/macos/exportadmf.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1F0411F268D629D0073DC6C /* libexportadmf.a in Frameworks */,
 				B1ECDC1F26130BDE00EAC0A3 /* lib4ddat_to_admf.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +85,7 @@
 		B1B643FB260D6D5300CADA90 = {
 			isa = PBXGroup;
 			children = (
+				B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */,
 				B1B6440F260D6D6F00CADA90 /* 4ddat_to_admf.xcodeproj */,
 				B1B64406260D6D5300CADA90 /* 4ddat2admfTest */,
 				B1B64405260D6D5300CADA90 /* Products */,
@@ -99,6 +117,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B1F0411A268D628E0073DC6C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B1F0411E268D628E0073DC6C /* libexportadmf.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -113,6 +139,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B1F04132268D67D30073DC6C /* PBXTargetDependency */,
 				B1ECDC2126130BE800EAC0A3 /* PBXTargetDependency */,
 			);
 			name = 4ddat2admfTest;
@@ -149,6 +176,10 @@
 					ProductGroup = B1B64410260D6D6F00CADA90 /* Products */;
 					ProjectRef = B1B6440F260D6D6F00CADA90 /* 4ddat_to_admf.xcodeproj */;
 				},
+				{
+					ProductGroup = B1F0411A268D628E0073DC6C /* Products */;
+					ProjectRef = B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -163,6 +194,13 @@
 			fileType = archive.ar;
 			path = lib4ddat_to_admf.a;
 			remoteRef = B1B64414260D6D6F00CADA90 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B1F0411E268D628E0073DC6C /* libexportadmf.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libexportadmf.a;
+			remoteRef = B1F0411D268D628E0073DC6C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -183,6 +221,11 @@
 			isa = PBXTargetDependency;
 			name = 4ddat_to_admf;
 			targetProxy = B1ECDC2026130BE800EAC0A3 /* PBXContainerItemProxy */;
+		};
+		B1F04132268D67D30073DC6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = exportadmf;
+			targetProxy = B1F04131268D67D30073DC6C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -302,7 +345,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../src";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../src",
+					"$(SRCROOT)/../../../../exportadmf/src",
+					/Volumes/Data/plugin/new/format/SDK/admf/material_import/exportadmf/src,
+				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -316,7 +363,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../src";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../src",
+					"$(SRCROOT)/../../../../exportadmf/src",
+					/Volumes/Data/plugin/new/format/SDK/admf/material_import/exportadmf/src,
+				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
