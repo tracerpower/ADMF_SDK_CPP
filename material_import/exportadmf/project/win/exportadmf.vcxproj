@@ -24,6 +24,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\exportadmf.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\changecolor\project\win\changecolor.vcxproj">
+      <Project>{3e42eed3-e062-496c-9333-00480d5bc464}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
