@@ -348,7 +348,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../src",
 					"$(SRCROOT)/../../../../exportadmf/src",
-					/Volumes/Data/plugin/new/format/SDK/admf/material_import/exportadmf/src,
+					"$(SRCROOT)/../../../material_import/exportadmf/src",
+					"$(SRCROOT)/../../../material_import/exportadmf/src",
 				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
@@ -366,7 +367,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../src",
 					"$(SRCROOT)/../../../../exportadmf/src",
-					/Volumes/Data/plugin/new/format/SDK/admf/material_import/exportadmf/src,
+					"$(SRCROOT)/../../../material_import/exportadmf/src",
+					"$(SRCROOT)/../../../material_import/exportadmf/src",
 				);
 				HyperRenderPath = /Volumes/Data/plugin/hyperrender;
 				LIBRARY_SEARCH_PATHS = (
