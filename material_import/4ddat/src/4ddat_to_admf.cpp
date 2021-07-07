@@ -111,58 +111,7 @@ int getTextureUsedTypeByName(std::string name)
     }
     return usedType;
 }
-bool ExportImageDataToFile(const unsigned char* buffer, const std::string& destPath, int width, int height, int channel, const int elementSize) {
-    FREE_IMAGE_TYPE imageType = FIT_UNKNOWN;
 
-    switch (channel)
-    {
-    case 1:
-        imageType = FIT_BITMAP;
-        break;
-    case 2:
-        imageType = FIT_BITMAP;
-        break;
-    case 3:
-        if (elementSize == 1) {
-            imageType = FIT_BITMAP;
-        }
-        else if (elementSize == 2) {
-            imageType = FIT_RGB16;
-        }
-        else if (elementSize == 4) {
-            imageType = FIT_RGBF;
-        }
-        break;
-    case 4:
-        if (elementSize == 1) {
-            imageType = FIT_BITMAP;
-        }
-        else if (elementSize == 2) {
-            imageType = FIT_RGBA16;
-        }
-        else if (elementSize == 4) {
-            imageType = FIT_RGBAF;
-        }
-        break;
-    default:
-        break;
-    }
-
-    FIBITMAP* bitmap = FreeImage_ConvertFromRawBitsEx(true, (BYTE*)buffer, imageType,
-        width, height, width * channel * elementSize,
-        channel * elementSize * 8, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK,
-        true);
-
-    if (!bitmap) {
-        return false;
-    }
-
-    FreeImage_FlipHorizontal(bitmap);
-    auto info = FreeImage_GetInfo(bitmap);
-    bool bSuccess = FreeImage_Save(FIF_PNG, bitmap, destPath.c_str(), PNG_DEFAULT);
-    FreeImage_Unload(bitmap);
-    return true;
-}
 
 
 bool checkIfSrgb(int matType)
