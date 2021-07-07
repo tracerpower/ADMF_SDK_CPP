@@ -99,7 +99,7 @@ bool ExportImageDataToFile(const unsigned char* buffer, const std::string& destP
         return false;
     }
     
-    FreeImage_FlipHorizontal(bitmap);
+    //FreeImage_FlipHorizontal(bitmap);
     auto info = FreeImage_GetInfo(bitmap);
     bool bSuccess = FreeImage_Save(FIF_PNG, bitmap, destPath.c_str(), PNG_DEFAULT);
     FreeImage_Unload(bitmap);
