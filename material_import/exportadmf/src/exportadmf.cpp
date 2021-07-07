@@ -13,6 +13,8 @@
 #if (defined _WIN32) || (defined __APPLE__)
 #include <filesystem>
 #else
+#include <iomanip> 
+#include <string.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <linux/limits.h>

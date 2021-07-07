@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\3rd\lz4\lz4.c">
-      <Filter>src\3rd\lz4</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\3rd\lz4\lz4frame.c">
-      <Filter>src\3rd\lz4</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\3rd\lz4\lz4hc.c">
-      <Filter>src\3rd\lz4</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\3rd\lz4\xxhash.c">
-      <Filter>src\3rd\lz4</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\4ddat_to_admf.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rd\lz4\lz4.c">
+      <Filter>src\3rd\lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rd\lz4\lz4frame.c">
+      <Filter>src\3rd\lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rd\lz4\lz4hc.c">
+      <Filter>src\3rd\lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rd\lz4\xxhash.c">
+      <Filter>src\3rd\lz4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -35,57 +35,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\3rd\lz4\lz4.h">
-      <Filter>src\3rd\lz4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\3rd\lz4\lz4frame.h">
-      <Filter>src\3rd\lz4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\3rd\lz4\lz4frame_static.h">
-      <Filter>src\3rd\lz4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\3rd\lz4\lz4hc.h">
-      <Filter>src\3rd\lz4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\3rd\lz4\xxhash.h">
-      <Filter>src\3rd\lz4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\3rd\FreeImage\FreeImage.h">
-      <Filter>src\3rd\FreeImage</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\4ddat_to_admf.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\3rd\FreeImage\FreeImage.h">
+      <Filter>src\3rd\FreeImage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\lz4\lz4.h">
+      <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\lz4\lz4frame.h">
+      <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\lz4\lz4frame_static.h">
+      <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\lz4\lz4hc.h">
+      <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\lz4\xxhash.h">
+      <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libFreeImage_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libFreeImage_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libJPEG_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libJPEG_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libJXR_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libJXR_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libOpenEXR_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libOpenEXR_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libOpenJPEG_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libOpenJPEG_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libPNG_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libPNG_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libRawLite_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libRawLite_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libTIFF_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libTIFF_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libWebP_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libWebP_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
-    <Library Include="..\..\src\3rd\FreeImage\lib\linux\libZlib_linux.a">
+    <Library Include="..\..\..\3rd\FreeImage\lib\linux\libZlib_linux.a">
       <Filter>src\3rd\FreeImage\lib</Filter>
     </Library>
   </ItemGroup>

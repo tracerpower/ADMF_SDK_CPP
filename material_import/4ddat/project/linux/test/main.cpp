@@ -7,7 +7,7 @@
 
 #include "4ddat_to_admf.hpp"
 #include <string>
-
+#include "exportadmf.h"
 int main(int argc, const char* argv[]) {
 
 	if (argc < 4)
