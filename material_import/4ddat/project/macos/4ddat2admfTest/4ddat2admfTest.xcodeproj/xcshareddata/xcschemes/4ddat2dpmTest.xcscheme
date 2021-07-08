@@ -50,6 +50,20 @@
             ReferencedContainer = "container:4ddat2admfTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/yushihang/Downloads/&#x76ae;&#x6599;08.4Ddat"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/1.admf"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/out"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

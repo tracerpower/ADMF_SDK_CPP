@@ -270,19 +270,24 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         normal->setValue(kNs->f);
     }
     
+    float kRsValue = 1.0f;
     auto* kRs = matInfo.FindPropertyVarient("kRs");
     if (kRs && kRs->type == RenderCore::MVarient::FLOAT)
     {
+        kRsValue = kRs->type;
         // 类型是Metal和Gilding时含义为roughness，其他类型含义为glossiness
-        if (strcmp(layerType_, "Metal") == 0 || strcmp(layerType_, "Gilding") == 0)
-        {
-            roughness->setValue(kRs->f);
-        }
-        else
-        {
-            glossiness->setValue(kRs->f);
-        }
+
     }
+    
+    if (strcmp(layerType_, "Metal") == 0 || strcmp(layerType_, "Gilding") == 0)
+    {
+        roughness->setValue(kRsValue);
+    }
+    else
+    {
+        glossiness->setValue(kRsValue);
+    }
+    
     
     auto* kHs = matInfo.FindPropertyVarient("kHs");
     if (kHs && kHs->type == RenderCore::MVarient::FLOAT)
@@ -291,6 +296,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         //凹凸贴图的偏移量
     }
     
+    alpha->setValue(1.0);
     auto* kAlpha = matInfo.FindPropertyVarient("kAlpha");
     if (kAlpha && kAlpha->type == RenderCore::MVarient::FLOAT)
     {
@@ -303,6 +309,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         // 旧版改色，无用
     }
     
+    metalness->setValue(0);
     auto* kMetallic = matInfo.FindPropertyVarient("kMetallic");
     if (kMetallic && kMetallic->type == RenderCore::MVarient::FLOAT)
     {
@@ -359,11 +366,15 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     {
         //TODO
     }
+    
+    layerBasic->setEmissive(0);
     auto* emissiveMultiplier = matInfo.FindPropertyVarient("emissiveMultiplier");
     if (emissiveMultiplier && emissiveMultiplier->type == RenderCore::MVarient::FLOAT)
     {
         layerBasic->setEmissive(emissiveMultiplier->f);
     }
+    
+    specRefraction->setGlossiness(1.0f);
     auto* refractionGlossiness = matInfo.FindPropertyVarient("refractionGlossiness");
     if (refractionGlossiness && refractionGlossiness->type == RenderCore::MVarient::FLOAT)
     {
