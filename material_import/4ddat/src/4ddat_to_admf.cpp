@@ -270,6 +270,9 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         normal->setValue(kNs->f);
     }
     
+    roughness->setValue(0.f);
+    glossiness->setValue(1.0f);
+    
     float kRsValue = 1.0f;
     auto* kRs = matInfo.FindPropertyVarient("kRs");
     if (kRs && kRs->type == RenderCore::MVarient::FLOAT)
