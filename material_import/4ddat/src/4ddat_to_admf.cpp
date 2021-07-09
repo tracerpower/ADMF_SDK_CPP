@@ -337,7 +337,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     }
 
     bool _hasDiffuseColor = false;
-    int _diffuseColor[3];
+    int _diffuseColor[3] = {128, 128, 128};
     auto* diffuseColor = matInfo.FindPropertyVarient("diffuseColor");
     if (diffuseColor && diffuseColor->type == RenderCore::MVarient::VEC3)
     {
