@@ -273,23 +273,23 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     roughness->setValue(0.f);
     glossiness->setValue(1.0f);
     
-    float kRsValue = 1.0f;
+  
     auto* kRs = matInfo.FindPropertyVarient("kRs");
     if (kRs && kRs->type == RenderCore::MVarient::FLOAT)
     {
-        kRsValue = kRs->type;
+        float kRsValue = kRs->type;
         // 类型是Metal和Gilding时含义为roughness，其他类型含义为glossiness
-
+        if (strcmp(layerType_, "Metal") == 0 || strcmp(layerType_, "Gilding") == 0)
+        {
+            roughness->setValue(kRsValue);
+        }
+        else
+        {
+            glossiness->setValue(kRsValue);
+        }
     }
     
-    if (strcmp(layerType_, "Metal") == 0 || strcmp(layerType_, "Gilding") == 0)
-    {
-        roughness->setValue(kRsValue);
-    }
-    else
-    {
-        glossiness->setValue(kRsValue);
-    }
+
     
     
     auto* kHs = matInfo.FindPropertyVarient("kHs");
