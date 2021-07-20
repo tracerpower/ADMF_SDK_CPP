@@ -149,6 +149,17 @@ namespace admf_internal
         
 #endif
     };
+    
+    
+    enum class TextureFileType {
+        None = 0,
+        RAW = 1,
+        PNG = 2,
+        JPG = 3,
+        GIF = 4,
+        TIFF = 5,
+        // https://www.filesignatures.net
+    };
 
 
     class Texture_internal : public admf::Texture_, public Base_internal
@@ -184,6 +195,10 @@ namespace admf_internal
 
     public:
         void setType(admf::TEX_TYPE type);
+        
+        TextureFileType getTypeByBinaryData();
+        std::string getExtensionByTextureFileType(TextureFileType type);
+        
 #ifdef ADMF_EDIT
     public:
         virtual void setWidth(admf::ADMF_FLOAT width) override {width_ = width;};

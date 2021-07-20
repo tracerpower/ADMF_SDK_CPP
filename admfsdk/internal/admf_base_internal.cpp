@@ -568,7 +568,9 @@ void Texture_internal::setType(admf::TEX_TYPE type) {
 	typeName_ = getTypeName_internal();
 	if (binaryData_)
 	{
-		std::string str = typeName_->getInternalString() + ".png";
+        auto textureBinaryType = this->getTypeByBinaryData();
+        auto ext = this->getExtensionByTextureFileType(textureBinaryType);
+		std::string str = typeName_->getInternalString() + "." + ext;
         auto string = binaryData_->getAssignedName();
         auto* string_internal = dynamic_cast<String_internal*>(string.get());
         assert(string_internal);
@@ -644,4 +646,82 @@ ADMF_FLOAT Texture_internal::getPhysicalWidth()
 ADMF_FLOAT Texture_internal::getPhysicalHeight()
 {
     return physicalHeight_;
+}
+
+
+
+const std::vector<std::pair<admf_internal::TextureFileType, std::vector<unsigned char>>> G_BinaryTypeData
+{
+    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE0}},
+    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE1}},
+    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE8}},
+    {admf_internal::TextureFileType::PNG, {0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A}},
+    {admf_internal::TextureFileType::GIF, {0x47,0x49,0x46,0x38}},
+    {admf_internal::TextureFileType::TIFF, {0x49,0x20,0x49}},
+    {admf_internal::TextureFileType::TIFF, {0x49,0x49,0x2A,0x00}},
+    {admf_internal::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2A}},
+    {admf_internal::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2B}},
+
+};
+
+
+admf_internal::TextureFileType Texture_internal::getTypeByBinaryData()
+{
+    if (!binaryData_)
+        return admf_internal::TextureFileType::RAW;
+    
+    
+    auto dataLen = binaryData_->getDataLength();
+    unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
+    binaryData_->getData(dataBuff, dataLen);
+    
+    admf_internal::TextureFileType result = admf_internal::TextureFileType::RAW;
+    
+    for (auto it = G_BinaryTypeData.begin(); it != G_BinaryTypeData.end(); it ++)
+    {
+        auto v = it->second;
+        if (dataLen < v.size())
+            continue;
+        
+        bool needContinue = false;
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (dataBuff[i] != v[i])
+            {
+                needContinue = true;
+                break;
+            }
+        }
+        
+        if (needContinue)
+            continue;
+        
+        result = it->first;
+        break;
+    }
+
+
+    
+    free(dataBuff);
+    dataBuff = NULL;
+    
+    return result;
+    
+    
+}
+
+
+std::string Texture_internal::getExtensionByTextureFileType(admf_internal::TextureFileType type)
+{
+    switch (type) {
+    case TextureFileType::JPG:
+        return "jpg";
+    case TextureFileType::TIFF:
+        return "tiff";
+    case TextureFileType::GIF:
+        return "gif";
+    case TextureFileType::PNG:
+    default:
+        return "png";
+    }
 }
