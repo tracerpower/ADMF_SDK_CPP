@@ -58,6 +58,7 @@ void BaseColor_internal::initMissed()
 #ifdef ADMF_EDIT
 void BaseColor_internal::save(bson_t *doc)
 {
+    texture_->setType(getTextureType());
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
 
@@ -121,6 +122,7 @@ void Specular_internal::initMissed()
 #ifdef ADMF_EDIT
 void Specular_internal::save(bson_t *doc)
 {
+    texture_->setType(getTextureType());
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
 
@@ -141,6 +143,7 @@ ColorRGB Specular_internal::getColor()
 #define Save_Implementation(classname)  \
 void classname::save(bson_t* doc)                                             \
 {                                                                             \
+texture_->setType(getTextureType());                                           \
 std::string textureKey = getNewKey("texture");                            \
 std::string valueKey = getNewKey("value");                                \
 ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);                      \
