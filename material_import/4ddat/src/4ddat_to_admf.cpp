@@ -336,7 +336,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         }
     }
 
-    bool _hasDiffuseColor = false;
+    bool _hasDiffuseColor = true; //跟珊璇讨论之后,确认
     int _diffuseColor[3] = {128, 128, 128};
     auto* diffuseColor = matInfo.FindPropertyVarient("diffuseColor");
     if (diffuseColor && diffuseColor->type == RenderCore::MVarient::VEC3)
@@ -356,6 +356,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         _diffuseColor[2] = diffuseColor->vec3.z * 255;
         
     }
+    
+
     auto* specularColor = matInfo.FindPropertyVarient("specularColor");
     if (specularColor && specularColor->type == RenderCore::MVarient::VEC3)
     {
