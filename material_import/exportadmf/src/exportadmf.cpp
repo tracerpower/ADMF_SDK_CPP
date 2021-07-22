@@ -27,6 +27,10 @@
 #include "admf_cpp.h"
 #include "admf_internal_header.h"
 
+#if (defined _WIN32)
+#include <assert.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
