@@ -3130,8 +3130,8 @@ _bson_as_json_visit_all (const bson_t *bson,
    state.err_offset = &err_offset;
    state.mode = mode;
 
-   if (bson_iter_visit_all (&iter, &bson_as_json_visitors, &state) ||
-       err_offset != -1) {
+   bool visit = bson_iter_visit_all (&iter, &bson_as_json_visitors, &state);
+   if ( !visit && err_offset != -1) {
       /*
        * We were prematurely exited due to corruption or failed visitor.
        */

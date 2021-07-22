@@ -817,6 +817,8 @@ zip_helper::ZIPResult ZipArchiveEntry::ExtractFile(const std::string& destinatio
 
     destFile.flush();
     destFile.close();
+    
+    this->CloseDecompressionStream();
 
     return zip_helper::ZIPResult::SUCCESS;
 }
@@ -853,6 +855,8 @@ zip_helper::ZIPResult ZipArchiveEntry::ExtractData(unsigned char* buff, size_t& 
     {
         return zip_helper::ZIPResult::BUFFER_READ_FAILED;
     }
+    
+    this->CloseDecompressionStream();
 
     
 
