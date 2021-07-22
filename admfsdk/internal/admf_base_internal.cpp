@@ -569,6 +569,7 @@ void Texture_internal::setType(admf::TEX_TYPE type) {
 	if (binaryData_)
 	{
         auto textureBinaryType = this->getTypeByBinaryData();
+
         auto ext = this->getExtensionByTextureFileType(textureBinaryType);
 		std::string str = typeName_->getInternalString() + "." + ext;
         auto string = binaryData_->getAssignedName();
@@ -673,6 +674,8 @@ admf_internal::TextureFileType Texture_internal::getTypeByBinaryData()
     
     auto dataLen = binaryData_->getDataLength();
     unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
+    memset(dataBuff, 0, dataLen);
+
     binaryData_->getData(dataBuff, dataLen);
     
     admf_internal::TextureFileType result = admf_internal::TextureFileType::RAW;

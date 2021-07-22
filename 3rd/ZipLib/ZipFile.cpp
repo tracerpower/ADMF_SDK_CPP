@@ -312,8 +312,11 @@ zip_helper::ZIPResult ZipFile::ExtractEncryptedFile(const std::string& zipPath, 
     
     utils::stream::copy(*dataStream, destFile);
     
+    
+    
     destFile.flush();
     destFile.close();
+    entry->CloseDecompressionStream();
     return zip_helper::ZIPResult::SUCCESS;
 }
 
