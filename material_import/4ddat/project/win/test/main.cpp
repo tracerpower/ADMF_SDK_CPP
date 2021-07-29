@@ -9,19 +9,44 @@
 #include <string>
 #include "exportadmf.h"
 
-int main(int argc, const char * argv[]) {
-    
-    if (argc < 4)
+int main(int argc, const char *argv[])
+{
+    if (argc < 5)
     {
-        printf("usage: %s <input 4ddat path> <output admf path> <output dir>\n", argv[0]);
+        const char *exeName = "admf_handler";
+        printf("usage: %s <input file type> <input file path> <output admf path> <output dir>\n\n", exeName);
+        printf("input file type:\n");
+        printf("    0 : admf (output admf path will be ignored)\n");
+        printf("    1 : 4ddat\n\n");
+        printf("examples:\n");
+        printf("    admf : %s 0 test.admf \"\" D:\\output\n", exeName);
+        printf("    4ddat : %s 1 test.4ddat output.admf D:\\output\n\n", exeName);
+
         return 0;
     }
-    std::string fourDdatCompressedFilePath = argv[1];//R"(D:\temp\20-0073TPM.4Ddat)";
-    std::string destFolderPath = argv[2]; // R"(D:\temp\1111\1.admf)";
-    bool success = _4ddatToAdmf(fourDdatCompressedFilePath.c_str(), destFolderPath.c_str());
-    if (success)
+
+    int type = std::stoi(argv[1]);
+    const char *inputPath = argv[2];
+    const char *outputAdmf = argv[3];
+    const char *extractAdmfDir = argv[4];
+    printf("type = %d\n", type);
+    printf("inputPath = %s\n", inputPath);
+    printf("outputAdmf = %s\n", outputAdmf);
+    printf("extractAdmfDir = %s\n", extractAdmfDir);
+
+    switch (type)
     {
-        extractAdmf(destFolderPath.c_str(), argv[3]);//R"(D:\temp\1111\1)");
+    case 0:
+        _4ddatToAdmf(inputPath, outputAdmf);
+        extractAdmf(outputAdmf, extractAdmfDir);
+        break;
+
+    case 1:
+        extractAdmf(inputPath, extractAdmfDir);
+
+    default:
+        break;
     }
+
     return 0;
 }
