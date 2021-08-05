@@ -35,13 +35,14 @@ int main(int argc, const char *argv[])
 
 	switch (type)
 	{
-	case 0:
+    case 0:
+        extractAdmf(inputPath, extractAdmfDir);
+        break;
+        
+	case 1:
 		_4ddatToAdmf(inputPath, outputAdmf);
 		extractAdmf(outputAdmf, extractAdmfDir);
 		break;
-
-	case 1:
-		extractAdmf(inputPath, extractAdmfDir);
 
 	default:
 		break;
