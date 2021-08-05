@@ -216,6 +216,16 @@ namespace admf
 #endif
     };
 
+    
+    enum class TextureFileType {
+        None = 0,
+        RAW = 1,
+        PNG = 2,
+        JPG = 3,
+        GIF = 4,
+        TIFF = 5,
+        // https://www.filesignatures.net
+    };
     /// 贴图数据结构
     class Texture_
     {
@@ -253,6 +263,8 @@ namespace admf
         virtual ADMF_UINT getChannels() = 0;
         ///获取每个通道字节数
         virtual ADMF_UINT getElementSize() = 0;
+        
+        virtual TextureFileType getTypeByBinaryData() = 0;
 
 #ifdef ADMF_EDIT
     public:

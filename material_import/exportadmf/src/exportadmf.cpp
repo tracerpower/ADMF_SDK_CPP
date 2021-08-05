@@ -184,7 +184,7 @@ extern "C" {
                 exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
             }
             
-            if (textureBinaryType != admf_internal::TextureFileType::RAW)
+            if (textureBinaryType != admf::TextureFileType::RAW)
             {
                 auto myfile = std::fstream(texturePath, std::ios::out | std::ios::binary);
                 myfile.write((char*)dataBuff, dataLen);
