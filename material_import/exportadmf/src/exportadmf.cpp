@@ -27,7 +27,7 @@
 #include "admf_cpp.h"
 #include "admf_internal_header.h"
 
-#if (defined _WIN32)
+#if (!defined __APPLE__)
 #include <assert.h>
 #endif
 
