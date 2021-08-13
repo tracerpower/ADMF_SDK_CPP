@@ -79,6 +79,17 @@ namespace admf
     class Glossiness_ : public TextureAndValueContainer
     {
     };
+    
+    /// 各向异性
+    class Anisotropy_ : public TextureAndValueContainer
+    {
+    };
+    
+    /// 各向异性
+    class AnisotropyRotation_ : public TextureAndValueContainer
+    {
+    };
+    
 
 }
 #endif /* admf_material_h */

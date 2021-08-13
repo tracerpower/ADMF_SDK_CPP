@@ -613,6 +613,12 @@ std::shared_ptr<String_internal> Texture_internal::getTypeName_internal()
     case TEX_TYPE_GLOSSINESS:
         str = new String_internal("Glossiness");
         break;
+    case TEX_TYPE_ANISOTROPY:
+        str = new String_internal("Anisotropy");
+        break;
+    case TEX_TYPE_ANISOTROPY_ROTATION:
+        str = new String_internal("AnisotropyRotation");
+        break;
     default:
         str = new String_internal("Unknown");
         break;

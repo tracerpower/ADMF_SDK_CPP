@@ -55,6 +55,8 @@ namespace admf
         TEX_TYPE_ROUGHNESS,  ///<粗糙贴图
         TEX_TYPE_SPECULAR,   ///<高光贴图
         TEX_TYPE_GLOSSINESS, ///<光滑度贴图
+        TEX_TYPE_ANISOTROPY, ///<各向异性贴图
+        TEX_TYPE_ANISOTROPY_ROTATION, ///<各向异性贴图
         TEX_TYPE_UNKNOWN     ///<未知类型
     };
 
@@ -102,6 +104,8 @@ namespace admf
     ADMF_DEF(Roughness);
     ADMF_DEF(Specular);
     ADMF_DEF(Glossiness);
+    ADMF_DEF(Anisotropy);
+    ADMF_DEF(AnisotropyRotation);
 
     /// 字符串类
     class String_
