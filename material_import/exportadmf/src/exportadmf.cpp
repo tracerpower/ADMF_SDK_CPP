@@ -155,7 +155,8 @@ extern "C" {
         vectorLambda(basic->getMetalness()->getTexture());
         vectorLambda(basic->getRoughness()->getTexture());
         vectorLambda(basic->getGlossiness()->getTexture());
-        
+        vectorLambda(basic->getAnisotropy()->getTexture());
+        vectorLambda(basic->getAnisotropyRotation()->getTexture());
         for (auto& texture : textureVector)
         {
             auto binaryData = texture->getBinaryData();
@@ -188,7 +189,7 @@ extern "C" {
                 exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
             }
             
-            if (textureBinaryType != admf_internal::TextureFileType::RAW)
+            if (textureBinaryType != admf::TextureFileType::RAW)
             {
                 auto myfile = std::fstream(texturePath, std::ios::out | std::ios::binary);
                 myfile.write((char*)dataBuff, dataLen);

@@ -55,6 +55,8 @@ namespace admf
         TEX_TYPE_ROUGHNESS,  ///<粗糙贴图
         TEX_TYPE_SPECULAR,   ///<高光贴图
         TEX_TYPE_GLOSSINESS, ///<光滑度贴图
+        TEX_TYPE_ANISOTROPY, ///<各向异性贴图
+        TEX_TYPE_ANISOTROPY_ROTATION, ///<各向异性贴图
         TEX_TYPE_UNKNOWN     ///<未知类型
     };
 
@@ -102,6 +104,8 @@ namespace admf
     ADMF_DEF(Roughness);
     ADMF_DEF(Specular);
     ADMF_DEF(Glossiness);
+    ADMF_DEF(Anisotropy);
+    ADMF_DEF(AnisotropyRotation);
 
     /// 字符串类
     class String_
@@ -216,6 +220,16 @@ namespace admf
 #endif
     };
 
+    
+    enum class TextureFileType {
+        None = 0,
+        RAW = 1,
+        PNG = 2,
+        JPG = 3,
+        GIF = 4,
+        TIFF = 5,
+        // https://www.filesignatures.net
+    };
     /// 贴图数据结构
     class Texture_
     {
@@ -253,6 +267,8 @@ namespace admf
         virtual ADMF_UINT getChannels() = 0;
         ///获取每个通道字节数
         virtual ADMF_UINT getElementSize() = 0;
+        
+        virtual TextureFileType getTypeByBinaryData() = 0;
 
 #ifdef ADMF_EDIT
     public:

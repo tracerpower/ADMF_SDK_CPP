@@ -56,11 +56,13 @@ const String TexChannel_Gaussian    = "uTexGaussian";
 
 const String TexChannel_Diffuse        = "uTexDiffuse";
 const String TexChannel_Bump        = "uTexBump";
+const String TexChannel_Anisotropy        = "uTexAnisotropy";
+const String TexChannel_AnisotropyRotation = "uTexAnisotropyRotation";
 
 int getTextureUsedTypeByName(std::string name)
 {
     using namespace RenderCore;
-    int usedType = 7;
+    int usedType = 1000;
     if (name == TexChannel_Color)
     {
         usedType = MAP_COLOR;
@@ -108,6 +110,14 @@ int getTextureUsedTypeByName(std::string name)
     else if (name == TexChannel_SpecularLobes)
     {
         usedType = MAP_LOBES;
+    }
+    else if (name == TexChannel_Anisotropy)
+    {
+        usedType = MAP_ANISOTROPY;
+    }
+    else if (name == TexChannel_AnisotropyRotation)
+    {
+        usedType = MAP_ANISOTROPY_ROTATION;
     }
     return usedType;
 }
@@ -226,6 +236,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto alpha = layerBasic->getAlpha();
     auto metalness = layerBasic->getMetalness();
     auto specular = layerBasic->getSpecular();
+    auto anisotrop = layerBasic->getAnisotropy();
+    auto anisotropRotation = layerBasic->getAnisotropyRotation();
     
     auto baseColor = layerBasic->getBaseColor();
     auto baseColorData = baseColor->getData();
@@ -412,6 +424,18 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         // 半透，暂时不对齐
     }
     
+    auto* kAnisotropy = matInfo.FindPropertyVarient("kAnisotropy");
+    if (kAnisotropy && kAnisotropy->type == RenderCore::MVarient::FLOAT)
+    {
+        anisotrop->setValue(kAnisotropy->f);
+    }
+    
+    auto* kAnisotropyRotation = matInfo.FindPropertyVarient("kAnisotropyRotation");
+    if (kAnisotropyRotation && kAnisotropyRotation->type == RenderCore::MVarient::FLOAT)
+    {
+        anisotropRotation->setValue(kAnisotropyRotation->f);
+    }
+    
     int mapType = RenderCore::MAP_COLOR;
     bool ifHdr = false;
     bool ifSrgb = false;
@@ -459,6 +483,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
                 CASE_TEXTURE_TYPE(MAP_SPECULAR, specular);
                 CASE_TEXTURE_TYPE(MAP_GLOSS, glossiness);
                 CASE_TEXTURE_TYPE(MAP_ALPHA, alpha);
+                CASE_TEXTURE_TYPE(MAP_ANISOTROPY, anisotrop);
+                CASE_TEXTURE_TYPE(MAP_ANISOTROPY_ROTATION, anisotropRotation);
             default:
                 assert(false);
                 continue;

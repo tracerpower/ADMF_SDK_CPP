@@ -255,6 +255,8 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
     std::string roughnessKey = getNewKey("roughness");
     std::string specularKey = getNewKey("specular");
     std::string glossinessKey = getNewKey("glossiness");
+    std::string anisotropyKey = getNewKey("anisotropy");
+    std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
     std::string transformKey = getNewKey("transform");
 
     while (bson_iter_next(&child))
@@ -278,8 +280,13 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
             specular_ = std::make_shared<Specular_internal>(admfIndex_, &child);
         else if (keyName == glossinessKey)
             glossiness_ = std::make_shared<Glossiness_internal>(admfIndex_, &child);
+        else if (keyName == anisotropyKey)
+            anisotropy_ = std::make_shared<Anisotropy_internal>(admfIndex_, &child);
+        else if (keyName == anisotropyRotationKey)
+            anisotropyRotation_ = std::make_shared<AnisotropyRotation_internal>(admfIndex_, &child);
         else if (keyName == transformKey)
             transform_ = std::make_shared<LayerTransform_internal>(admfIndex_, &child);
+        
     }
 }
 
@@ -299,6 +306,10 @@ void LayerBasic_internal::initMissed()
         specular_ = std::make_shared<Specular_internal>(admfIndex_);
     if (!glossiness_)
         glossiness_ = std::make_shared<Glossiness_internal>(admfIndex_);
+    if (!anisotropy_)
+        anisotropy_ = std::make_shared<Anisotropy_internal>(admfIndex_);
+    if (!anisotropyRotation_)
+        anisotropyRotation_ = std::make_shared<AnisotropyRotation_internal>(admfIndex_);
     if (!transform_)
         transform_ = std::make_shared<LayerTransform_internal>(admfIndex_);
 }
@@ -313,7 +324,10 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string roughnessKey = getNewKey("roughness");
     std::string specularKey = getNewKey("specular");
     std::string glossinessKey = getNewKey("glossiness");
+    std::string anisotropyKey = getNewKey("anisotropy");
+    std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
     std::string transformKey = getNewKey("transform");
+
 
     ADMF_BSON_APPEND_DOUBLE(doc, emissiveKey, emissive_);
     ADMF_BSON_APPEND_DOCUMENT(doc, basecolorKey, base_);
@@ -323,6 +337,8 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, roughnessKey, roughness_);
     ADMF_BSON_APPEND_DOCUMENT(doc, specularKey, specular_);
     ADMF_BSON_APPEND_DOCUMENT(doc, glossinessKey, glossiness_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, anisotropyKey, anisotropy_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, anisotropyRotationKey, anisotropyRotation_);
     ADMF_BSON_APPEND_DOCUMENT(doc, transformKey, transform_);
 }
 #endif
@@ -360,6 +376,16 @@ Specular LayerBasic_internal::getSpecular()
 Glossiness LayerBasic_internal::getGlossiness()
 {
     return Glossiness(glossiness_);
+}
+
+Anisotropy LayerBasic_internal::getAnisotropy()
+{
+    return Anisotropy(anisotropy_);
+}
+
+AnisotropyRotation LayerBasic_internal::getAnisotropyRotation()
+{
+    return AnisotropyRotation(anisotropyRotation_);
 }
 
 LayerTransform LayerBasic_internal::getTransform()

@@ -52,7 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/yushihang/Downloads/&#x9ed8;&#x8ba4;&#x989c;&#x8272;.4Ddat"
+            argument = "1"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/yushihang/Downloads/&#x4e1d;&#x7ef8;&#x900f;&#x660e;.4Ddat"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

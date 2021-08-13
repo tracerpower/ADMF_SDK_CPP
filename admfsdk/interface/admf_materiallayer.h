@@ -113,6 +113,14 @@ namespace admf
         ///    @return    返回光泽贴图
         ///    @see Glossiness
         virtual Glossiness getGlossiness() = 0;
+        ///     获取各向异性贴图
+        ///    @return    返回各向异性贴图
+        ///    @see Glossiness
+        virtual Anisotropy getAnisotropy() = 0;
+        ///     获取各向异性贴图
+        ///    @return    返回各向异性贴图
+        ///    @see Glossiness
+        virtual AnisotropyRotation getAnisotropyRotation() = 0;
         ///     获取Transform
         ///    @return    返回Transform
         ///    @see LayerTransform

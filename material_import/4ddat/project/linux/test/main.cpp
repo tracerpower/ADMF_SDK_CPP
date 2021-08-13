@@ -37,10 +37,11 @@ int main(int argc, const char *argv[])
 	{
 
 
-	case 0:
-		extractAdmf(inputPath, extractAdmfDir);
-		break;
 
+    case 0:
+        extractAdmf(inputPath, extractAdmfDir);
+        break;
+        
 	case 1:
 		_4ddatToAdmf(inputPath, outputAdmf);
 		extractAdmf(outputAdmf, extractAdmfDir);

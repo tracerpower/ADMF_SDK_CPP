@@ -24,7 +24,9 @@ namespace admf_internal {
     class Metalness_internal;
     class Roughness_internal;
     class Specular_internal;
-    class Glossiness_interna;
+    class Glossiness_internal;
+    class Anisotropy_internal;
+    class AnisotropyRotation_internal;
     class LayerTransform_internal;
     
     class MaterialLayer_internal : public admf::MaterialLayer_, public Base_internal
@@ -95,7 +97,10 @@ namespace admf_internal {
         virtual admf::Roughness getRoughness() override;
         virtual admf::Specular getSpecular() override;
         virtual admf::Glossiness getGlossiness() override;
+        virtual admf::Anisotropy getAnisotropy() override;
+        virtual admf::AnisotropyRotation getAnisotropyRotation() override;
         virtual admf::LayerTransform getTransform() override;
+        
     private:
         admf::ADMF_FLOAT emissive_ = 1.0f;
         std::shared_ptr<BaseColor_internal> base_;
@@ -105,6 +110,8 @@ namespace admf_internal {
         std::shared_ptr<Roughness_internal> roughness_;
         std::shared_ptr<Specular_internal> specular_;
         std::shared_ptr<Glossiness_internal> glossiness_;
+        std::shared_ptr<Anisotropy_internal> anisotropy_;
+        std::shared_ptr<AnisotropyRotation_internal> anisotropyRotation_;
         std::shared_ptr<LayerTransform_internal> transform_;
         
 #ifdef ADMF_EDIT

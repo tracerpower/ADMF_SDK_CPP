@@ -70,16 +70,23 @@ extern "C" char* getNewKey_(const char* origKey)
 #endif
 }
 
+#ifndef WIN32
+#define _open open
+#define _read read
+#define _write write
+#define _close close
+#endif
+
 extern bool admf_internal::copyFile(const char* src, const char* dest)
 {
     if (src == nullptr || dest == nullptr)
         return false;
-	int in_fd = open(src, O_RDONLY);
+	int in_fd = _open(src, O_RDONLY);
 	assert(in_fd >= 0);
     if (in_fd < 0)
         return false;
 
-	int out_fd = open(dest, O_WRONLY);
+	int out_fd = _open(dest, O_WRONLY);
 	assert(out_fd >= 0);
 	if (out_fd < 0)
 		return false;
@@ -87,14 +94,14 @@ extern bool admf_internal::copyFile(const char* src, const char* dest)
 	char buf[8192];
 
 	while (true) {
-		ssize_t read_result = read(in_fd, &buf[0], sizeof(buf));
+		ssize_t read_result = _read(in_fd, &buf[0], sizeof(buf));
 		if (!read_result) break;
-		ssize_t write_result = write(out_fd, &buf[0], read_result);
+		ssize_t write_result = _write(out_fd, &buf[0], read_result);
 		assert(write_result == read_result);
 	}
 
-    close(in_fd);
-    close(out_fd);
+    _close(in_fd);
+    _close(out_fd);
     return true;
 }
 

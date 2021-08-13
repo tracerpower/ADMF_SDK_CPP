@@ -613,6 +613,12 @@ std::shared_ptr<String_internal> Texture_internal::getTypeName_internal()
     case TEX_TYPE_GLOSSINESS:
         str = new String_internal("Glossiness");
         break;
+    case TEX_TYPE_ANISOTROPY:
+        str = new String_internal("Anisotropy");
+        break;
+    case TEX_TYPE_ANISOTROPY_ROTATION:
+        str = new String_internal("AnisotropyRotation");
+        break;
     default:
         str = new String_internal("Unknown");
         break;
@@ -651,25 +657,25 @@ ADMF_FLOAT Texture_internal::getPhysicalHeight()
 
 
 
-const std::vector<std::pair<admf_internal::TextureFileType, std::vector<unsigned char>>> G_BinaryTypeData
+const std::vector<std::pair<admf::TextureFileType, std::vector<unsigned char>>> G_BinaryTypeData
 {
-    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE0}},
-    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE1}},
-    {admf_internal::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE8}},
-    {admf_internal::TextureFileType::PNG, {0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A}},
-    {admf_internal::TextureFileType::GIF, {0x47,0x49,0x46,0x38}},
-    {admf_internal::TextureFileType::TIFF, {0x49,0x20,0x49}},
-    {admf_internal::TextureFileType::TIFF, {0x49,0x49,0x2A,0x00}},
-    {admf_internal::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2A}},
-    {admf_internal::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2B}},
+    {admf::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE0}},
+    {admf::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE1}},
+    {admf::TextureFileType::JPG, {0xFF,0xD8,0xFF,0xE8}},
+    {admf::TextureFileType::PNG, {0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A}},
+    {admf::TextureFileType::GIF, {0x47,0x49,0x46,0x38}},
+    {admf::TextureFileType::TIFF, {0x49,0x20,0x49}},
+    {admf::TextureFileType::TIFF, {0x49,0x49,0x2A,0x00}},
+    {admf::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2A}},
+    {admf::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2B}},
 
 };
 
 
-admf_internal::TextureFileType Texture_internal::getTypeByBinaryData()
+admf::TextureFileType Texture_internal::getTypeByBinaryData()
 {
     if (!binaryData_)
-        return admf_internal::TextureFileType::RAW;
+        return admf::TextureFileType::RAW;
     
     
     auto dataLen = binaryData_->getDataLength();
@@ -678,7 +684,7 @@ admf_internal::TextureFileType Texture_internal::getTypeByBinaryData()
 
     binaryData_->getData(dataBuff, dataLen);
     
-    admf_internal::TextureFileType result = admf_internal::TextureFileType::RAW;
+    admf::TextureFileType result = admf::TextureFileType::RAW;
     
     for (auto it = G_BinaryTypeData.begin(); it != G_BinaryTypeData.end(); it ++)
     {
@@ -714,7 +720,7 @@ admf_internal::TextureFileType Texture_internal::getTypeByBinaryData()
 }
 
 
-std::string Texture_internal::getExtensionByTextureFileType(admf_internal::TextureFileType type)
+std::string Texture_internal::getExtensionByTextureFileType(admf::TextureFileType type)
 {
     switch (type) {
     case TextureFileType::JPG:
