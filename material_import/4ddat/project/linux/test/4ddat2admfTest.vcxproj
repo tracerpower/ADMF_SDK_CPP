@@ -97,6 +97,10 @@
     <Import Project="4ddat2admfTest.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>admf_handler</TargetName>
+    <OutDir>/root/admf_handler/</OutDir>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\4ddat_to_admf.vcxproj">
       <Project>{c8ab1234-c1ff-40db-8c60-e1212c6fbdb3}</Project>

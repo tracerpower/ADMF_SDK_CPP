@@ -27,6 +27,10 @@
 #include "admf_cpp.h"
 #include "admf_internal_header.h"
 
+#if (!defined __APPLE__)
+#include <assert.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

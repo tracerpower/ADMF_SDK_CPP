@@ -35,6 +35,9 @@ int main(int argc, const char *argv[])
 
 	switch (type)
 	{
+
+
+
     case 0:
         extractAdmf(inputPath, extractAdmfDir);
         break;
