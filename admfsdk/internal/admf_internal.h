@@ -12,6 +12,7 @@
 //#include "bson.h"
 #include <unordered_map>
 #include <string>
+
 typedef struct _bson_t bson_t;
 typedef struct _bson_iter_t bson_iter_t;
  
@@ -115,6 +116,14 @@ namespace admf_internal
         
         
     };
+    
+    
+    
+    //bson helper code
+    //bson字段格式变化后进行兼容处理
+
+    bool bson_iter_can_convert_to_double (const bson_iter_t *iter);
+
     
 }
 

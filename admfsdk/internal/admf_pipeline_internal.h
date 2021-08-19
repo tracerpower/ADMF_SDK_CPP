@@ -49,7 +49,7 @@ namespace admf_internal {
 #endif
     
 
-#define TextureAndValueContainer_Internal_Declaration(classname, basename, texType) \
+#define TextureAndValueContainer_Internal_Declaration(classname, basename, texType, defaultValue) \
     class classname: public admf::basename, public Base_internal   \
     { \
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(classname);    \
@@ -59,19 +59,20 @@ namespace admf_internal {
         virtual admf::TEX_TYPE getTextureType() override {return admf::texType;};    \
     private:   \
         std::shared_ptr<Texture_internal> texture_; \
-        admf::ADMF_FLOAT value_ = 0;\
+        admf::ADMF_FLOAT value_ = defaultValue;\
     public: \
         SetValue_Declaration() \
     };
 
 
-    TextureAndValueContainer_Internal_Declaration(Normal_internal, Normal_, TEX_TYPE_NORMAL)
-    TextureAndValueContainer_Internal_Declaration(Alpha_internal, Alpha_, TEX_TYPE_ALPHA)
-    TextureAndValueContainer_Internal_Declaration(Metalness_internal, Metalness_, TEX_TYPE_METALNESS)
-    TextureAndValueContainer_Internal_Declaration(Roughness_internal, Roughness_, TEX_TYPE_ROUGHNESS)
-    TextureAndValueContainer_Internal_Declaration(Glossiness_internal, Glossiness_, TEX_TYPE_GLOSSINESS)
-    TextureAndValueContainer_Internal_Declaration(Anisotropy_internal, Anisotropy_, TEX_TYPE_ANISOTROPY)
-    TextureAndValueContainer_Internal_Declaration(AnisotropyRotation_internal, AnisotropyRotation_, TEX_TYPE_ANISOTROPY_ROTATION)
+    TextureAndValueContainer_Internal_Declaration(Normal_internal, Normal_, TEX_TYPE_NORMAL, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Alpha_internal, Alpha_, TEX_TYPE_ALPHA, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Metalness_internal, Metalness_, TEX_TYPE_METALNESS, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Roughness_internal, Roughness_, TEX_TYPE_ROUGHNESS, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Glossiness_internal, Glossiness_, TEX_TYPE_GLOSSINESS, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Anisotropy_internal, Anisotropy_, TEX_TYPE_ANISOTROPY, 0.0f)
+    TextureAndValueContainer_Internal_Declaration(AnisotropyRotation_internal, AnisotropyRotation_, TEX_TYPE_ANISOTROPY_ROTATION, 0.0f)
+    TextureAndValueContainer_Internal_Declaration(Emissive_internal, Emissive_, TEX_TYPE_EMISSIVE, 0.0f)
 
 
 }

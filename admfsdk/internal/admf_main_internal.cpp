@@ -581,3 +581,25 @@ ZipArchiveEntry::Ptr ADMF_internal::getZipArchiveEntry(const std::string &name)
     entry->SetPassword(__pwd__);
     return entry;
 }
+
+
+
+//bson helper code
+//bson字段格式变化后进行兼容处理
+#define BSON_ITER_TYPE(i) ((int) * ((i)->raw + (i)->type))
+bool admf_internal::bson_iter_can_convert_to_double (const bson_iter_t *iter)
+{
+    if (iter == nullptr)
+        return false;
+    
+    switch ((int) BSON_ITER_TYPE (iter)) {
+    case BSON_TYPE_BOOL:
+    case BSON_TYPE_DOUBLE:
+    case BSON_TYPE_INT32:
+    case BSON_TYPE_INT64:
+        return true;
+        
+    default:
+        return false;
+    }
+}

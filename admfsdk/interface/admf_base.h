@@ -57,6 +57,7 @@ namespace admf
         TEX_TYPE_GLOSSINESS, ///<光滑度贴图
         TEX_TYPE_ANISOTROPY, ///<各向异性贴图
         TEX_TYPE_ANISOTROPY_ROTATION, ///<各向异性贴图
+        TEX_TYPE_EMISSIVE, ///<自发光贴图
         TEX_TYPE_UNKNOWN     ///<未知类型
     };
 
@@ -106,6 +107,7 @@ namespace admf
     ADMF_DEF(Glossiness);
     ADMF_DEF(Anisotropy);
     ADMF_DEF(AnisotropyRotation);
+    ADMF_DEF(Emissive);
 
     /// 字符串类
     class String_

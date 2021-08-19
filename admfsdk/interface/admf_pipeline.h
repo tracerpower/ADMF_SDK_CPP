@@ -90,6 +90,10 @@ namespace admf
     {
     };
     
+    /// 自发光
+    class Emissive_ : public TextureAndValueContainer
+    {
+    };
 
 }
 #endif /* admf_material_h */

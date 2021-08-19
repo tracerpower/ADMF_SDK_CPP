@@ -84,7 +84,7 @@ namespace admf
     public:
         ///     获取反射率
         ///    @return    返回反射率
-        virtual ADMF_FLOAT getEmissive() = 0;
+        virtual Emissive getEmissive() = 0;
         ///     获取基本颜色
         ///    @return    返回基本颜色
         ///    @see BaseColor
@@ -126,12 +126,7 @@ namespace admf
         ///    @see LayerTransform
         virtual LayerTransform getTransform() = 0;
 
-#ifdef ADMF_EDIT
-    public:
-        ///     设置反射率
-        ///   @param emissive 反射率
-        virtual void setEmissive(ADMF_FLOAT emissive) = 0;
-#endif
+
     };
 
     /// 材质层空间类

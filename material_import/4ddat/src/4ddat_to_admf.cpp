@@ -58,6 +58,7 @@ const String TexChannel_Diffuse        = "uTexDiffuse";
 const String TexChannel_Bump        = "uTexBump";
 const String TexChannel_Anisotropy        = "uTexAnisotropy";
 const String TexChannel_AnisotropyRotation = "uTexAnisotropyRotation";
+const String TexChannel_Emissive = "uTexColorEmissive";
 
 int getTextureUsedTypeByName(std::string name)
 {
@@ -118,6 +119,10 @@ int getTextureUsedTypeByName(std::string name)
     else if (name == TexChannel_AnisotropyRotation)
     {
         usedType = MAP_ANISOTROPY_ROTATION;
+    }
+    else if (name == TexChannel_Emissive)
+    {
+        usedType = MAP_COLOREMISSIVE;
     }
     return usedType;
 }
@@ -238,6 +243,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto specular = layerBasic->getSpecular();
     auto anisotrop = layerBasic->getAnisotropy();
     auto anisotropRotation = layerBasic->getAnisotropyRotation();
+    auto emissive = layerBasic->getEmissive();
     
     auto baseColor = layerBasic->getBaseColor();
     auto baseColorData = baseColor->getData();
@@ -384,11 +390,10 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         //TODO
     }
     
-    layerBasic->setEmissive(0);
     auto* emissiveMultiplier = matInfo.FindPropertyVarient("emissiveMultiplier");
     if (emissiveMultiplier && emissiveMultiplier->type == RenderCore::MVarient::FLOAT)
     {
-        layerBasic->setEmissive(emissiveMultiplier->f);
+        emissive->setValue(emissiveMultiplier->f);
     }
     
     specRefraction->setGlossiness(1.0f);
@@ -485,6 +490,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
                 CASE_TEXTURE_TYPE(MAP_ALPHA, alpha);
                 CASE_TEXTURE_TYPE(MAP_ANISOTROPY, anisotrop);
                 CASE_TEXTURE_TYPE(MAP_ANISOTROPY_ROTATION, anisotropRotation);
+                CASE_TEXTURE_TYPE(MAP_COLOREMISSIVE, emissive);
             default:
                 assert(false);
                 continue;

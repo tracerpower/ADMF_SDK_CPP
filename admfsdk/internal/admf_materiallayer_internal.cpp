@@ -265,7 +265,21 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
         assert(bson_iter_value(&child) != nullptr);
         //printf("Found element key: \"%s\"\n", keyName.c_str());
         if (keyName == emissiveKey)
-            emissive_ = (ADMF_FLOAT)bson_iter_as_double(&child);
+        {
+            double emissiveValue = 0;
+            if (bson_iter_can_convert_to_double(iter))
+            {
+                emissiveValue = (ADMF_FLOAT)bson_iter_as_double(&child);
+                emissive_ = std::make_shared<Emissive_internal>(admfIndex_);
+                emissive_->setValue(emissiveValue);
+            }
+            
+            else {
+                emissive_ = std::make_shared<Emissive_internal>(admfIndex_, &child);
+            }
+
+        }
+    
         else if (keyName == basecolorKey)
             base_ = std::make_shared<BaseColor_internal>(admfIndex_, &child);
         else if (keyName == normalKey)
@@ -310,8 +324,11 @@ void LayerBasic_internal::initMissed()
         anisotropy_ = std::make_shared<Anisotropy_internal>(admfIndex_);
     if (!anisotropyRotation_)
         anisotropyRotation_ = std::make_shared<AnisotropyRotation_internal>(admfIndex_);
+    if (!emissive_)
+        emissive_ = std::make_shared<Emissive_internal>(admfIndex_);
     if (!transform_)
         transform_ = std::make_shared<LayerTransform_internal>(admfIndex_);
+
 }
 #ifdef ADMF_EDIT
 void LayerBasic_internal::save(bson_t *doc)
@@ -329,7 +346,7 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string transformKey = getNewKey("transform");
 
 
-    ADMF_BSON_APPEND_DOUBLE(doc, emissiveKey, emissive_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, emissiveKey, emissive_);
     ADMF_BSON_APPEND_DOCUMENT(doc, basecolorKey, base_);
     ADMF_BSON_APPEND_DOCUMENT(doc, normalKey, normal_);
     ADMF_BSON_APPEND_DOCUMENT(doc, alphaKey, alpha_);
@@ -342,10 +359,6 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, transformKey, transform_);
 }
 #endif
-ADMF_FLOAT LayerBasic_internal::getEmissive()
-{
-    return emissive_;
-}
 
 BaseColor LayerBasic_internal::getBaseColor()
 {
@@ -387,6 +400,12 @@ AnisotropyRotation LayerBasic_internal::getAnisotropyRotation()
 {
     return AnisotropyRotation(anisotropyRotation_);
 }
+
+Emissive LayerBasic_internal::getEmissive()
+{
+    return Emissive(emissive_);
+}
+
 
 LayerTransform LayerBasic_internal::getTransform()
 {

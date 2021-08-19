@@ -153,6 +153,7 @@ extern "C" {
         vectorLambda(basic->getGlossiness()->getTexture());
         vectorLambda(basic->getAnisotropy()->getTexture());
         vectorLambda(basic->getAnisotropyRotation()->getTexture());
+        vectorLambda(basic->getEmissive()->getTexture());
         for (auto& texture : textureVector)
         {
             auto binaryData = texture->getBinaryData();

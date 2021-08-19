@@ -27,6 +27,7 @@ namespace admf_internal {
     class Glossiness_internal;
     class Anisotropy_internal;
     class AnisotropyRotation_internal;
+    class Emissive_internal;
     class LayerTransform_internal;
     
     class MaterialLayer_internal : public admf::MaterialLayer_, public Base_internal
@@ -89,7 +90,7 @@ namespace admf_internal {
     {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(LayerBasic_internal);
     public:
-        virtual admf::ADMF_FLOAT getEmissive() override;
+        virtual admf::Emissive getEmissive() override;
         virtual admf::BaseColor getBaseColor() override;
         virtual admf::Normal getNormal() override;
         virtual admf::Alpha getAlpha() override;
@@ -102,7 +103,7 @@ namespace admf_internal {
         virtual admf::LayerTransform getTransform() override;
         
     private:
-        admf::ADMF_FLOAT emissive_ = 1.0f;
+
         std::shared_ptr<BaseColor_internal> base_;
         std::shared_ptr<Normal_internal> normal_;
         std::shared_ptr<Alpha_internal> alpha_;
@@ -112,12 +113,10 @@ namespace admf_internal {
         std::shared_ptr<Glossiness_internal> glossiness_;
         std::shared_ptr<Anisotropy_internal> anisotropy_;
         std::shared_ptr<AnisotropyRotation_internal> anisotropyRotation_;
+        std::shared_ptr<Emissive_internal> emissive_;
         std::shared_ptr<LayerTransform_internal> transform_;
         
-#ifdef ADMF_EDIT
-    public:
-        virtual void setEmissive(admf::ADMF_FLOAT emissive) override {emissive_ = emissive;};
-#endif
+
     };
     
     

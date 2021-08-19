@@ -619,6 +619,9 @@ std::shared_ptr<String_internal> Texture_internal::getTypeName_internal()
     case TEX_TYPE_ANISOTROPY_ROTATION:
         str = new String_internal("AnisotropyRotation");
         break;
+    case TEX_TYPE_EMISSIVE:
+        str = new String_internal("Emissive");
+        break;
     default:
         str = new String_internal("Unknown");
         break;
