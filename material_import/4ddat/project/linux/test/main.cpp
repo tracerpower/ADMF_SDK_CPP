@@ -22,8 +22,8 @@ int main(int argc, const char* argv[]) {
 		printf("    0 : admf (output admf path will be ignored)\n");
 		printf("    1 : 4ddat\n\n");
 		printf("examples:\n");
-		printf("    admf : %s 0 test.admf \"\" /temp/output\n", exeName);
-		printf("    4ddat : %s 1 test.4ddat output.admf /temp/output\n\n", exeName);
+		printf("    admf : %s 0 test.admf \"\" /temp/output 2 1\n", exeName);
+		printf("    4ddat : %s 1 test.4ddat output.admf /temp/output 2 1\n\n", exeName);
 
 		return 0;
 	}
