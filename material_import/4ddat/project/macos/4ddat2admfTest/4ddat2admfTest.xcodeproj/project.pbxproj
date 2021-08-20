@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -135,6 +135,7 @@
 				B1B64400260D6D5300CADA90 /* Sources */,
 				B1B64401260D6D5300CADA90 /* Frameworks */,
 				B1B64402260D6D5300CADA90 /* CopyFiles */,
+				B1BDEFE326CFA1A50079832D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -204,6 +205,27 @@
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B1BDEFE326CFA1A50079832D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho '123'\necho ${BUILT_PRODUCTS_DIR}\necho ${PRODUCT_NAME}\ncp ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME} '/Users/yushihang/Documents/未命名文件夹/temp/1/'\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B1B64400260D6D5300CADA90 /* Sources */ = {

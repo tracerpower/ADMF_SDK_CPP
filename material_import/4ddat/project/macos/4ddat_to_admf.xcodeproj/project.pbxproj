@@ -10,6 +10,7 @@
 		B1007C64260DD691005969B8 /* libadmfsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B13E6A09260C747F002BEB0A /* libadmfsdk.a */; };
 		B1007C7C260DD804005969B8 /* 4ddat_to_admf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B1007C7A260DD804005969B8 /* 4ddat_to_admf.hpp */; };
 		B1007C7D260DD804005969B8 /* 4ddat_to_admf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1007C7B260DD804005969B8 /* 4ddat_to_admf.cpp */; };
+		B1BDEFE226CF9D8C0079832D /* ctpl_stl.h in Headers */ = {isa = PBXBuildFile; fileRef = B1BDEFE026CF9D8C0079832D /* ctpl_stl.h */; };
 		B1D902F22682090B00EDABE6 /* libchangecolor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D902EF2682087900EDABE6 /* libchangecolor.a */; };
 		B1D902F32682091F00EDABE6 /* lib4Ddat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1072A192681F54C0013A7E6 /* lib4Ddat.a */; };
 		B1ECDC0C2612FA7D00EAC0A3 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B1ECDC002612FA7D00EAC0A3 /* FreeImage.h */; };
@@ -48,6 +49,20 @@
 			remoteGlobalIDString = B1B2D8772604787500F210B0;
 			remoteInfo = admfsdk;
 		};
+		B1BDEFD226CF62400079832D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1007C5B260DD66F005969B8 /* 4Ddat.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D78A47172546DE2700DC20EE;
+			remoteInfo = 4Ddat;
+		};
+		B1BDEFD426CF62400079832D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B13E6A04260C747F002BEB0A /* admfsdk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B1B2D8762604787500F210B0;
+			remoteInfo = admfsdk;
+		};
 		B1D902EE2682087900EDABE6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B1D902E82682087900EDABE6 /* changecolor.xcodeproj */;
@@ -63,6 +78,7 @@
 		B1007C7B260DD804005969B8 /* 4ddat_to_admf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4ddat_to_admf.cpp; sourceTree = "<group>"; };
 		B13E69F4260C744C002BEB0A /* lib4ddat_to_admf.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = lib4ddat_to_admf.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B13E6A04260C747F002BEB0A /* admfsdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = admfsdk.xcodeproj; path = ../../../../project/macos/admfsdk.xcodeproj; sourceTree = "<group>"; };
+		B1BDEFE026CF9D8C0079832D /* ctpl_stl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpl_stl.h; sourceTree = "<group>"; };
 		B1D902E82682087900EDABE6 /* changecolor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = changecolor.xcodeproj; path = ../../../changecolor/project/macos/changecolor.xcodeproj; sourceTree = "<group>"; };
 		B1ECDC002612FA7D00EAC0A3 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeImage.h; sourceTree = "<group>"; };
 		B1ECDC032612FA7D00EAC0A3 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng.a; sourceTree = "<group>"; };
@@ -162,6 +178,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B1BDEFDE26CF9D8C0079832D /* ctpl */ = {
+			isa = PBXGroup;
+			children = (
+				B1BDEFE026CF9D8C0079832D /* ctpl_stl.h */,
+			);
+			path = ctpl;
+			sourceTree = "<group>";
+		};
 		B1D902E92682087900EDABE6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -173,6 +197,7 @@
 		B1ECDBFE2612FA7D00EAC0A3 /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
+				B1BDEFDE26CF9D8C0079832D /* ctpl */,
 				B1ECDC2A26130CE000EAC0A3 /* lz4 */,
 				B1ECDBFF2612FA7D00EAC0A3 /* FreeImage */,
 			);
@@ -239,6 +264,7 @@
 				B1ECDC3A26130CE000EAC0A3 /* lz4hc.h in Headers */,
 				B1ECDC0C2612FA7D00EAC0A3 /* FreeImage.h in Headers */,
 				B1ECDC3726130CE000EAC0A3 /* lz4.h in Headers */,
+				B1BDEFE226CF9D8C0079832D /* ctpl_stl.h in Headers */,
 				B1007C7C260DD804005969B8 /* 4ddat_to_admf.hpp in Headers */,
 				B1ECDC3926130CE000EAC0A3 /* lz4frame_static.h in Headers */,
 				B1ECDC3426130CE000EAC0A3 /* xxhash.h in Headers */,
@@ -260,6 +286,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				B1BDEFD326CF62400079832D /* PBXTargetDependency */,
+				B1BDEFD526CF62400079832D /* PBXTargetDependency */,
 			);
 			name = 4ddat_to_admf;
 			productName = 4ddat_to_admf;
@@ -349,6 +377,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B1BDEFD326CF62400079832D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = 4Ddat;
+			targetProxy = B1BDEFD226CF62400079832D /* PBXContainerItemProxy */;
+		};
+		B1BDEFD526CF62400079832D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = admfsdk;
+			targetProxy = B1BDEFD426CF62400079832D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B13E69FD260C744C002BEB0A /* Debug */ = {

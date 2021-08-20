@@ -95,21 +95,38 @@ extern "C" {
         default:
             break;
         }
-        
+        std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+  
         FIBITMAP* bitmap = FreeImage_ConvertFromRawBitsEx(true, (BYTE*)buffer, imageType,
                                                           width, height, width * channel * elementSize,
                                                           channel * elementSize * 8, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK,
                                                           true);
         
+        std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time_span = t2-t1;
+        printf("FreeImage_ConvertFromRawBitsEx:%f\n", time_span.count());
         if (!bitmap) {
             return false;
         }
         
         //FreeImage_FlipHorizontal(bitmap);
         FreeImage_FlipVertical(bitmap);
+        std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+         time_span = t3-t2;
+        printf("FreeImage_FlipVertical:%f\n", time_span.count());
         auto info = FreeImage_GetInfo(bitmap);
+        std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+        time_span = t4-t3;
+        printf("FreeImage_GetInfo:%f\n", time_span.count());
+
         bool bSuccess = FreeImage_Save(FIF_PNG, bitmap, destPath.c_str(), PNG_DEFAULT);
+        std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
+        time_span = t5-t4;
+        printf("FreeImage_Save:%f\n", time_span.count());
         FreeImage_Unload(bitmap);
+        std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+        time_span = t6-t5;
+        printf("FreeImage_Unload:%f\n", time_span.count());
         return true;
     }
     
@@ -189,7 +206,7 @@ extern "C" {
                 needExportDiffuse = false;
                 exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
             }
-            
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             if (textureBinaryType != admf::TextureFileType::RAW)
             {
                 auto myfile = std::fstream(texturePath, std::ios::out | std::ios::binary);
@@ -200,6 +217,10 @@ extern "C" {
             {
                 ExportImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
             }
+            
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> time_span = t2-t1;
+            printf("ExportImageDataToFile:%f\n", time_span.count());
  
             free(dataBuff);
             dataBuff = nullptr;
@@ -212,6 +233,7 @@ extern "C" {
     
     bool extractAdmf(const char* admfFilePath, const char* dir_)
     {
+        std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
         printf("\nexport %s to dir %s\n", admfFilePath, dir_);
         if (admfFilePath == nullptr || dir_ == nullptr || strlen(admfFilePath) == 0 || strlen(dir_) == 0)
             return false;
@@ -277,6 +299,10 @@ extern "C" {
          mkdir(layersPath.c_str(), 0777);
          #endif
          */
+        
+        std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time_span = t2-t1;
+        printf("before extractLayer:%f\n", time_span.count());
         auto material = admf->getMaterial();
         auto layerArray = material->getLayerArray();
         auto layersCount = layerArray->size();
@@ -287,6 +313,9 @@ extern "C" {
         
         auto sideLayer = material->getSideLayer();
         extractLayer(layersPath,  sideLayer, "Side");
+        std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+         time_span = t3-t2;
+        printf("after extractLayer:%f\n", time_span.count());
         
         //admf->getMaterial()->getMetaData()->getSource()->exportToFile((dir + "/orig.4ddat").c_str());
         FreeImage_DeInitialise();

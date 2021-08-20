@@ -14,5 +14,5 @@
 #endif /* _ddat_to_admf_hpp */
 
 
-extern "C" bool _4ddatToAdmf(const char* filename, const char* admfFilePath);
+extern "C" bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCount, int pngCompressLevel);
 

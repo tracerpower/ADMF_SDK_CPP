@@ -14,7 +14,7 @@ class ZipFile
 public:
     struct FileInfo
     {
-        FileInfo(bool _isFile, const std::string& _content, const std::string& _inArchiveName, const std::string& _password, ICompressionMethod::Ptr _method = DeflateMethod::Create())
+        FileInfo(bool _isFile, const std::string& _content, const std::string& _inArchiveName, const std::string& _password, ICompressionMethod::Ptr _method = StoreMethod::Create())
         :isFile(_isFile), content(_content), inArchiveName(_inArchiveName), password(_password), method(_method)
         {
             

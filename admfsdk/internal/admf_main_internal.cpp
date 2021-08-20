@@ -411,6 +411,8 @@ void ADMF_internal::save(bson_t *doc)
 
 ADMF_RESULT ADMF_internal::saveToFile(const char *filePath)
 {
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+
     fileInfos_.clear();
     needDeleteFiles_.clear();
     std::string tmpPath(filePath);
@@ -460,9 +462,15 @@ ADMF_RESULT ADMF_internal::saveToFile(const char *filePath)
     std::string bsonZipNameKey = getNewKey(bsonZipName);
 
     fileInfos_.emplace_back(false, bsonData, bsonZipNameKey, __pwd__);
+    
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> time_span = t2-t1;
+    printf("before AddEncryptedFiles:%f\n", time_span.count());
 
     zip_helper::ZIPResult result = ZipFile::AddEncryptedFiles(tmpPath, fileInfos_);
-
+    std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+    time_span = t3-t2;
+    printf("after AddEncryptedFiles:%f\n", time_span.count());
     for (auto &filePath : needDeleteFiles_)
     {
         remove(filePath.c_str());
@@ -477,6 +485,10 @@ ADMF_RESULT ADMF_internal::saveToFile(const char *filePath)
 
     remove(filePath);
     rename(tmpPath.c_str(), filePath);
+    
+    std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+    time_span = t4-t3;
+    printf("after delete all temp files:%f\n", time_span.count());
 
     return ADMF_SUCCESS;
 }

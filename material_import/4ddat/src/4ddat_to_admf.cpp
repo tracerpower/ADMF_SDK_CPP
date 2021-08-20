@@ -32,13 +32,16 @@
 #else
 #include <sys/stat.h>
 #endif
-
 #include <iostream>
+#include <thread>
+
 #include <sstream>
 #include <fstream>
 #include <string>
 #include "changecolor.h"
 #include <iomanip>
+
+#include <ctpl_stl.h>
 
 const String TexChannel_Unknown        = "Unknown";
 const String TexChannel_Color        = "uTexColor";
@@ -167,8 +170,16 @@ std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNe
     return strContent;
 }
 
-admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const MaterialEntryInfo& materialEntryInfo, S4DTextureDataVec* outTextureDatas, const std::string& admfFilePath)
+void test()
 {
+    
+}
+
+admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const MaterialEntryInfo& materialEntryInfo, S4DTextureDataVec* outTextureDatas, const std::string& admfFilePath, int threadCount, int pngCompressLevel)
+{
+    
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+
 #if (defined __APPLE__) || (defined _WIN32)
 #ifdef __APPLE__
 	namespace fs = std::__fs::filesystem;
@@ -226,7 +237,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     
     
     auto layerType = layer->getType();
-    layerType->setString(matInfo.type.c_str());
+    auto* str_ = matInfo.type.c_str();
+    layerType->setString(str_ ? str_:"");
     
     int len = layerType->getLength();
     char *layerType_ = new char[len+1];
@@ -454,6 +466,10 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     std::vector<std::string> tempFiles;
     if (outTextureDatas )
     {
+        
+        ctpl::thread_pool p(threadCount);
+        std::future<void> allFutures[outTextureDatas->size()];
+        int futureCount = 0;
         for (int i = 0; i < outTextureDatas->size(); i++)
         {
             auto& imageData = outTextureDatas->at(i);
@@ -502,12 +518,13 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             else
                 colorSpace->setString("linear");
             
-            int w = imageData.head.imageWidth;
-            int h = imageData.head.imageHeight;
-            int c = imageData.head.imageChannels;
-            int elementsSize = imageData.head.elementSize;
-            int size = w * h * c * elementsSize;
+            int width = imageData.head.imageWidth;
+            int height = imageData.head.imageHeight;
+            int channel = imageData.head.imageChannels;
+            int elementSize = imageData.head.elementSize;
+            int size = width * height * channel * elementSize;
 
+            /*
 #if (defined _WIN32) || (defined __APPLE__)
             char tempBuff[L_tmpnam + 1] = {0};
             const char *tmpFileName = std::tmpnam(tempBuff);
@@ -521,7 +538,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             assert(tmpFileName);
             if (tmpFileName == nullptr)
                 continue;
-            
+        
             {
                 std::ofstream outfile(tmpFileName, ios::out | ios::binary);
                 outfile.write((const char*)imageData.imageData, size);
@@ -529,27 +546,141 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             
             auto binary = texture->getBinaryData();
             binary->updateFromFile(tmpFileName, true);
-            texture->setWidth(w);
-            texture->setHeight(h);
+            */
+            
+            auto binary = texture->getBinaryData();
+            auto pngLambda = [binary, imageData, size, width, height, channel, elementSize, pngCompressLevel](int id_) -> void {
+                FREE_IMAGE_TYPE imageType = FIT_UNKNOWN;
+                
+                switch (channel)
+                {
+                case 1:
+                    imageType = FIT_BITMAP;
+                    break;
+                case 2:
+                    imageType = FIT_BITMAP;
+                    break;
+                case 3:
+                    if (elementSize == 1) {
+                        imageType = FIT_BITMAP;
+                    }
+                    else if (elementSize == 2) {
+                        imageType = FIT_RGB16;
+                    }
+                    else if (elementSize == 4) {
+                        imageType = FIT_RGBF;
+                    }
+                    break;
+                case 4:
+                    if (elementSize == 1) {
+                        imageType = FIT_BITMAP;
+                    }
+                    else if (elementSize == 2) {
+                        imageType = FIT_RGBA16;
+                    }
+                    else if (elementSize == 4) {
+                        imageType = FIT_RGBAF;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+                
+                FIBITMAP* bitmap = FreeImage_ConvertFromRawBitsEx(false, (BYTE*)imageData.imageData, imageType,
+                                                                  width, height, width * channel * elementSize,
+                                                                  channel * elementSize * 8, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK,
+                                                                  false);
+                
+                std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> time_span = t2-t1;
+                printf("[%d]FreeImage_ConvertFromRawBitsEx:%f\n", id_, time_span.count());
+                if (!bitmap) {
+                    return;
+                }
+                
+                //FreeImage_FlipHorizontal(bitmap);
+                //FreeImage_FlipVertical(bitmap);
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+                time_span = t3-t2;
+                printf("[%d]FreeImage_FlipVertical:%f\n", id_, time_span.count());
+                auto info = FreeImage_GetInfo(bitmap);
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                time_span = t4-t3;
+                printf("[%d]FreeImage_GetInfo:%f\n", id_, time_span.count());
+                
+                FIMEMORY *hmem = FreeImage_OpenMemory();
+                if (!hmem)
+                {
+                    return;
+                }
+                FreeImage_SaveToMemory(FIF_PNG, bitmap, hmem, pngCompressLevel);
+                
+                long bufferSize = FreeImage_TellMemory(hmem);
+                unsigned char* buffer = new unsigned char[bufferSize];
+                
+                FreeImage_SeekMemory(hmem, 0, SEEK_SET);
+                FreeImage_ReadMemory(buffer, (unsigned int)bufferSize, 1, hmem);
+                binary->updateFromData(buffer, bufferSize);
+                FreeImage_CloseMemory(hmem);
+                
+                
+                delete[] buffer;
+                
+                
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
+                time_span = t5-t4;
+                printf("[%d]FreeImage_Save:%f\n", id_, time_span.count());
+                FreeImage_Unload(bitmap);
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                time_span = t6-t5;
+                printf("[%d]FreeImage_Unload:%f\n",id_,  time_span.count());
+                return ;
+                
+        
+            };
+            if (threadCount > 1)
+            {
+                allFutures[futureCount] = p.push(pngLambda);
+                futureCount++;
+    
+            }
+            else
+            {
+                pngLambda(0);
+            }
+            
+        
+            texture->setWidth(width);
+            texture->setHeight(height);
             if (scaleX > 0)
                 texture->setPhysicalWidth(1/ scaleX);
             if (scaleY > 0)
                 texture->setPhysicalHeight(1/scaleY);
-            texture->setChannels(c);
-            texture->setElementSize(elementsSize);
+            texture->setChannels(channel);
+            texture->setElementSize(elementSize);
 
             auto dpi = texture->getDpi();
-            auto dpi_x = (w * 25.4) * scaleX;
-            auto dpi_y = (h * 25.4) * scaleY;
+            auto dpi_x = (width * 25.4) * scaleX;
+            auto dpi_y = (height * 25.4) * scaleY;
             dpi->setX(dpi_x);
             dpi->setY(dpi_y);
 
 
         
-            tempFiles.emplace_back(tmpFileName);
+            //tempFiles.emplace_back(tmpFileName);
             
             
         }
+        
+        for (int i=0; i<futureCount ; i++ )
+        {
+            
+            allFutures[i].wait();
+        }
+
+    
+      
     }
 
     //solid colorCards
@@ -576,7 +707,15 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         }
     }
     
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> time_span = t2-t1;
+    printf("before saveToFile:%f\n", time_span.count());
+    
     admf::ADMF_RESULT result = admf->saveToFile(admfFilePath.c_str());
+    
+    std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+    time_span = t3-t2;
+    printf("after saveToFile:%f\n", time_span.count());
     
     for (auto& path : tempFiles)
     {
@@ -584,12 +723,19 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     }
     tempFiles.clear();
     delete[] layerType_;
+    
+    std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+    time_span = t4-t3;
+    printf("after remove:%f\n", time_span.count());
     return result;
 }
 
 
-bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
+bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCount, int pngCompressLevel)
 {
+    
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    
     std::string filename(filename_);
     std::string admfFilePath(admfFilePath_);
     
@@ -599,6 +745,9 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
         printf("serializer == nullptr\n");
         return false;
     }
+    std::chrono::high_resolution_clock::time_point t2_1 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> time_span = t2_1-t1;
+    printf("t2_1:%f\n", time_span.count());
     
     if (!serializer->openFile(filename))
     {
@@ -611,6 +760,10 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
         delete p;
     });
     
+    std::chrono::high_resolution_clock::time_point t2_2 = std::chrono::high_resolution_clock::now();
+    time_span = t2_2-t2_1;
+    printf("t2_2:%f\n", time_span.count());
+    
     auto outDatasHead = serializer->getFileHeaderData();
     if (outDatasHead == nullptr)
     {
@@ -620,16 +773,26 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_)
     
     assert(outDatasHead->materialNum == 1);
     
-    
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+     time_span = t2-t1;
+    printf("before getAllMaterialsEntites:%f\n", time_span.count());
     auto& matEntities = serializer->getAllMaterialsEntites();
+    
+    std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+    time_span = t3-t2;
+    printf("after getAllMaterialsEntites:%f\n", time_span.count());
     auto* outTextureDatas = serializer->getAllTextureDatas();
     for (int i = 0; i < outDatasHead->materialNum; i++)
     {
         
         MaterialEntryInfo& materialEntryInfo = matEntities[i];
         
-        auto result = materialEntryInfoToAdmf(filename, materialEntryInfo, outTextureDatas, admfFilePath);
+        auto result = materialEntryInfoToAdmf(filename, materialEntryInfo, outTextureDatas, admfFilePath,  threadCount,  pngCompressLevel);
         printf("convert %s to %s success\n", filename.c_str(), admfFilePath.c_str());
+        
+        std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+        time_span = t4-t3;
+        printf("export MaterialEntryInfo:%f\n", time_span.count());
         return result == admf::ADMF_SUCCESS;
         
     }
