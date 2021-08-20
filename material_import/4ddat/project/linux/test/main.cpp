@@ -37,17 +37,17 @@ int main(int argc, const char* argv[]) {
 	const char* outputAdmf = argv[3];
 	const char* extractAdmfDir = argv[4];
 	int threadCount = std::stoi(argv[5]);
-	int pngComressLevel = std::stoi(argv[6]);
+	int pngCompressLevel = std::stoi(argv[6]);
 
 
 	if (threadCount < 1)
 		threadCount = 1;
 
-	if (pngComressLevel < 0)
-		pngComressLevel = 0;
+	if (pngCompressLevel < 0)
+		pngCompressLevel = 0;
 
-	if (pngComressLevel > 9)
-		pngComressLevel = 9;
+	if (pngCompressLevel > 9)
+		pngCompressLevel = 9;
 
 	printf("type = %d\n", type);
 	printf("inputPath = %s\n", inputPath);
@@ -63,7 +63,7 @@ int main(int argc, const char* argv[]) {
 	case 1:
 	{
 
-		_4ddatToAdmf(inputPath, outputAdmf, threadCount, pngComressLevel);
+		_4ddatToAdmf(inputPath, outputAdmf, threadCount, pngCompressLevel);
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> time_span = t2 - t1;
 		printf("_4ddatToAdmf:%f\n", time_span.count());
