@@ -33,6 +33,9 @@
     <Filter Include="src\3rd\FreeImage\lib">
       <UniqueIdentifier>{2ac3e961-af19-48ec-8be1-07d529ab5745}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\3rd\ctpl">
+      <UniqueIdentifier>{31c9f07b-943b-4123-85db-54474aad11d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\4ddat_to_admf.hpp">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\3rd\lz4\xxhash.h">
       <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl_stl.h">
+      <Filter>src\3rd\ctpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

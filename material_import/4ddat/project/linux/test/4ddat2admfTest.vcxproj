@@ -100,6 +100,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>admf_handler</TargetName>
     <OutDir>/root/admf_handler/</OutDir>
+    <TargetExt>.</TargetExt>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\4ddat_to_admf.vcxproj">
