@@ -65,7 +65,7 @@ namespace admf_internal {
     };
 
 
-    TextureAndValueContainer_Internal_Declaration(Normal_internal, Normal_, TEX_TYPE_NORMAL, 1.0f)
+    TextureAndValueContainer_Internal_Declaration(Normal_internal, Normal_, TEX_TYPE_NORMAL, 1.2f)
     TextureAndValueContainer_Internal_Declaration(Alpha_internal, Alpha_, TEX_TYPE_ALPHA, 1.0f)
     TextureAndValueContainer_Internal_Declaration(Metalness_internal, Metalness_, TEX_TYPE_METALNESS, 1.0f)
     TextureAndValueContainer_Internal_Declaration(Roughness_internal, Roughness_, TEX_TYPE_ROUGHNESS, 1.0f)
