@@ -20,48 +20,45 @@
 #include <stdlib.h>
 
 namespace admfRender{
-#ifdef __cplusplus
-    extern "C" {
-#endif
-        
-        /**
-         * Function: xxtea_encrypt
-         * @data:    Data to be encrypted
-         * @len:     Length of the data to be encrypted
-         * @key:     Symmetric key
-         * @out_len: Pointer to output length variable
-         * Returns:  Encrypted data or %NULL on failure
-         *
-         * Caller is responsible for freeing the returned buffer.
-         */
-        void * makeRenderPipeline(const void * data, size_t len, const void * key, size_t * out_len);
-        
-        /**
-         * Function: xxtea_decrypt
-         * @data:    Data to be decrypted
-         * @len:     Length of the data to be decrypted
-         * @key:     Symmetric key
-         * @out_len: Pointer to output length variable
-         * Returns:  Decrypted data or %NULL on failure
-         *
-         * Caller is responsible for freeing the returned buffer.
-         */
-        void * rasterizer(const void * data, size_t len, const void * key, size_t * out_len);
-        
-        extern const unsigned char _[384];
-        
-        extern  unsigned char __[413];
-        
-        void init();
-        
-        //convert bytes use dictionary
-        void ___(unsigned char * buff, size_t len);
-        void ____(unsigned char * buff, size_t len);
-        
-#ifdef __cplusplus
-    }
-#endif
+    
+    
+    /**
+     * Function: xxtea_encrypt
+     * @data:    Data to be encrypted
+     * @len:     Length of the data to be encrypted
+     * @key:     Symmetric key
+     * @out_len: Pointer to output length variable
+     * Returns:  Encrypted data or %NULL on failure
+     *
+     * Caller is responsible for freeing the returned buffer.
+     */
+    void * makeRenderPipeline(const void * data, size_t len, const void * key, size_t * out_len);
+    
+    /**
+     * Function: xxtea_decrypt
+     * @data:    Data to be decrypted
+     * @len:     Length of the data to be decrypted
+     * @key:     Symmetric key
+     * @out_len: Pointer to output length variable
+     * Returns:  Decrypted data or %NULL on failure
+     *
+     * Caller is responsible for freeing the returned buffer.
+     */
+    void * rasterizer(const void * data, size_t len, const void * key, size_t * out_len);
+    
+    extern const unsigned char _[384];
+    
+    extern  unsigned char __[413];
+    
+    void init();
+    
+    //convert bytes use dictionary
+    void ___(unsigned char * buff, size_t len);
+    void ____(unsigned char * buff, size_t len);
+    
+    
     
 }
 
 #endif
+
