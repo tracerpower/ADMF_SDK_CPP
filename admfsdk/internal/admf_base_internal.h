@@ -102,7 +102,7 @@ namespace admf_internal
         admf::String getRawName();
 
 		std::string getNameString() {
-			if (assignedName_->getLength() > 0)
+			if (!assignedName_->isEmpty())
 				return std::to_string(baseIndex_) + "_" + assignedName_->getInternalString();
 			if (!name_->getInternalString().empty())
 				return std::to_string(baseIndex_) + "_" + name_->getInternalString();

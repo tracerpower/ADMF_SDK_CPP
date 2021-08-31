@@ -184,8 +184,8 @@ extern "C" {
             admf_internal::BinaryData_internal* binaryData_internal = dynamic_cast<admf_internal::BinaryData_internal*>(binaryData.get());
             
             auto name = binaryData_internal->getRawName();
-            char* nameBuff = new char[name->getLength()+1];
-            name->getString(nameBuff, name->getLength()+1);
+            char* nameBuff = new char[name->getLength()];
+            name->getString(nameBuff, name->getLength());
             auto texturePath = pathName + "/" + nameBuff;
             
             

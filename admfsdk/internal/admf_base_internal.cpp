@@ -341,7 +341,7 @@ String BinaryData_internal::getAssignedName()
 
 String BinaryData_internal::getName()
 {
-    if (assignedName_->getLength() > 0)
+    if (!assignedName_->isEmpty())
         return getAssignedName();
 
     return getRawName();
