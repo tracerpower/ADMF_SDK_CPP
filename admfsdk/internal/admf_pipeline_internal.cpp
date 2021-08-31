@@ -58,6 +58,21 @@ void BaseColor_internal::initMissed()
 #ifdef ADMF_EDIT
 void BaseColor_internal::save(bson_t *doc)
 {
+    auto type = data_->getType();
+    if (type->getLength() == 0)
+    {
+        auto solid = data_->getSolid();
+        auto blockArray = solid->getBlockArray();
+        if (blockArray->size() == 0)
+        {
+            auto solidBlock = blockArray->append();
+            solidBlock->setOriginal(1);
+            type->setString("solid");
+        }
+    
+    }
+    
+    
     texture_->setType(getTextureType());
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
