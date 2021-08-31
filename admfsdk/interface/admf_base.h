@@ -113,6 +113,7 @@ namespace admf
     class String_
     {
     public:
+        virtual bool isEmpty() = 0;
         /// 获取字符串长度
         ///    @see ADMFUINT
         virtual ADMF_UINT getLength() = 0;

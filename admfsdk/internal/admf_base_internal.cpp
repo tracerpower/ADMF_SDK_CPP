@@ -47,6 +47,11 @@ ADMF_UINT String_internal::getLength()
     return (ADMF_UINT)(str_.length() + 1);
 }
 
+bool String_internal::isEmpty()
+{
+     return str_.length() == 0;
+}
+
 ADMF_UINT String_internal::getString(ADMF_CHAR *buff, ADMF_UINT len)
 {
     if (buff == nullptr)

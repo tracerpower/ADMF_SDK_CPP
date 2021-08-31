@@ -59,7 +59,8 @@ void BaseColor_internal::initMissed()
 void BaseColor_internal::save(bson_t *doc)
 {
     auto type = data_->getType();
-    if (type->getLength() == 0)
+
+    if (type->isEmpty())
     {
         auto solid = data_->getSolid();
         auto blockArray = solid->getBlockArray();
