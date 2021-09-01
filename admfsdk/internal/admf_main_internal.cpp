@@ -394,6 +394,8 @@ void ADMF_internal::save(bson_t *doc)
     std::string physicsKey = getNewKey("physics");
     std::string customKey = getNewKey("custom");
     std::string geometryKey = getNewKey("geometry");
+    
+    schema_->setString("1.0");
 
     ADMF_BSON_APPEND_STRING(doc, schemaKey, schema_);
     ADMF_BSON_APPEND_DOCUMENT(doc, materialKey, material_internal_);
