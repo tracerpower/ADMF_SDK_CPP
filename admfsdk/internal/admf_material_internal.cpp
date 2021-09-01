@@ -277,6 +277,7 @@ void MaterialMetaData_internal::load(bson_iter_t *iter) //save
 
     std::string sourceKey = getNewKey("source");
     std::string typeKey = getNewKey("type");
+    std::string versionKey = getNewKey("version");
     
     while (bson_iter_next (&child)) {
         std::string keyName = bson_iter_key (&child);
@@ -287,9 +288,13 @@ void MaterialMetaData_internal::load(bson_iter_t *iter) //save
             source_ = std::make_shared<BinaryData_internal>(admfIndex_, &child);
             source_->name_->str_ = "original";
         }
-        if (keyName == typeKey)
+        else if (keyName == typeKey)
         {
             type_ = std::make_shared<String_internal>(admfIndex_, &child);
+        }
+        else if (keyName == versionKey)
+        {
+            version_ = std::make_shared<String_internal>(admfIndex_, &child);
         }
         
     }
@@ -311,9 +316,11 @@ void MaterialMetaData_internal::save(bson_t* doc)
 {
     std::string sourceKey = getNewKey("source");
     std::string typeKey = getNewKey("type");
+    std::string versionKey = getNewKey("version");
 
     ADMF_BSON_APPEND_BINARY(doc, sourceKey, source_);
     ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
+    ADMF_BSON_APPEND_STRING(doc, versionKey, version_);
 }
 #endif
 
@@ -324,4 +331,8 @@ BinaryData MaterialMetaData_internal::getSource()
 admf::String MaterialMetaData_internal::getType()
 {
     return String(type_);
+}
+admf::String MaterialMetaData_internal::getVersion()
+{
+    return String(version_);
 }

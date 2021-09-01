@@ -83,6 +83,8 @@ namespace admf
     virtual BinaryData getSource() = 0; // source material file
                                         ///获取类型
     virtual String getType() = 0;       //"4ddat",
+      
+    virtual String getVersion() = 0;    //"1.0"
   };
 }
 #endif /* admf_material_h */

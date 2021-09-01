@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "1"
+            argument = "0"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/test.4ddat"
+            argument = "/Users/yushihang/Downloads/Fabric.admf"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
