@@ -309,6 +309,8 @@ void MaterialMetaData_internal::initMissed()
         source_ = std::make_shared<BinaryData_internal>(admfIndex_);
     if (!type_)
         type_ = std::make_shared<String_internal>(admfIndex_);
+    if (!version_)
+        version_ = std::make_shared<String_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
