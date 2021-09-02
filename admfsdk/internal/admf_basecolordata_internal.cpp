@@ -73,9 +73,10 @@ void BaseColorData_internal::save(bson_t* doc)
     std::string indexKey = getNewKey("index");
 
 	ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
+    ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, solidKey, solid_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, multiKey, multi_);
-    ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
+    
 }
 #endif
 
