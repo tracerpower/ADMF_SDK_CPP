@@ -118,11 +118,11 @@ namespace admf_internal {
     {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorDataMultiBlockMask_internal);
     public:
-        virtual admf::String getMaskPath() override;
+        virtual admf::Texture getMask() override;
         virtual admf::String getValue() override;
 
     private:
-        std::shared_ptr<String_internal> maskPath_;
+        std::shared_ptr<Texture_internal> mask_;
         std::shared_ptr<String_internal> value_;
 
     };

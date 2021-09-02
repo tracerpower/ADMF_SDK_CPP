@@ -155,9 +155,9 @@ namespace admf
     class BaseColorDataMultiBlockMask_
     {
     public:
-        ///    获取多色改色的Mask文件名
-        ///    @return    返回Mask文件名
-        virtual admf::String getMaskPath() = 0;
+        ///    获取多色改色的Mask文件
+        ///    @return    返回Mask文件
+        virtual admf::Texture getMask() = 0;
 
         ///    获取改色颜色值
         ///    @return    返回改色颜色值
