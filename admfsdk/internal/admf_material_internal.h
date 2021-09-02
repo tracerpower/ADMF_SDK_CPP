@@ -76,9 +76,11 @@ namespace admf_internal {
     public:
         virtual admf::BinaryData getSource() override; // source material file
         virtual admf::String getType() override; //"4ddat",
+        virtual admf::String getVersion() override; //"1.0",
     private:
         std::shared_ptr<BinaryData_internal> source_;
         std::shared_ptr<String_internal> type_;
+        std::shared_ptr<String_internal> version_;
     };
 }
 #endif /* admf_material_internal_hpp */

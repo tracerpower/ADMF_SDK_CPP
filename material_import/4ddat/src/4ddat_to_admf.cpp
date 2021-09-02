@@ -241,7 +241,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     layerType->setString(str_ ? str_:"");
     
     int len = layerType->getLength();
-    char *layerType_ = new char[len+1];
+    char *layerType_ = new char[len];
     layerType->getString(layerType_, len);
     
     auto layerBasic = layer->getBasic();

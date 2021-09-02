@@ -200,6 +200,7 @@ void BaseColorDataSolid_internal::initMissed()
 #ifdef ADMF_EDIT
 void BaseColorDataSolid_internal::save(bson_t *doc)
 {
+
     std::string colorSpaceKey = getNewKey("colorSpace");
     std::string valueKey = getNewKey("value");
     std::string inputBlackKey = getNewKey("inputBlack");

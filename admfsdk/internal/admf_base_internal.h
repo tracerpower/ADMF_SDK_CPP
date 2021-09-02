@@ -27,6 +27,7 @@ namespace admf_internal
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(String_internal);
     public:
         virtual admf::ADMF_UINT getLength() override;
+        virtual bool isEmpty() override;
         virtual admf::ADMF_UINT getString(admf::ADMF_CHAR* buff, admf::ADMF_UINT) override;
         
         const std::string& getInternalString() {return str_;};
@@ -101,7 +102,7 @@ namespace admf_internal
         admf::String getRawName();
 
 		std::string getNameString() {
-			if (assignedName_->getLength() > 0)
+			if (!assignedName_->isEmpty())
 				return std::to_string(baseIndex_) + "_" + assignedName_->getInternalString();
 			if (!name_->getInternalString().empty())
 				return std::to_string(baseIndex_) + "_" + name_->getInternalString();
