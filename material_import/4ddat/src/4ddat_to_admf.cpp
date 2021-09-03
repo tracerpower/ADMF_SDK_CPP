@@ -468,7 +468,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     {
         
         ctpl::thread_pool p(threadCount);
-        std::future<void> allFutures[outTextureDatas->size()];
+        std::future<void>* allFutures = new std::future<void>[outTextureDatas->size()];
         int futureCount = 0;
         for (int i = 0; i < outTextureDatas->size(); i++)
         {
@@ -679,6 +679,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             allFutures[i].wait();
         }
 
+        delete[] allFutures;
     
       
     }
