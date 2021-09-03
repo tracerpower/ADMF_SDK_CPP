@@ -41,6 +41,7 @@
 #include "changecolor.h"
 #include <iomanip>
 
+
 #include <ctpl_stl.h>
 
 const String TexChannel_Unknown        = "Unknown";
@@ -468,7 +469,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     {
         
         ctpl::thread_pool p(threadCount);
-        std::future<void> allFutures[outTextureDatas->size()];
+        std::future<void>* allFutures = new std::future<void>[outTextureDatas->size()];
         int futureCount = 0;
         for (int i = 0; i < outTextureDatas->size(); i++)
         {
@@ -679,7 +680,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
             allFutures[i].wait();
         }
 
-    
+        delete[] allFutures;
       
     }
 
@@ -782,7 +783,7 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCo
     time_span = t3-t2;
     printf("after getAllMaterialsEntites:%f\n", time_span.count());
     auto* outTextureDatas = serializer->getAllTextureDatas();
-    for (int i = 0; i < outDatasHead->materialNum; i++)
+    for (int i = 0; i < outDatasHead->materialNum && i< matEntities.size(); i++)
     {
         
         MaterialEntryInfo& materialEntryInfo = matEntities[i];
