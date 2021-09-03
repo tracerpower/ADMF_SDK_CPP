@@ -73,9 +73,10 @@ void BaseColorData_internal::save(bson_t* doc)
     std::string indexKey = getNewKey("index");
 
 	ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
+    ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, solidKey, solid_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, multiKey, multi_);
-    ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
+    
 }
 #endif
 
@@ -513,7 +514,7 @@ void BaseColorDataMultiBlockMask_internal::load(bson_iter_t *iter) //save
     if (!bson_iter_recurse(iter, &child))
         return;
 
-    std::string maskPathKey = getNewKey("maskPath");
+    std::string maskKey = getNewKey("mask");
     std::string valueKey = getNewKey("value");
 
     while (bson_iter_next(&child))
@@ -521,9 +522,9 @@ void BaseColorDataMultiBlockMask_internal::load(bson_iter_t *iter) //save
         std::string keyName = bson_iter_key(&child);
         assert(bson_iter_value(&child) != nullptr);
         //printf("Found element key: \"%s\"\n", keyName.c_str());
-        if (keyName == maskPathKey)
+        if (keyName == maskKey)
         {
-            maskPath_ = std::make_shared<String_internal>(admfIndex_, &child);
+            mask_ = std::make_shared<Texture_internal>(admfIndex_, &child);
         }
         else if (keyName == valueKey)
         {
@@ -535,8 +536,8 @@ void BaseColorDataMultiBlockMask_internal::load(bson_iter_t *iter) //save
 
 void BaseColorDataMultiBlockMask_internal::initMissed()
 {
-    if (!maskPath_)
-        maskPath_ = std::make_shared<String_internal>(admfIndex_);
+    if (!mask_)
+        mask_ = std::make_shared<Texture_internal>(admfIndex_);
     if (!value_)
         value_ = std::make_shared<String_internal>(admfIndex_);
 }
@@ -544,19 +545,19 @@ void BaseColorDataMultiBlockMask_internal::initMissed()
 #ifdef ADMF_EDIT
 void BaseColorDataMultiBlockMask_internal::save(bson_t *doc)
 {
-    std::string maskPathKey = getNewKey("maskPath");
+    std::string maskKey = getNewKey("mask");
     std::string valueKey = getNewKey("value");
 
 
-    ADMF_BSON_APPEND_STRING(doc, maskPathKey, maskPath_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, maskKey, mask_);
     ADMF_BSON_APPEND_STRING(doc, valueKey, value_);
 
 }
 #endif
 
-String BaseColorDataMultiBlockMask_internal::getMaskPath()
+Texture BaseColorDataMultiBlockMask_internal::getMask()
 {
-    return maskPath_;
+    return mask_;
 }
 
 String BaseColorDataMultiBlockMask_internal::getValue()
