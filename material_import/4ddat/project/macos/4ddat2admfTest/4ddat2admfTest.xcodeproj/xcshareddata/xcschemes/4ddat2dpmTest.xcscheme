@@ -56,7 +56,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/test.4ddat"
+            argument = "&quot;/Users/yushihang/Downloads/PANTONE 20-0011TPM.4Ddat&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
