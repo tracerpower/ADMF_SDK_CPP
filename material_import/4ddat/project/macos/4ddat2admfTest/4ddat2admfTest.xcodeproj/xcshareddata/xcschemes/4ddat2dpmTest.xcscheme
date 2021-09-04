@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "1"
+            argument = "0"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Downloads/PANTONE 20-0011TPM.4Ddat&quot;"
+            argument = "/Users/yushihang/Downloads/bug-3(2)(6)(2)(1)(1)(1).admf"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

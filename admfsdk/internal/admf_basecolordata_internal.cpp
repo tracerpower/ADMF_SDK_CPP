@@ -514,7 +514,7 @@ void BaseColorDataMultiBlockMask_internal::load(bson_iter_t *iter) //save
     if (!bson_iter_recurse(iter, &child))
         return;
 
-    std::string maskKey = getNewKey("mask");
+    std::string maskKey = getNewKey("texture");
     std::string valueKey = getNewKey("value");
 
     while (bson_iter_next(&child))
@@ -545,7 +545,7 @@ void BaseColorDataMultiBlockMask_internal::initMissed()
 #ifdef ADMF_EDIT
 void BaseColorDataMultiBlockMask_internal::save(bson_t *doc)
 {
-    std::string maskKey = getNewKey("mask");
+    std::string maskKey = getNewKey("texture");
     std::string valueKey = getNewKey("value");
 
 
