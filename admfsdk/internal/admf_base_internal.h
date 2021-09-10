@@ -30,7 +30,7 @@ namespace admf_internal
         virtual bool isEmpty() override;
         virtual admf::ADMF_UINT getString(admf::ADMF_CHAR* buff, admf::ADMF_UINT) override;
         
-        const std::string& getInternalString() {return str_;};
+        const std::string& getInternalString() override {return str_;};
     private:
         String_internal(const std::string& str):Base_internal(-1),str_(str) {}
         std::string str_;
