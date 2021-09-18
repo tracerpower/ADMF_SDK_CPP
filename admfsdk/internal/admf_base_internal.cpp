@@ -44,7 +44,7 @@ void String_internal::save(bson_t *doc)
 #endif
 ADMF_UINT String_internal::getLength()
 {
-    return (ADMF_UINT)(str_.length() + 1);
+    return (ADMF_UINT)str_.length();
 }
 
 bool String_internal::isEmpty()
