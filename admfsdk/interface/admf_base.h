@@ -15,7 +15,7 @@
 #define ADMF_MAX_STR_LEN (256)
 
 #include <memory>
-
+#include <string>
 namespace admf
 {
 
@@ -121,6 +121,8 @@ namespace admf
         ///      @param buff 传入的指针
         ///    @see ADMFUINT
         virtual ADMF_UINT getString(ADMF_CHAR *buff, ADMF_UINT) = 0;
+
+        virtual const std::string& getInternalString() = 0;
 
 #ifdef ADMF_EDIT
     public:

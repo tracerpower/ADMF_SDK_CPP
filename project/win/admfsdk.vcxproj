@@ -309,8 +309,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)Bin\Debug  (xcopy $(SolutionDir)x64\Debug\admfsdk.lib $(SolutionDir)Bin\Debug /e/y) 
-if exist $(SolutionDir)External\source\RenderCore\Private\Include\admfsdk (xcopy $(SolutionDir)Source\admfsdk\admfsdk\interface  $(SolutionDir)External\source\RenderCore\Private\Include\admfsdk /e /y)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -335,8 +335,8 @@ if exist $(SolutionDir)External\source\RenderCore\Private\Include\admfsdk (xcopy
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)Bin\Release  (xcopy $(SolutionDir)x64\Release\admfsdk.lib $(SolutionDir)Bin\Release /e/y) 
-if exist $(SolutionDir)External\source\RenderCore\Private\Include\admfsdk (xcopy $(SolutionDir)Source\admfsdk\admfsdk\interface  $(SolutionDir)External\source\RenderCore\Private\Include\admfsdk /e /y)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
