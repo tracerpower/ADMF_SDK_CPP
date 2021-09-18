@@ -35,11 +35,15 @@ namespace admf
         ///    @return    返回多色改色数据
         ///    @see BaseColorDataMulti
         virtual BaseColorDataMulti getMulti() = 0;
+        
+        
+
 
 #ifdef ADMF_EDIT
         ///    获取类型
         ///    @param  index 当前生效的色卡index
         virtual void setIndex(ADMF_INT index) = 0;
+
 #endif
 
 
@@ -162,6 +166,30 @@ namespace admf
         ///    获取改色颜色值
         ///    @return    返回改色颜色值
         virtual admf::String getValue() = 0; //"166,202,240",
+    };
+    
+  
+    class BaseColorChangeColorData_
+    {
+    public:
+        virtual ADMF_BYTE isEnable() = 0;
+        virtual ADMF_DOUBLE getBottomS() = 0;
+        virtual ADMF_DOUBLE getBottomV() = 0;
+        virtual ADMF_DOUBLE getMeanS() = 0;
+        virtual ADMF_DOUBLE getMeanV() = 0;
+        virtual ADMF_DOUBLE getKS() = 0;
+        virtual ADMF_DOUBLE getKV() = 0;
+        
+#ifdef ADMF_EDIT
+    public:
+        virtual void setEnabled(ADMF_BYTE enabled) = 0;
+        virtual void setBottomS(ADMF_DOUBLE bottomS) = 0;
+        virtual void setBottomV(ADMF_DOUBLE bottomV) = 0;
+        virtual void setMeanS(ADMF_DOUBLE meanS) = 0;
+        virtual void setMeanV(ADMF_DOUBLE meanV) = 0;
+        virtual void setKS(ADMF_DOUBLE kS) = 0;
+        virtual void setKV(ADMF_DOUBLE kV) = 0;
+#endif
     };
     
 

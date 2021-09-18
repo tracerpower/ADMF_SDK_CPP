@@ -49,6 +49,8 @@ namespace admf
         ///     获取基本颜色数据
         ///    @return    返回基本颜色数据
         virtual BaseColorData getData() = 0;
+        virtual BaseColorChangeColorData getChangeColorData() = 0;
+
     };
 
     /// 法线贴图类

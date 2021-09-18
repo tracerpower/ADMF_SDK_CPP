@@ -22,6 +22,7 @@ namespace admf
     typedef int ADMF_INT;
     typedef unsigned int ADMF_UINT;
     typedef float ADMF_FLOAT;
+    typedef double ADMF_DOUBLE;
     typedef unsigned long long ADMF_DATE;
     typedef unsigned char ADMF_BYTE;
     typedef char ADMF_CHAR;
@@ -97,6 +98,7 @@ namespace admf
     ADMF_DEF(BaseColorDataMulti);
     ADMF_DEF(BaseColorDataMultiBlock);
     ADMF_DEF(BaseColorDataMultiBlockMask);
+    ADMF_DEF(BaseColorChangeColorData);
 
     ADMF_DEF(BaseColor);
     ADMF_DEF(Normal);

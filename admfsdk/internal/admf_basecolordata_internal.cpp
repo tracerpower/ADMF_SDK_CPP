@@ -30,6 +30,7 @@ void BaseColorData_internal::load(bson_iter_t *iter) //save
     std::string solidKey = getNewKey("solid");
     std::string multiKey = getNewKey("multi");
     std::string indexKey = getNewKey("index");
+    
 
     while (bson_iter_next(&child))
     {
@@ -52,6 +53,7 @@ void BaseColorData_internal::load(bson_iter_t *iter) //save
         {
             index_ = (ADMF_INT)bson_iter_as_int64(&child);
         }
+
     }
 }
 
@@ -63,6 +65,7 @@ void BaseColorData_internal::initMissed()
         solid_ = std::make_shared<BaseColorDataSolid_internal>(admfIndex_);
     if (!multi_)
         multi_ = std::make_shared<BaseColorDataMulti_internal>(admfIndex_);
+
 }
 #ifdef ADMF_EDIT
 void BaseColorData_internal::save(bson_t* doc)
@@ -71,11 +74,13 @@ void BaseColorData_internal::save(bson_t* doc)
 	std::string solidKey = getNewKey("solid");
 	std::string multiKey = getNewKey("multi");
     std::string indexKey = getNewKey("index");
+ 
 
 	ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
     ADMF_BSON_APPEND_INT32(doc, indexKey, index_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, solidKey, solid_);
 	ADMF_BSON_APPEND_DOCUMENT(doc, multiKey, multi_);
+
     
 }
 #endif
@@ -100,6 +105,8 @@ admf::ADMF_INT BaseColorData_internal::getIndex()
 {
     return index_;
 }
+
+
 
 #ifdef ADMF_EDIT
 void BaseColorData_internal::setIndex(ADMF_INT index)
@@ -564,3 +571,91 @@ String BaseColorDataMultiBlockMask_internal::getValue()
 {
     return value_;
 }
+
+
+
+void BaseColorChangeColorData_internal::load(bson_iter_t *iter) //save
+{
+    
+    if (iter == nullptr)
+        return;
+    
+    if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+        return;
+    
+    bson_iter_t child;
+    if (!bson_iter_recurse(iter, &child))
+        return;
+    
+    std::string enabledKey = getNewKey("enabled");
+    std::string bottomSKey = getNewKey("bottomS");
+    std::string bottomVKey = getNewKey("bottomV");
+    std::string meanSKey = getNewKey("meanS");
+    std::string meanVKey = getNewKey("meanV");
+    std::string kSKey = getNewKey("kS");
+    std::string kVKey = getNewKey("kV");
+    
+    while (bson_iter_next(&child))
+    {
+        std::string keyName = bson_iter_key(&child);
+        assert(bson_iter_value(&child) != nullptr);
+        //printf("Found element key: \"%s\"\n", keyName.c_str());
+        if (keyName == enabledKey)
+        {
+            enabled_ = (ADMF_BYTE)bson_iter_as_int64(&child);
+        }
+        else if (keyName == bottomSKey)
+        {
+            bottomS_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+        else if (keyName == bottomVKey)
+        {
+            bottomV_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+        else if (keyName == meanSKey)
+        {
+            meanS_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+        else if (keyName == meanVKey)
+        {
+            meanV_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+        else if (keyName == kSKey)
+        {
+            kS_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+        else if (keyName == kVKey)
+        {
+            kV_ = (ADMF_DOUBLE)bson_iter_as_double(&child);
+        }
+   
+    }
+}
+
+void BaseColorChangeColorData_internal::initMissed()
+{
+
+}
+#ifdef ADMF_EDIT
+void BaseColorChangeColorData_internal::save(bson_t* doc)
+{
+    std::string enabledKey = getNewKey("enabled");
+    std::string bottomSKey = getNewKey("bottomS");
+    std::string bottomVKey = getNewKey("bottomV");
+    std::string meanSKey = getNewKey("meanS");
+    std::string meanVKey = getNewKey("meanV");
+    std::string kSKey = getNewKey("kS");
+    std::string kVKey = getNewKey("kV");
+    
+
+    ADMF_BSON_APPEND_INT64(doc, enabledKey, enabled_);
+    ADMF_BSON_APPEND_DOUBLE(doc, bottomSKey, bottomS_);
+    ADMF_BSON_APPEND_DOUBLE(doc, bottomVKey, bottomV_);
+    ADMF_BSON_APPEND_DOUBLE(doc, meanSKey, meanS_);
+    ADMF_BSON_APPEND_DOUBLE(doc, meanVKey, meanV_);
+    ADMF_BSON_APPEND_DOUBLE(doc, kSKey, kS_);
+    ADMF_BSON_APPEND_DOUBLE(doc, kVKey, kV_);
+    
+    
+}
+#endif

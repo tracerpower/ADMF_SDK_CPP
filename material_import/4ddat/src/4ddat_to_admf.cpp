@@ -259,6 +259,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto emissive = layerBasic->getEmissive();
     
     auto baseColor = layerBasic->getBaseColor();
+    auto changeColorData = baseColor->getChangeColorData();
     auto baseColorData = baseColor->getData();
     auto baseColorSolid = baseColorData->getSolid();
     auto baseColorSolidBlock = baseColorSolid->getBlockArray();
@@ -452,6 +453,49 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     if (kAnisotropyRotation && kAnisotropyRotation->type == RenderCore::MVarient::FLOAT)
     {
         anisotropRotation->setValue(kAnisotropyRotation->f);
+    }
+    
+    
+    auto* bottomS = matInfo.FindPropertyVarient("bottomS");
+    if (bottomS && bottomS->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setBottomS(bottomS->f);
+        changeColorData->setEnabled(1);
+    }
+    
+    auto* bottomV = matInfo.FindPropertyVarient("bottomV");
+    if (bottomV && bottomV->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setBottomV(bottomV->f);
+        changeColorData->setEnabled(1);
+    }
+
+    auto* kS = matInfo.FindPropertyVarient("kS");
+    if (kS && kS->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setKS(kS->f);
+        changeColorData->setEnabled(1);
+    }
+    
+    auto* kV = matInfo.FindPropertyVarient("kV");
+    if (kV && kV->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setKV(kV->f);
+        changeColorData->setEnabled(1);
+    }
+    
+    auto* meanS = matInfo.FindPropertyVarient("meanS");
+    if (meanS && meanS->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setMeanS(meanS->f);
+        changeColorData->setEnabled(1);
+    }
+    
+    auto* meanV = matInfo.FindPropertyVarient("meanV");
+    if (meanV && meanV->type == RenderCore::MVarient::FLOAT)
+    {
+        changeColorData->setMeanV(meanV->f);
+        changeColorData->setEnabled(1);
     }
     
     int mapType = RenderCore::MAP_COLOR;

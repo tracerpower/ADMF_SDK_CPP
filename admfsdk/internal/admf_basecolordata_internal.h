@@ -19,6 +19,7 @@ namespace admf_internal {
 
 
 
+
     class BaseColorData_internal : public admf::BaseColorData_, public Base_internal
     {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorData_internal);
@@ -27,6 +28,9 @@ namespace admf_internal {
         virtual admf::ADMF_INT getIndex() override;
         virtual admf::BaseColorDataSolid getSolid() override;
         virtual admf::BaseColorDataMulti getMulti() override;
+        
+
+        
 #ifdef ADMF_EDIT
         virtual void setIndex(admf::ADMF_INT index) override;
 #endif
@@ -125,6 +129,39 @@ namespace admf_internal {
         std::shared_ptr<Texture_internal> mask_;
         std::shared_ptr<String_internal> value_;
 
+    };
+    
+    class BaseColorChangeColorData_internal : public admf::BaseColorChangeColorData_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(BaseColorChangeColorData_internal);
+    public:
+        virtual admf::ADMF_BYTE isEnable() override {return enabled_;};
+        virtual admf::ADMF_DOUBLE getBottomS() override {return bottomS_;};
+        virtual admf::ADMF_DOUBLE getBottomV() override {return bottomV_;};
+        virtual admf::ADMF_DOUBLE getMeanS() override {return meanS_;};
+        virtual admf::ADMF_DOUBLE getMeanV() override {return meanV_;};
+        virtual admf::ADMF_DOUBLE getKS() override {return kS_;};
+        virtual admf::ADMF_DOUBLE getKV() override {return kV_;};
+        
+    private:
+        admf::ADMF_BYTE enabled_ = false;
+        admf::ADMF_DOUBLE bottomS_ = false;
+        admf::ADMF_DOUBLE bottomV_ = false;
+        admf::ADMF_DOUBLE meanS_ = false;
+        admf::ADMF_DOUBLE meanV_ = false;
+        admf::ADMF_DOUBLE kS_ = false;
+        admf::ADMF_DOUBLE kV_ = false;
+        
+#ifdef ADMF_EDIT
+    public:
+        virtual void setEnabled(admf::ADMF_BYTE enabled) override {enabled_ = enabled;};
+        virtual void setBottomS(admf::ADMF_DOUBLE bottomS) override {bottomS_ = bottomS;};
+        virtual void setBottomV(admf::ADMF_DOUBLE bottomV) override {bottomV_ = bottomV;};
+        virtual void setMeanS(admf::ADMF_DOUBLE meanS) override {meanS_ = meanS;};
+        virtual void setMeanV(admf::ADMF_DOUBLE meanV) override {meanV_ = meanV;};
+        virtual void setKS(admf::ADMF_DOUBLE kS) override {kS_ = kS;};
+        virtual void setKV(admf::ADMF_DOUBLE kV) override {kV_ = kV;};
+#endif
     };
 }
 #endif /* admf_basecolordata_internal_hpp */
