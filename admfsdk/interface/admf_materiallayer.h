@@ -85,8 +85,8 @@ namespace admf
         ///     获取反射率
         ///    @return    返回反射率
         virtual Emissive getEmissive() = 0;
-        ///     获取基本颜色
-        ///    @return    返回基本颜色
+        ///     获取DiffUse信息
+        ///    @return    返回DiffUse信息
         ///    @see BaseColor
         virtual BaseColor getBaseColor() = 0;
         ///     获取法线贴图

@@ -6,7 +6,7 @@
 #include "changecolor.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include "opencv2/opencv.hpp"
 
 namespace  CHANGE_COLOR {
 	struct Double4
@@ -335,10 +335,110 @@ namespace  CHANGE_COLOR {
 		//delete[] output;
 	}
 
-	Result wrap(const std::string& loadPath) {
-		int width, height, channel;
-		auto* data = stbi_load(loadPath.c_str(), &width, &height, &channel, 0);
-		return changeColor(data, width, height, channel);
-	}
+
+    
+    using namespace cv;
+    void colorAlterationsSingle(const std::string src, double& ks, double& bottoms, double& means, double& kv, double& bottomv, double& meanv)
+    {
+        Mat srcimage = imread(src, IMREAD_COLOR);
+        if (srcimage.channels() != 3)
+            return;
+        
+        cv::cvtColor(srcimage, srcimage, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(srcimage, srcimage, cv::COLOR_GRAY2BGR);
+        
+        //convert to hsv
+        /*Mat bgrColor = Mat(1, 1, CV_8UC3, color);*/
+        Mat hsvImage;
+        cvtColor(srcimage, hsvImage, COLOR_BGR2HSV);
+        
+        std::vector<Mat> singleimgs;
+        split(hsvImage, singleimgs);
+        
+        std::vector<std::vector<int>> tables;
+        
+        int width, height;
+        int npixels = 0;
+        width = std::min(300, srcimage.cols);
+        height = std::min(300, srcimage.rows);
+        
+        for (int i = 1; i < 3; i++) //HSV
+        {
+            std::vector<int> table(256, 0);
+            Mat curimg;
+            resize(singleimgs[i], curimg, Size(width, height), 0, 0, INTER_NEAREST);
+            curimg.convertTo(curimg, CV_32FC1);
+            npixels = curimg.cols * curimg.rows;
+            
+            //mean
+            cv::Scalar sclmean = sum(curimg) / npixels;
+            double mean = sclmean[0];
+            
+            //variance
+            cv::Mat minalsMat = curimg - mean;
+            minalsMat = minalsMat.mul(minalsMat);
+            cv::Scalar quadratic_sum = sum(minalsMat);
+            double variance = sqrt(quadratic_sum[0] / npixels);
+            
+            //get extremum
+            double max1 = 2 * variance;
+            double min1 = -2 * variance;
+            double max2, min2;
+            cv::minMaxLoc(curimg, &min2, &max2, 0, 0);
+            
+            //reduce effect from noise
+            double maxvalue = std::min(max1, max2 - mean);
+            double minvalue = std::max(min1, min2 - mean);
+            if (minvalue < -20)
+                minvalue = -20;
+            if (maxvalue > 20)
+                maxvalue = 20;
+            
+            double bottom = abs(minvalue);
+            double top = 255 - maxvalue;
+            
+            //refine the input color
+            double k = (top - bottom) / 255;
+            
+            if (i == 1)
+            {
+                ks = k;
+                bottoms = bottom;
+                means = mean;
+                
+            }
+            else if (i == 2)
+            {
+                kv = k;
+                bottomv = bottom;
+                meanv = mean;
+            }
+            
+        }
+    }
+    
+    /*
+     Result wrap(const std::string& loadPath) {
+         int width, height, channel;
+         auto* data = stbi_load(loadPath.c_str(), &width, &height, &channel, 0);
+         return changeColor(data, width, height, channel);
+     }
+     */
+    
+    Result wrap(const std::string& loadPath) {
+        int width, height, channel;
+        auto* data = stbi_load(loadPath.c_str(), &width, &height, &channel, 0);
+        Result result;
+        std::string str((const char*)data);
+        colorAlterationsSingle(str, result.kS, result.bottomS, result.meanS, result.kV, result.bottomV, result.meanV);
+        return result;
+    }
+    
+    Result changeColor_new(const std::string path)
+    {
+        Result result;
+        colorAlterationsSingle(path, result.kS, result.bottomS, result.meanS, result.kV, result.bottomV, result.meanV);
+        return result;
+    }
 
 }

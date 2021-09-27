@@ -56,6 +56,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B18A242D2700ABFA00005B91 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		B18A242F2700AC1C00005B91 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		B1B64404260D6D5300CADA90 /* 4ddat2admfTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 4ddat2admfTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1B64407260D6D5300CADA90 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B1B6440F260D6D6F00CADA90 /* 4ddat_to_admf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = 4ddat_to_admf.xcodeproj; path = ../4ddat_to_admf.xcodeproj; sourceTree = "<group>"; };
@@ -78,6 +80,8 @@
 		B193CF63260D853000593CA3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B18A242F2700AC1C00005B91 /* OpenGL.framework */,
+				B18A242D2700ABFA00005B91 /* OpenCL.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -381,6 +385,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -400,6 +405,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

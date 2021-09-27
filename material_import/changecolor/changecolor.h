@@ -15,4 +15,5 @@ namespace  CHANGE_COLOR {
 	};
 	Result DYNAMIC_OUTPUT wrap(const std::string& loadPath);
 	Result DYNAMIC_OUTPUT changeColor(unsigned char* data, int picWidth, int picHeight, int picChannel);
+    Result DYNAMIC_OUTPUT changeColor_new(const std::string path);
 }

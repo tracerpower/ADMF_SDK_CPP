@@ -200,59 +200,7 @@ extern "C" {
             unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
             binaryData->getData(dataBuff, dataLen);
             
-            if (needExportDiffuse)
-            {
-              
-                CHANGE_COLOR::Result result;
-               
-                if (textureBinaryType == admf::TextureFileType::RAW)
-                    result = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
-                else
-                {
-                    FIMEMORY* stream = FreeImage_OpenMemory();
-                    FreeImage_WriteMemory(dataBuff, 1, dataLen, stream);
-                    FreeImage_SeekMemory(stream, 0, SEEK_SET);
-                    
-                    FREE_IMAGE_FORMAT format = FIF_PNG;
-                    switch (textureBinaryType) {
-                    case admf::TextureFileType::PNG:
-                        format = FIF_PNG;
-                        break;
-                    case admf::TextureFileType::JPG:
-                        format = FIF_JPEG;
-                        break;
-                    case admf::TextureFileType::GIF:
-                        format = FIF_GIF;
-                        break;
-                    case admf::TextureFileType::TIFF:
-                        format = FIF_TIFF;
-                        break;
-                        
-                    default:
-                        break;
-                    }
-                    FIBITMAP* bitmap = FreeImage_LoadFromMemory(FIF_PNG, stream);
-                    
-              
-                    int width = FreeImage_GetWidth(bitmap);
-                    int height = FreeImage_GetHeight(bitmap);
-                    int scan_width = FreeImage_GetPitch(bitmap);
-                    int bpp = FreeImage_GetBPP(bitmap);
-                    BYTE *bits = (BYTE*)malloc(height * scan_width);
-                    // convert the bitmap to raw bits (top-left pixel first)
-                    FreeImage_ConvertToRawBits(bits, bitmap, scan_width, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
-                    FreeImage_Unload(bitmap);
-                  
-                    FreeImage_CloseMemory(stream);
-                    
-                    result = CHANGE_COLOR::changeColor(bits, width, height, bpp / 8);
-                    
-                    free(bits);
-                }
-                
-                needExportDiffuse = false;
-                exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
-            }
+           
             std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             if (textureBinaryType != admf::TextureFileType::RAW)
             {
@@ -265,9 +213,79 @@ extern "C" {
                 ExportImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
             }
             
+            
+            
             std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> time_span = t2-t1;
             printf("ExportImageDataToFile:%f\n", time_span.count());
+            
+            if (needExportDiffuse)
+            {
+                
+                CHANGE_COLOR::Result result;
+                auto changeColorData = basic->getBaseColor()->getChangeColorData();
+                if (changeColorData->isEnable())
+                {
+                    result.bottomS = changeColorData->getBottomS();
+                    result.bottomV = changeColorData->getBottomV();
+                    result.meanV = changeColorData->getMeanV();
+                    result.meanS = changeColorData->getMeanS();
+                    result.kS = changeColorData->getKS();
+                    result.kV = changeColorData->getKV();
+                }
+                else if (textureBinaryType == admf::TextureFileType::RAW)
+                    result = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
+                else
+                {
+                    /*
+                     FIMEMORY* stream = FreeImage_OpenMemory();
+                     FreeImage_WriteMemory(dataBuff, 1, dataLen, stream);
+                     FreeImage_SeekMemory(stream, 0, SEEK_SET);
+                     
+                     FREE_IMAGE_FORMAT format = FIF_PNG;
+                     switch (textureBinaryType) {
+                     case admf::TextureFileType::PNG:
+                     format = FIF_PNG;
+                     break;
+                     case admf::TextureFileType::JPG:
+                     format = FIF_JPEG;
+                     break;
+                     case admf::TextureFileType::GIF:
+                     format = FIF_GIF;
+                     break;
+                     case admf::TextureFileType::TIFF:
+                     format = FIF_TIFF;
+                     break;
+                     
+                     default:
+                     break;
+                     }
+                     FIBITMAP* bitmap = FreeImage_LoadFromMemory(FIF_PNG, stream);
+                     
+                     
+                     int width = FreeImage_GetWidth(bitmap);
+                     int height = FreeImage_GetHeight(bitmap);
+                     int scan_width = FreeImage_GetPitch(bitmap);
+                     int bpp = FreeImage_GetBPP(bitmap);
+                     BYTE *bits = (BYTE*)malloc(height * scan_width);
+                     // convert the bitmap to raw bits (top-left pixel first)
+                     FreeImage_ConvertToRawBits(bits, bitmap, scan_width, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+                     FreeImage_Unload(bitmap);
+                     
+                     FreeImage_CloseMemory(stream);
+                     
+                     result = CHANGE_COLOR::changeColor(bits, width, height, bpp / 8);
+                     
+                     free(bits);
+                     */
+
+                    result = CHANGE_COLOR::changeColor_new(texturePath);
+                }
+                
+                needExportDiffuse = false;
+                exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
+            }
+            
  
             free(dataBuff);
             dataBuff = nullptr;
