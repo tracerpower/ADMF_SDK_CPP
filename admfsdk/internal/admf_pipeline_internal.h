@@ -43,6 +43,65 @@ namespace admf_internal {
         std::shared_ptr<ColorRGB_internal> color_;
 
     };
+    
+    
+    class Emissive_internal: public admf::Emissive_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(Emissive_internal);
+    public:
+        virtual admf::Texture getTexture() override;
+        virtual admf::TEX_TYPE getTextureType() override {return admf::TEX_TYPE_EMISSIVE;};
+        virtual admf::ColorRGB getColor() override;
+        virtual admf::ADMF_FLOAT getValue() override {return value_;};
+#ifdef ADMF_EDIT
+        virtual void setValue(admf::ADMF_FLOAT value) override {value_ = value;}
+#endif
+        
+    private:
+        std::shared_ptr<Texture_internal> texture_;
+        std::shared_ptr<ColorRGB_internal> color_;
+        admf::ADMF_FLOAT value_ = 0.0;
+    };
+    
+    
+    
+    class AmbientOcclusion_internal: public admf::AmbientOcclusion_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(AmbientOcclusion_internal);
+    public:
+        virtual admf::Texture getTexture() override;
+        virtual admf::TEX_TYPE getTextureType() override {return admf::TEX_TYPE_AO;};
+        
+    private:
+        std::shared_ptr<Texture_internal> texture_;
+
+    };
+    
+    
+    /// Height
+    class Height_internal: public admf::Height_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(Height_internal);
+
+        
+    public:
+        virtual admf::Texture getTexture() override;
+        virtual admf::TEX_TYPE getTextureType() override {return admf::TEX_TYPE_HEIGHT;};
+        virtual admf::ADMF_FLOAT getValue() override {return value_;};
+        virtual admf::ADMF_FLOAT getLevel() override  {return level_;};
+
+#ifdef ADMF_EDIT
+    public:
+        virtual void setValue(admf::ADMF_FLOAT value) override {value_ = value;};
+        virtual void setLevel(admf::ADMF_FLOAT level) override {level_ = level;};
+#endif
+        
+    private:
+        std::shared_ptr<Texture_internal> texture_;
+        admf::ADMF_FLOAT value_ = 1.0;
+        admf::ADMF_FLOAT level_ = 1.0;
+    };
+
 
     
 #ifdef ADMF_EDIT
@@ -75,7 +134,7 @@ namespace admf_internal {
     TextureAndValueContainer_Internal_Declaration(Glossiness_internal, Glossiness_, TEX_TYPE_GLOSSINESS, 1.0f)
     TextureAndValueContainer_Internal_Declaration(Anisotropy_internal, Anisotropy_, TEX_TYPE_ANISOTROPY, 0.0f)
     TextureAndValueContainer_Internal_Declaration(AnisotropyRotation_internal, AnisotropyRotation_, TEX_TYPE_ANISOTROPY_ROTATION, 0.0f)
-    TextureAndValueContainer_Internal_Declaration(Emissive_internal, Emissive_, TEX_TYPE_EMISSIVE, 0.0f)
+
 
 
 }

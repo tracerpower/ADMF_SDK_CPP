@@ -121,6 +121,14 @@ namespace admf
         ///    @return    返回各向异性贴图
         ///    @see Glossiness
         virtual AnisotropyRotation getAnisotropyRotation() = 0;
+        ///     获取AO贴图
+        ///    @return    返回AO贴图
+        ///    @see AmbientOcclusion
+        virtual AmbientOcclusion getAmbientOcclusion() = 0;
+        ///     获取Height贴图
+        ///    @return    返回Height贴图
+        ///    @see Height
+        virtual Height getHeight() = 0;
         ///     获取Transform
         ///    @return    返回Transform
         ///    @see LayerTransform

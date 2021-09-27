@@ -627,6 +627,12 @@ std::shared_ptr<String_internal> Texture_internal::getTypeName_internal()
     case TEX_TYPE_EMISSIVE:
         str = new String_internal("Emissive");
         break;
+    case TEX_TYPE_AO:
+        str = new String_internal("AO");
+        break;
+    case TEX_TYPE_HEIGHT:
+        str = new String_internal("Height");
+        break;
     default:
         str = new String_internal("Unknown");
         break;

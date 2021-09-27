@@ -257,6 +257,8 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto anisotrop = layerBasic->getAnisotropy();
     auto anisotropRotation = layerBasic->getAnisotropyRotation();
     auto emissive = layerBasic->getEmissive();
+    auto ambientOcclusion = layerBasic->getAmbientOcclusion();
+    auto height = layerBasic->getHeight();
     
     auto baseColor = layerBasic->getBaseColor();
     auto changeColorData = baseColor->getChangeColorData();
@@ -324,13 +326,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
 
     
     
-    auto* kHs = matInfo.FindPropertyVarient("kHs");
-    if (kHs && kHs->type == RenderCore::MVarient::FLOAT)
-    {
-        //todo
-        //凹凸贴图的偏移量
-    }
-    
+
     alpha->setValue(1.0);
     auto* kAlpha = matInfo.FindPropertyVarient("kAlpha");
     if (kAlpha && kAlpha->type == RenderCore::MVarient::FLOAT)
@@ -398,17 +394,23 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         color->setG(specularColor->vec3.y);
         color->setB(specularColor->vec3.z);
     }
-    auto* emissiveColor = matInfo.FindPropertyVarient("emissiveColor");
-    if (emissiveColor && emissiveColor->type == RenderCore::MVarient::VEC3)
-    {
-        //TODO
-    }
+
     
     auto* emissiveMultiplier = matInfo.FindPropertyVarient("emissiveMultiplier");
     if (emissiveMultiplier && emissiveMultiplier->type == RenderCore::MVarient::FLOAT)
     {
         emissive->setValue(emissiveMultiplier->f);
     }
+    
+    auto* emissiveColor = matInfo.FindPropertyVarient("emissiveColor");
+    if (emissiveColor && emissiveColor->type == RenderCore::MVarient::VEC3)
+    {
+        auto color = emissive->getColor();
+        color->setR(specularColor->vec3.x);
+        color->setG(specularColor->vec3.y);
+        color->setB(specularColor->vec3.z);
+    }
+    
     
     specRefraction->setGlossiness(1.0f);
     auto* refractionGlossiness = matInfo.FindPropertyVarient("refractionGlossiness");
@@ -498,6 +500,22 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         changeColorData->setEnabled(1);
     }
     
+    
+    
+    auto* kHeightLevel = matInfo.FindPropertyVarient("kHeightLevel");
+    if (kHeightLevel && kHeightLevel->type == RenderCore::MVarient::FLOAT)
+    {
+        height->setLevel(kHeightLevel->f);
+    }
+    
+    auto* kHs = matInfo.FindPropertyVarient("kHs");
+    if (kHs && kHs->type == RenderCore::MVarient::FLOAT)
+    {
+        height->setValue(kHs->f);
+    }
+    
+
+    
     int mapType = RenderCore::MAP_COLOR;
     bool ifHdr = false;
     bool ifSrgb = false;
@@ -552,6 +570,9 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
                 CASE_TEXTURE_TYPE(MAP_ANISOTROPY, anisotrop);
                 CASE_TEXTURE_TYPE(MAP_ANISOTROPY_ROTATION, anisotropRotation);
                 CASE_TEXTURE_TYPE(MAP_COLOREMISSIVE, emissive);
+                CASE_TEXTURE_TYPE(MAP_AO, ambientOcclusion);
+                CASE_TEXTURE_TYPE(MAP_HEIGHT, height);
+                
             default:
                 assert(false);
                 continue;

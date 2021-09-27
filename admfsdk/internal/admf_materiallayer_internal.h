@@ -100,6 +100,8 @@ namespace admf_internal {
         virtual admf::Glossiness getGlossiness() override;
         virtual admf::Anisotropy getAnisotropy() override;
         virtual admf::AnisotropyRotation getAnisotropyRotation() override;
+        virtual admf::AmbientOcclusion getAmbientOcclusion() override;
+        virtual admf::Height getHeight() override;
         virtual admf::LayerTransform getTransform() override;
         
     private:
@@ -114,6 +116,8 @@ namespace admf_internal {
         std::shared_ptr<Anisotropy_internal> anisotropy_;
         std::shared_ptr<AnisotropyRotation_internal> anisotropyRotation_;
         std::shared_ptr<Emissive_internal> emissive_;
+        std::shared_ptr<AmbientOcclusion_internal> ambientOcclusion_;
+        std::shared_ptr<Height_internal> height_;
         std::shared_ptr<LayerTransform_internal> transform_;
         
 

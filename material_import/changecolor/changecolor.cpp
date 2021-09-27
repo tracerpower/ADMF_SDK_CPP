@@ -258,7 +258,7 @@ namespace  CHANGE_COLOR {
 		double kS = (topS - bottomS) / 255.f;
 		double kV = (topV - bottomV) / 255.f;
 
-		return { bottomS, bottomV, meanS, meanV, kS, kV };
+		return { bottomS, bottomV, meanS, meanV, kS, kV, 1 };
 		//auto diffuseColor = RGBToHSV(mDiffuseColor);
 		//diffuseColor = toOpenCVFormatHSV(diffuseColor);
 		//bool saturateZero = false;

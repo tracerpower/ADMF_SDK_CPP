@@ -92,9 +92,37 @@ namespace admf
     };
     
     /// 自发光
-    class Emissive_ : public TextureAndValueContainer
+    class Emissive_: public TextureContainer
     {
+
+    public:
+        virtual admf::ColorRGB getColor() = 0;
+        virtual admf::ADMF_FLOAT getValue() = 0;
+#ifdef ADMF_EDIT
+        virtual void setValue(admf::ADMF_FLOAT value)  = 0;
+#endif
     };
+    
+    
+    /// AO
+    class AmbientOcclusion_: public TextureContainer
+    {
+        
+    };
+    
+    /// Height
+    class Height_: public TextureContainer
+    {
+
+        virtual admf::ADMF_FLOAT getValue() = 0;
+        virtual admf::ADMF_FLOAT getLevel() = 0;
+#ifdef ADMF_EDIT
+    public:
+        virtual void setValue(admf::ADMF_FLOAT value) = 0;
+        virtual void setLevel(admf::ADMF_FLOAT level) = 0;
+#endif
+    };
+
 
 }
 #endif /* admf_material_h */

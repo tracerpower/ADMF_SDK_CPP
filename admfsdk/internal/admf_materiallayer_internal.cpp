@@ -257,7 +257,10 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
     std::string glossinessKey = getNewKey("glossiness");
     std::string anisotropyKey = getNewKey("anisotropy");
     std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
+    std::string ambientOcclusionKey = getNewKey("ambientOcclusion");
+    std::string heightKey = getNewKey("height");
     std::string transformKey = getNewKey("transform");
+    
 
     while (bson_iter_next(&child))
     {
@@ -300,7 +303,10 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
             anisotropyRotation_ = std::make_shared<AnisotropyRotation_internal>(admfIndex_, &child);
         else if (keyName == transformKey)
             transform_ = std::make_shared<LayerTransform_internal>(admfIndex_, &child);
-        
+        else if (keyName == ambientOcclusionKey)
+            ambientOcclusion_ = std::make_shared<AmbientOcclusion_internal>(admfIndex_, &child);
+        else if (keyName == heightKey)
+            height_ = std::make_shared<Height_internal>(admfIndex_, &child);
     }
 }
 
@@ -326,6 +332,10 @@ void LayerBasic_internal::initMissed()
         anisotropyRotation_ = std::make_shared<AnisotropyRotation_internal>(admfIndex_);
     if (!emissive_)
         emissive_ = std::make_shared<Emissive_internal>(admfIndex_);
+    if (!ambientOcclusion_)
+        ambientOcclusion_ = std::make_shared<AmbientOcclusion_internal>(admfIndex_);
+    if (!height_)
+        height_ = std::make_shared<Height_internal>(admfIndex_);
     if (!transform_)
         transform_ = std::make_shared<LayerTransform_internal>(admfIndex_);
 
@@ -343,6 +353,8 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string glossinessKey = getNewKey("glossiness");
     std::string anisotropyKey = getNewKey("anisotropy");
     std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
+    std::string ambientOcclusionKey = getNewKey("ambientOcclusion");
+    std::string heightKey = getNewKey("height");
     std::string transformKey = getNewKey("transform");
 
 
@@ -356,6 +368,8 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, glossinessKey, glossiness_);
     ADMF_BSON_APPEND_DOCUMENT(doc, anisotropyKey, anisotropy_);
     ADMF_BSON_APPEND_DOCUMENT(doc, anisotropyRotationKey, anisotropyRotation_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, ambientOcclusionKey, ambientOcclusion_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, heightKey, height_);
     ADMF_BSON_APPEND_DOCUMENT(doc, transformKey, transform_);
 }
 #endif
@@ -401,11 +415,20 @@ AnisotropyRotation LayerBasic_internal::getAnisotropyRotation()
     return AnisotropyRotation(anisotropyRotation_);
 }
 
+AmbientOcclusion LayerBasic_internal::getAmbientOcclusion()
+{
+    return AmbientOcclusion(ambientOcclusion_);
+}
+
+Height LayerBasic_internal::getHeight()
+{
+    return Height(height_);
+}
+
 Emissive LayerBasic_internal::getEmissive()
 {
     return Emissive(emissive_);
 }
-
 
 LayerTransform LayerBasic_internal::getTransform()
 {
