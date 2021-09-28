@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "1"
+            argument = "2"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/yushihang/Downloads/Height_emissive_AO_Example.4Ddat"
+            argument = "&quot;/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/xtex/4MM  LACE NON-WICKING --- 8-26-2021 15_33_51.zip&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

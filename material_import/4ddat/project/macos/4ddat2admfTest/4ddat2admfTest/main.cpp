@@ -22,10 +22,11 @@ int main(int argc, const char * argv[]) {
         printf("input file type:\n");
         printf("    0 : admf (output admf path will be ignored)\n");
         printf("    1 : 4ddat\n\n");
+        printf("    2 : xTex\n\n");
         printf("examples:\n");
-        printf("    admf : %s 0 test.admf \"\" /temp/output\n", exeName);
-        printf("    4ddat : %s 1 test.4ddat output.admf /temp/output\n\n", exeName);
-
+        printf("    admf : %s 0 test.admf \"\" /temp/output 2 6 \n", exeName);
+        printf("    4ddat : %s 1 test.4ddat output.admf /temp/output 2 6 \n", exeName);
+        printf("    xTex : %s 2 test.zip output.admf /temp/output 2 6 \n", exeName);
         return 0;
     }
     
@@ -78,7 +79,11 @@ int main(int argc, const char * argv[]) {
         }
         break;
         
-
+    case 2:
+        {
+            
+        }
+        break;
         
         
     default:

@@ -129,6 +129,8 @@ public:
      * \param destinationPath Full pathname of the extracted file.
      */
     static zip_helper::ZIPResult ExtractFile(const std::string& zipPath, const std::string& fileName, const std::string& destinationPath);
+    
+
 
     /**
      * \brief Extracts an encrypted file from the zip archive.

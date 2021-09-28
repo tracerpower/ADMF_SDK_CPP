@@ -320,6 +320,7 @@ zip_helper::ZIPResult ZipFile::ExtractEncryptedFile(const std::string& zipPath, 
     return zip_helper::ZIPResult::SUCCESS;
 }
 
+
 zip_helper::ZIPResult ZipFile::RemoveEntry(const std::string& zipPath, const std::string& fileName)
 {
     std::string tmpName = MakeTempFilename(zipPath);
