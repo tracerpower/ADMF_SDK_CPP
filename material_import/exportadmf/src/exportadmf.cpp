@@ -40,6 +40,7 @@ extern "C" {
         try {
             std::ofstream out(path);
             out << "{" << std::endl;
+            out << "\t\"version\": "  << result.version << "," << std::endl;
             out << "\t\"hasDiffuseMap\": true," << std::endl;
             out << "\t\"bottomS\": " << std::setprecision(20) << result.bottomS << "," << std::endl;
             out << "\t\"bottomV\": " << std::setprecision(20) << result.bottomV << "," << std::endl;

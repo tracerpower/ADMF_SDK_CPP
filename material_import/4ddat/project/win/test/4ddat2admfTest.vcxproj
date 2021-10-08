@@ -93,7 +93,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\3rd\FreeImage\lib\win</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\3rd\FreeImage\lib\win;$(ProjectDir)..\..\..\..\changecolor\3rd\opencv\lib\win\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ws2_32.lib;FreeImaged.lib;opencv_core453d.lib;opencv_imgcodecs453d.lib;opencv_imgproc453d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -128,7 +128,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\3rd\FreeImage\lib\win</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\3rd\FreeImage\lib\win;$(ProjectDir)..\..\..\..\changecolor\3rd\opencv\lib\win\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ws2_32.lib;FreeImaged.lib;opencv_core453d.lib;opencv_imgcodecs453d.lib;opencv_imgproc453d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
