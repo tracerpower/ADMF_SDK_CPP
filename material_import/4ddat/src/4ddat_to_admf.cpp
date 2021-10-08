@@ -42,7 +42,7 @@
 #include <iomanip>
 
 
-#include <ctpl_stl.h>
+#include "ctpl_stl.h"
 
 const String TexChannel_Unknown        = "Unknown";
 const String TexChannel_Color        = "uTexColor";

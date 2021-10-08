@@ -56,6 +56,9 @@
     <ClInclude Include="..\..\..\3rd\lz4\xxhash.h">
       <Filter>src\3rd\lz4</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl.h">
+      <Filter>src\3rd\ctpl</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\3rd\ctpl\ctpl_stl.h">
       <Filter>src\3rd\ctpl</Filter>
     </ClInclude>
