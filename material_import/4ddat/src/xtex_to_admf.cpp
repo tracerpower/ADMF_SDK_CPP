@@ -51,25 +51,7 @@
 #include "rapidxml_print.hpp"
 #include "rapidxml_utils.hpp"
 
-std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNew)
-{
-    std::string strContent, strTemp;
-    strContent.assign( pszSrc );
-    std::string::size_type nPos = 0;
-    while( true )
-    {
-        nPos = strContent.find(pszOld, nPos);
-        strTemp = strContent.substr(nPos+strlen(pszOld), strContent.length());
-        if ( nPos == std::string::npos )
-        {
-            break;
-        }
-        strContent.replace(nPos,strContent.length(), pszNew );
-        strContent.append(strTemp);
-        nPos +=strlen(pszNew) - strlen(pszOld)+1; //防止重复替换 避免死循环
-    }
-    return strContent;
-}
+extern std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNew);
 
 bool hasEnding (std::string const &fullString, std::string const &ending) {
     if (fullString.length() >= ending.length()) {
@@ -104,37 +86,120 @@ bool _xtexToAdmf(const char* filename_, const char* admfFilePath_, int threadCou
         return false;
     
     auto count = zipArchive->GetEntriesCount();
-    std::vector<ZipArchiveEntry::Ptr> entryVector(zipArchive->GetEntriesCount());
     
-   
+    std::istream* xmlDataStream = nullptr;
     for (int i=0; i< count; i++ ){
         
         auto entry = zipArchive->GetEntry(i);
-        if (entry == nullptr)
-            continue;
-        
-        entryVector.push_back(entry);
-    
-    }
-    
-    
-    std::istream* xmlDataStream = nullptr;
-    //find the first xml
-    for (auto& entry : entryVector)
-    {
         auto& name = entry->GetName();
         if (hasEnding(name, "_Description.xml"))
         {
             xmlDataStream = entry->GetDecompressionStream();
             break;
         }
+
+    
     }
     
+
     
     if (xmlDataStream == nullptr)
         return false;
     
-    std::string xmlContent(std::istreambuf_iterator<char>(xmlDataStream), {});
+    
+    
+    std::string xmlContent(std::istreambuf_iterator<char>(*xmlDataStream), {});
+    
+    try {
+        admf::ADMF admf = admf::createADMF();
+        admf->getSchema()->setString("1.0");
+        admf::Material admfMaterial = admf->getMaterial();
+        
+        const auto p1 = std::chrono::system_clock::now();
+        admf::ADMF_DATE timeStamp = (admf::ADMF_DATE)std::chrono::duration_cast<std::chrono::milliseconds>(p1.time_since_epoch()).count();
+        admfMaterial->setCreatedTime(timeStamp);
+        admfMaterial->setModifiedTime(timeStamp);
+        
+
+        
+        auto metadata = admfMaterial->getMetaData();
+        auto metadataSource = metadata->getSource();
+        
+        
+#if (defined __APPLE__) || (defined _WIN32)
+#ifdef __APPLE__
+        namespace fs = std::__fs::filesystem;
+#else
+        namespace fs = std::filesystem;
+#endif
+        auto path = fs::path(filename_);
+        
+        std::string sourceFileName = path.filename().string();
+#else
+        std::string sourceFileName;
+        auto pos = filename.rfind("/");
+        if (pos == std::string::npos)
+        {
+            sourceFileName = filename;
+        }
+        else{
+            sourceFileName = filename.substr(pos+1);
+        }
+#endif
+        
+        metadataSource->setName(sourceFileName.c_str());
+        metadataSource->updateFromFile(filename_, false);
+        metadata->getType()->setString("xtex");
+        
+
+        
+        
+        //parse XML
+        rapidxml::xml_document<> doc;
+        doc.parse<0>((char*)(xmlContent.c_str()));
+       
+        
+        rapidxml::xml_node<> *firstNode = doc.first_node();
+        
+        auto* name = firstNode->name();
+        assert(strcmp(name, "swatch") == 0);
+        
+
+        {
+            auto* node = firstNode->first_node("uuid");
+            if (node)
+            {
+                auto* value = node->value();
+                auto id = admfMaterial->getId();
+                id->setString(value);
+            }
+
+        }
+        
+        {
+            auto* node = firstNode->first_node("name");
+            if (node)
+            {
+                auto* value = node->value();
+                auto materialName = admfMaterial->getName();
+                materialName->setString(value);
+            }
+            
+        }
+        
+        
+       
+       
+        admf::ADMF_RESULT result = admf->saveToFile(admfFilePath_);
+        return result == admf::ADMF_SUCCESS;
+    } catch (...) {
+        return false;
+    }
+  
+    
+    
+    
+   
     
     
     return true;

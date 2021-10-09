@@ -6,6 +6,7 @@
 //
 
 #include "4ddat_to_admf.hpp"
+#include "xtex_to_admf.hpp"
 #include "exportadmf.h"
 #include <string>
 
@@ -35,6 +36,7 @@ int main(int argc, const char * argv[]) {
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     
     int type = std::stoi(argv[1]);
+
     const char* inputPath = argv[2];
     const char* outputAdmf = argv[3];
     const char* extractAdmfDir = argv[4];
@@ -71,7 +73,7 @@ int main(int argc, const char * argv[]) {
             printf("_4ddatToAdmf:%f\n", time_span.count());
             extractAdmf(outputAdmf, extractAdmfDir);
             std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
-            ;
+
             time_span = t3-t2;
             printf("extractAdmf:%f\n",time_span.count());
             time_span = t3-t1;
@@ -81,7 +83,8 @@ int main(int argc, const char * argv[]) {
         
     case 2:
         {
-            
+            _xtexToAdmf(inputPath, outputAdmf, threadCount, pngComressLevel);
+            extractAdmf(outputAdmf, extractAdmfDir);
         }
         break;
         

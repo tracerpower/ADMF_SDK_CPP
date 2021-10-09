@@ -158,7 +158,7 @@
 		B1B643FC260D6D5300CADA90 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1300;
 				TargetAttributes = {
 					B1B64403260D6D5300CADA90 = {
 						CreatedOnToolsVersion = 12.4;
@@ -373,6 +373,7 @@
 		B1B6440C260D6D5300CADA90 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../src",
@@ -393,6 +394,7 @@
 		B1B6440D260D6D5300CADA90 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../src",
