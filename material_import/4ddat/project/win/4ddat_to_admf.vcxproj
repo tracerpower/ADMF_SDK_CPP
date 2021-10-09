@@ -40,6 +40,8 @@
     <ClCompile Include="..\..\src\4ddat_to_admf.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl.h" />
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl_stl.h" />
     <ClInclude Include="..\..\..\3rd\FreeImage\FreeImage.h" />
     <ClInclude Include="..\..\..\3rd\lz4\lz4.h" />
     <ClInclude Include="..\..\..\3rd\lz4\lz4frame.h" />
@@ -133,7 +135,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor;$(ProjectDir)..\..\..\3rd\ctpl</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -153,7 +155,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor;$(ProjectDir)..\..\..\3rd\ctpl</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -173,7 +175,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor;$(ProjectDir)..\..\..\3rd\ctpl</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -193,7 +195,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ShidiDatPath)\Include;$(ShidiDatPath)\Source;$(HyperRenderPath)\External\source;$(ShidiDatPath)\..\3rdPatry;$(ShidiDatPath)\External\source\RenderCore\Private\Include;$(ShidiDatPath)\linux;$(HyperRenderPath)\Source\3rdParty;$(ProjectDir)..\..\..\..\admfsdk\interface;$(ProjectDir)..\..\..\..\admfsdk\internal;$(ProjectDir)..\..\..\..\3rd\bson;$(ProjectDir)..\..\..\..\3rd\encrypt;$(ProjectDir)..\..\..\..\3rd\ZipLib;$(ProjectDir)..\..\..\..\3rd\jsonsl;$(ProjectDir)..\..\..\changecolor;$(ProjectDir)..\..\..\3rd\ctpl</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

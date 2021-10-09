@@ -438,6 +438,7 @@ namespace  CHANGE_COLOR {
     {
         Result result;
         colorAlterationsSingle(path, result.kS, result.bottomS, result.meanS, result.kV, result.bottomV, result.meanV);
+		result.version = 2;
         return result;
     }
 

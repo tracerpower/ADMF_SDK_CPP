@@ -13,6 +13,9 @@
     <Filter Include="src\3rd\FreeImage">
       <UniqueIdentifier>{1c65a688-45c1-4df5-b712-c540d5986730}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\3rd\ctpl">
+      <UniqueIdentifier>{53801925-9ad9-4c41-9b97-8e56b970eb6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\4ddat_to_admf.cpp">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\3rd\lz4\xxhash.h">
       <Filter>src\3rd\lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl.h">
+      <Filter>src\3rd\ctpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\ctpl\ctpl_stl.h">
+      <Filter>src\3rd\ctpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
