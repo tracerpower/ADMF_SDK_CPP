@@ -115,7 +115,7 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
       <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -124,8 +124,8 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -133,7 +133,7 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
       <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -142,8 +142,8 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,7 +151,7 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
       <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -160,8 +160,8 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -169,7 +169,7 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
       <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -178,8 +178,8 @@
       <AdditionalIncludeDirectories>/root/projects/4ddat_to_admf/4ddat/src/;/root/projects/exportadmf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>pthread;FreeImage_linux;JPEG_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;PNG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
