@@ -134,7 +134,7 @@ bool _xtexToAdmf(const char* filename_, const char* admfFilePath_, int threadCou
     if (xmlDataStream == nullptr)
         return false;
     
-    std::string xmlContent(std::istreambuf_iterator<char>(xmlDataStream), {});
+    //std::string xmlContent(std::istreambuf_iterator<const char>(xmlDataStream), {});
     
     
     return true;

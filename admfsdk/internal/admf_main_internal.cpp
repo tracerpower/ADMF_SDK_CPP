@@ -112,8 +112,10 @@ std::string admf_internal::getBsonString(const bson_iter_t *iter)
 {
     uint32_t len;
     const char *str = bson_iter_utf8(iter, &len);
-    std::string s(str, len);
-    return s;
+    if (str != nullptr)
+        return std::string(str, len);
+
+    return std::string();
 }
 
 void ADMF_::setSizeLimit(ADMF_UINT descriptionSizeLimit, ADMF_UINT binarySizeLimit)
@@ -394,22 +396,17 @@ void ADMF_internal::save(bson_t *doc)
     std::string physicsKey = getNewKey("physics");
     std::string customKey = getNewKey("custom");
     std::string geometryKey = getNewKey("geometry");
-    
-    schema_->setString("1.0");
+    if (schema_->isEmpty())
+    {
+        schema_->setString(std::to_string(ADMF_SDK_VERSION).c_str());
+    }
+
 
     ADMF_BSON_APPEND_STRING(doc, schemaKey, schema_);
     ADMF_BSON_APPEND_DOCUMENT(doc, materialKey, material_internal_);
     ADMF_BSON_APPEND_DOCUMENT(doc, physicsKey, physics_internal_);
     ADMF_BSON_APPEND_DOCUMENT(doc, geometryKey, geometry_internal_);
-
-    //ADMF_BSON_APPEND_DOCUMENT(doc, customKey, custom_internal_);
-    bson_error_t error;
-
-    bson_t *customBson = bson_new_from_json((const uint8_t *)custom_internal_->getJson().c_str(), -1, &error);
-    if (error.code != 0)
-        return;
-
-    BSON_APPEND_DOCUMENT(doc, customKey.c_str(), customBson);
+    ADMF_BSON_APPEND_DOCUMENT(doc, customKey, custom_internal_);
 }
 
 ADMF_RESULT ADMF_internal::saveToFile(const char *filePath)

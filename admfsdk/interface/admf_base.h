@@ -14,6 +14,8 @@
 
 #define ADMF_MAX_STR_LEN (256)
 
+#define ADMF_SDK_VERSION (1.1)
+
 #include <memory>
 #include <string>
 namespace admf
@@ -100,7 +102,8 @@ namespace admf
     ADMF_DEF(BaseColorDataMulti);
     ADMF_DEF(BaseColorDataMultiBlock);
     ADMF_DEF(BaseColorDataMultiBlockMask);
-    ADMF_DEF(BaseColorChangeColorData);
+    //ADMF_DEF(BaseColorChangeColorData);
+    //放入Custom字段
 
     ADMF_DEF(BaseColor);
     ADMF_DEF(Normal);

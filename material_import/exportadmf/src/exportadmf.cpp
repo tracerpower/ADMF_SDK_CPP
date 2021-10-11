@@ -26,7 +26,7 @@
 #include "changecolor/changecolor.h"
 #include "admf_cpp.h"
 #include "admf_internal_header.h"
-
+#include "rapidjson/document.h"
 #if (!defined __APPLE__)
 #include <assert.h>
 #endif
@@ -35,10 +35,10 @@
 extern "C" {
 #endif
     
-    void exportChangeColor(const std::string& path, const CHANGE_COLOR::Result& result)
+    const char* exportChangeColorToJson(const CHANGE_COLOR::Result& result)
     {
         try {
-            std::ofstream out(path);
+            std::stringstream out;
             out << "{" << std::endl;
             out << "\t\"version\": "  << result.version << "," << std::endl;
             out << "\t\"hasDiffuseMap\": true," << std::endl;
@@ -49,11 +49,28 @@ extern "C" {
             out << "\t\"kS\": " << std::setprecision(20) << result.kS << "," << std::endl;
             out << "\t\"kV\": " << std::setprecision(20) << result.kV  << std::endl;
             out << "}" << std::endl;
+            
+            std::string str = out.str();
+            char* c_str = (char*)malloc(str.size()+1);
+            strcpy(c_str, str.c_str());
+            return c_str;
+  
+        }
+        catch (...) {
+            
+        }
+        return nullptr;
+        
+    }
+    
+    void exportChangeColor(const std::string& path, const CHANGE_COLOR::Result& result)
+    {
+        try {
+            const char* str = exportChangeColorToJson(result);
+            std::ofstream out(path);
+            out << str;
             out.close();
-            
-            
-            
-            
+            free((void*)str);
         }
         catch (...) {
             
@@ -139,7 +156,7 @@ extern "C" {
         }
     }
     
-    void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer, const std::string& layerIndex)
+    void extractLayer(const std::string& pathName,  const admf::MaterialLayer& layer, const std::string& layerIndex, const admf::Custom& custom)
     {
         if (!layer->isEnabled())
             return;
@@ -225,68 +242,67 @@ extern "C" {
             if (needExportDiffuse)
             {
                 
-                CHANGE_COLOR::Result result;
-                auto changeColorData = basic->getBaseColor()->getChangeColorData();
-                if (changeColorData->isEnable())
+                
+                auto& valueMap = custom->getValueMap();
+                std::string changeColorKey = _4DSTC_CHANGEC_COLOR_KEY;
+                changeColorKey += layerIndex;
+                std::string changeColorJson;
                 {
-                    result.bottomS = changeColorData->getBottomS();
-                    result.bottomV = changeColorData->getBottomV();
-                    result.meanV = changeColorData->getMeanV();
-                    result.meanS = changeColorData->getMeanS();
-                    result.kS = changeColorData->getKS();
-                    result.kV = changeColorData->getKV();
+                    auto it = valueMap.find(changeColorKey);
+                    if (it != valueMap.end())
+                        changeColorJson = it->second;
                 }
-                else if (textureBinaryType == admf::TextureFileType::RAW)
-                    result = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
-                else
+                
+                bool changeColorEnabled = false;
+                
+                CHANGE_COLOR::Result changeColorResult;
+                
+                if (!changeColorJson.empty())
                 {
-                    /*
-                     FIMEMORY* stream = FreeImage_OpenMemory();
-                     FreeImage_WriteMemory(dataBuff, 1, dataLen, stream);
-                     FreeImage_SeekMemory(stream, 0, SEEK_SET);
-                     
-                     FREE_IMAGE_FORMAT format = FIF_PNG;
-                     switch (textureBinaryType) {
-                     case admf::TextureFileType::PNG:
-                     format = FIF_PNG;
-                     break;
-                     case admf::TextureFileType::JPG:
-                     format = FIF_JPEG;
-                     break;
-                     case admf::TextureFileType::GIF:
-                     format = FIF_GIF;
-                     break;
-                     case admf::TextureFileType::TIFF:
-                     format = FIF_TIFF;
-                     break;
-                     
-                     default:
-                     break;
-                     }
-                     FIBITMAP* bitmap = FreeImage_LoadFromMemory(FIF_PNG, stream);
-                     
-                     
-                     int width = FreeImage_GetWidth(bitmap);
-                     int height = FreeImage_GetHeight(bitmap);
-                     int scan_width = FreeImage_GetPitch(bitmap);
-                     int bpp = FreeImage_GetBPP(bitmap);
-                     BYTE *bits = (BYTE*)malloc(height * scan_width);
-                     // convert the bitmap to raw bits (top-left pixel first)
-                     FreeImage_ConvertToRawBits(bits, bitmap, scan_width, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
-                     FreeImage_Unload(bitmap);
-                     
-                     FreeImage_CloseMemory(stream);
-                     
-                     result = CHANGE_COLOR::changeColor(bits, width, height, bpp / 8);
-                     
-                     free(bits);
-                     */
+                    try {
+                        do {
+                            rapidjson::Document document;
+                            document.Parse(changeColorJson.c_str());
+                            if (document.HasParseError())
+                                break;
 
-                    result = CHANGE_COLOR::changeColor_new(texturePath);
+#define GET_JSON_KEY(key) \
+{if (!document.HasMember(#key) || !document[#key].IsNumber()) break;\
+changeColorResult.key = document[#key].GetFloat();}
+                            
+                            GET_JSON_KEY(version);
+                            GET_JSON_KEY(bottomS);
+                            GET_JSON_KEY(bottomV);
+                            GET_JSON_KEY(meanS);
+                            GET_JSON_KEY(meanV);
+                            GET_JSON_KEY(kS);
+                            GET_JSON_KEY(kV);
+                            changeColorEnabled = true;
+                            
+                           
+                        } while (0);
+                  
+                        
+                    } catch (...) {
+                        
+                    }
+        
+                }
+                    
+                
+                
+                //auto changeColorData = basic->getBaseColor()->getChangeColorData();
+                if (!changeColorEnabled)
+                {
+                    if (textureBinaryType == admf::TextureFileType::RAW)
+                        changeColorResult = CHANGE_COLOR::changeColor(dataBuff, texture->getWidth(), texture->getHeight(), texture->getChannels());
+                    else
+                        changeColorResult = CHANGE_COLOR::changeColor_new(texturePath);
+               
                 }
                 
                 needExportDiffuse = false;
-                exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", result);
+                exportChangeColor(pathName + "/changeColor" + layerIndex + ".json", changeColorResult);
             }
             
  
@@ -374,13 +390,14 @@ extern "C" {
         auto material = admf->getMaterial();
         auto layerArray = material->getLayerArray();
         auto layersCount = layerArray->size();
+        auto custom = admf->getCustom();
         for (int i = 0; i < layersCount; i++) {
             auto layer = layerArray->get(i);
-            extractLayer(layersPath, layer, i==0 ? "":std::to_string(i).c_str());
+            extractLayer(layersPath, layer, i==0 ? "":std::to_string(i).c_str(), custom);
         }
         
         auto sideLayer = material->getSideLayer();
-        extractLayer(layersPath,  sideLayer, "Side");
+        extractLayer(layersPath,  sideLayer, "Side", custom);
         std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
          time_span = t3-t2;
         printf("after extractLayer:%f\n", time_span.count());

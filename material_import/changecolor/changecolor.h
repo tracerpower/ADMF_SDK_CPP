@@ -8,10 +8,12 @@
 #endif
 #include <string>
 
+#define _4DSTC_CHANGEC_COLOR_KEY "4dstc.changeColor"
+
 namespace  CHANGE_COLOR {
 	struct DYNAMIC_OUTPUT Result
 	{
-		double bottomS, bottomV, meanS, meanV, kS, kV;
+		double bottomS = 0, bottomV = 0, meanS = 0, meanV = 0, kS = 0, kV = 0;
         int version = 1;
 	};
 	Result DYNAMIC_OUTPUT wrap(const std::string& loadPath);

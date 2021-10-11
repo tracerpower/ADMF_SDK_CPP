@@ -39,6 +39,7 @@ void Material_internal::load(bson_iter_t *iter) //save
     std::string idKey = getNewKey("id");
     std::string nameKey = getNewKey("name");
     std::string metadataKey = getNewKey("metadata");
+    std::string sdkVersionKey = getNewKey("sdkVersion");
     
     
     while (bson_iter_next (&child)) {
@@ -96,6 +97,10 @@ void Material_internal::load(bson_iter_t *iter) //save
            //MaterialMetaData
             metaData_ = std::make_shared<MaterialMetaData_internal>(admfIndex_, &child);
         }
+        else if (keyName == sdkVersionKey)
+        {
+            sdkVersion_ = (ADMF_FLOAT)bson_iter_as_double(&child);
+        }
     }
 }
 
@@ -124,6 +129,7 @@ void Material_internal::save(bson_t* doc)
     std::string idKey = getNewKey("id");
     std::string nameKey = getNewKey("name");
     std::string metadataKey = getNewKey("metadata");
+    std::string sdkVersionKey = getNewKey("sdkVersion");
 
 
     ADMF_BSON_APPEND_ARRAY(doc, layersKey, layerArray_, MaterialLayer_internal);
@@ -134,6 +140,8 @@ void Material_internal::save(bson_t* doc)
     ADMF_BSON_APPEND_STRING(doc, idKey, id_);
     ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
     ADMF_BSON_APPEND_DOCUMENT(doc, metadataKey, metaData_);
+    sdkVersion_ = ADMF_SDK_VERSION;
+    ADMF_BSON_APPEND_DOUBLE(doc, sdkVersionKey, sdkVersion_);
    
 }
 #endif
@@ -174,6 +182,12 @@ String Material_internal::getName()  //"PANTONE 20-0060TPM",
 MaterialMetaData Material_internal::getMetaData()
 {
     return MaterialMetaData(metaData_);
+}
+
+
+admf::ADMF_FLOAT Material_internal::getSDKVersion()
+{
+    return sdkVersion_;
 }
 
 void MaterialDevice_internal::load(bson_iter_t *iter) //save

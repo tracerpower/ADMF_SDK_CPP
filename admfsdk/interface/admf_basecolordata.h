@@ -53,37 +53,31 @@ namespace admf
     class BaseColorDataSolid_
     {
     public:
-        ///    获取颜色空间
-        ///    @return    返回颜色空间
+/*
         virtual String getColorSpace() = 0;   //"srgb",
 
-        ///    获取颜色值
-        ///    @return    返回颜色值
+
         virtual ColorRGB getValue() = 0;      //
 
-        ///    获取输入Black
-        ///    @return    返回输入Black
+ 
         virtual ADMF_INT getInputBlack() = 0;  //0,
 
-        ///    获取输入White
-        ///    @return    返回输入White
+
         virtual ADMF_INT getInputWhite() = 0;  //255,
 
-        ///    获取伽马值
-        ///    @return    返回伽马值
+
         virtual ADMF_FLOAT getGamma() = 0;     //1.0,
 
-        ///    获取输出黑场
-        ///    @return    返回输出黑场
+
         virtual ADMF_INT getOutputBlack() = 0; //0,
 
-        ///    获取输出白场
-        ///    @return    返回输出白场
         virtual ADMF_INT getOutputWhite() = 0; //0,
-
+*/
         ///    获取改色数据数组
         ///    @return    返回改色数据数组
         virtual Array<BaseColorDataSolidBlock> getBlockArray() = 0;
+        
+        /*
 #ifdef ADMF_EDIT
     public:
         /// 色阶改色输入黑场
@@ -104,6 +98,7 @@ namespace admf
         /// @param outputWhite 白场值
         virtual void setOutputWhite(ADMF_INT outputWhite) = 0; //0,
 #endif
+         */
     };
 
     /// 单色改色数据块
@@ -168,6 +163,7 @@ namespace admf
         virtual admf::String getValue() = 0; //"166,202,240",
     };
     
+    /*
   
     class BaseColorChangeColorData_
     {
@@ -191,6 +187,7 @@ namespace admf
         virtual void setKV(ADMF_DOUBLE kV) = 0;
 #endif
     };
+     */
     
 
 }

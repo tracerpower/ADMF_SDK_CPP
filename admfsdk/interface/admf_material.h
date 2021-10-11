@@ -47,12 +47,18 @@ namespace admf
     ///    @return    返回meta数据
     ///    @see MaterialMetaData
     virtual MaterialMetaData getMetaData() = 0;
+      
+      
+    virtual  ADMF_FLOAT getSDKVersion() = 0; //上次编辑时的SDK版本
+      
 #ifdef ADMF_EDIT
     ///设置创建时间
     virtual void setCreatedTime(ADMF_DATE date) = 0;  //"2018-11-08T12:35:37",
                                                      ///设置修改时间
     virtual void setModifiedTime(ADMF_DATE date) = 0; //"2020-11-03T07:59:55Z",
 #endif
+      
+  
   };
 
   /// 材质采集设备类
@@ -73,7 +79,7 @@ namespace admf
     virtual String getSerialNumber() = 0; //"1000"
   };
 
-  /// 材质数据类
+  /// 原材质数据类
   class MaterialMetaData_
   {
   public:

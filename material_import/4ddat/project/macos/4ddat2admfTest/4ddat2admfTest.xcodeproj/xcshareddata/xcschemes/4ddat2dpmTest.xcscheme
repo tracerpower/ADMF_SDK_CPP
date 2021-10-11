@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "2"
+            argument = "1"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/xtex/4MM  LACE NON-WICKING --- 8-26-2021 15_33_51.zip&quot;"
+            argument = "/Volumes/Data/plugin/4ddat/orange.4Ddat"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
