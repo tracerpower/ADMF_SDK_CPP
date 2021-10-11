@@ -56,7 +56,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/Data/plugin/4ddat/orange.4Ddat"
+            argument = "/Volumes/Data/download/feishu/&#x6539;&#x8272;.4Ddat"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

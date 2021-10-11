@@ -206,11 +206,13 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     admf::ADMF admf = admf::createADMF();
     auto &matInfo = materialEntryInfo.materialInfo;
     
-    admf->getSchema()->setString("1.0");
+    auto &materialConfig = materialEntryInfo.materialConfig;
+
     
     admf::Custom custom = admf->getCustom();
     
     admf::Material admfMaterial = admf->getMaterial();
+    
     
     const auto p1 = std::chrono::system_clock::now();
     admf::ADMF_DATE timeStamp = (admf::ADMF_DATE)std::chrono::duration_cast<std::chrono::milliseconds>(p1.time_since_epoch()).count();
@@ -227,9 +229,16 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     metadataSource->updateFromFile(filename.c_str(), false);
     metadata->getType()->setString("4ddat");
     
+    
+    std::string version = std::to_string(materialConfig.versionMajor) + "." + std::to_string(materialConfig.versionMinor) + "." + std::to_string(materialConfig.versionPatch);
+    metadata->getVersion()->setString(version.c_str());
+    
+    custom->getValueMap()["4dstc.version"] = version;
+    
+    /*
     auto id = admfMaterial->getId();
-    std::string version = std::to_string(matInfo.versionMajor) + "." + std::to_string(matInfo.versionMinor) + "." + std::to_string(matInfo.versionPatch);
     id->setString(version.c_str());
+     */
     
     
     
