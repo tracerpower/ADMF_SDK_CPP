@@ -19,6 +19,24 @@ namespace admf_internal
    
 
     
+    class StringReadOnly_internal : public admf::StringReadOnly_, public Base_internal
+    {
+        friend class ADMF_internal;
+
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(StringReadOnly_internal);
+    public:
+        virtual admf::ADMF_UINT getLength() override;
+        virtual bool isEmpty() override;
+        virtual admf::ADMF_UINT getString(admf::ADMF_CHAR* buff, admf::ADMF_UINT) override;
+        
+        const std::string& getInternalString() override {return str_;};
+    private:
+        StringReadOnly_internal(const std::string& str):Base_internal(-1),str_(str) {}
+        std::string str_;
+        
+
+    };
+    
     class String_internal : public admf::String_, public Base_internal
     {
         friend class MaterialMetaData_internal;
@@ -34,8 +52,6 @@ namespace admf_internal
     private:
         String_internal(const std::string& str):Base_internal(-1),str_(str) {}
         std::string str_;
-        
-        
 #ifdef ADMF_EDIT
     public:
         virtual void setString(const char* str) override {str_ = str;};

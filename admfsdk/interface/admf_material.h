@@ -49,7 +49,6 @@ namespace admf
     virtual MaterialMetaData getMetaData() = 0;
       
       
-    virtual  ADMF_FLOAT getSDKVersion() = 0; //上次编辑时的SDK版本
       
 #ifdef ADMF_EDIT
     ///设置创建时间

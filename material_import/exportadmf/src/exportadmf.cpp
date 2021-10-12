@@ -27,6 +27,8 @@
 #include "admf_cpp.h"
 #include "admf_internal_header.h"
 #include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 #if (!defined __APPLE__)
 #include <assert.h>
 #endif
@@ -373,6 +375,28 @@ changeColorResult.key = document[#key].GetFloat();}
         {
             std::ofstream jsonFile(dir + "/physics.json");
             jsonFile << admfJsons.physics;
+        }
+        
+        {
+            rapidjson::Document document;
+            document.SetObject();
+            rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+            
+            auto sdkVersion = admf->getSDKVersion();
+            rapidjson::Value sdkVersionValue(rapidjson::StringRef(sdkVersion->getInternalString().c_str()));
+            document.AddMember("sdkVersion", sdkVersionValue, allocator);
+            
+            
+            auto schema = admf->getSDKVersion();
+            rapidjson::Value schemaValue(rapidjson::StringRef(schema->getInternalString().c_str()));
+            document.AddMember("schema", schemaValue, allocator);
+
+            
+            rapidjson::StringBuffer sbBuffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(sbBuffer);
+            document.Accept(writer);
+            std::ofstream jsonFile(dir + "/version.json");
+            jsonFile << sbBuffer.GetString();
         }
         std::string layersPath = dir;
         /*

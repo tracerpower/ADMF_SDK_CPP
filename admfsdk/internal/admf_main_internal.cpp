@@ -156,9 +156,13 @@ ADMF_internal::~ADMF_internal()
     
 }
 
-admf::String ADMF_internal::getSchema()
+admf::StringReadOnly ADMF_internal::getSchema()
 {
-    return String(schema_);
+    return StringReadOnly(schema_);
+}
+admf::StringReadOnly ADMF_internal::getSDKVersion()
+{
+    return StringReadOnly(sdkVersion_);
 }
 admf::Material ADMF_internal::getMaterial()
 {
@@ -332,6 +336,7 @@ admf::ADMF_RESULT ADMF_internal::load(bson_reader_t *reader, ADMFJsons* jsons) /
         std::string physicsKey = getNewKey("physics");
         std::string customKey = getNewKey("custom");
         std::string geometryKey = getNewKey("geometry");
+        std::string sdkVersionKey = getNewKey("sdkVersion");
         while (bson_iter_next(&iter))
         {
             std::string keyName = bson_iter_key(&iter);
@@ -339,7 +344,7 @@ admf::ADMF_RESULT ADMF_internal::load(bson_reader_t *reader, ADMFJsons* jsons) /
             assert(bson_iter_value(&iter) != nullptr);
             if (keyName == schemaKey)
             {
-                schema_ = std::make_shared<String_internal>(admfIndex_, &iter);
+                schema_ = std::make_shared<StringReadOnly_internal>(admfIndex_, &iter);
             }
             else if (keyName == materialKey)
             {
@@ -361,6 +366,10 @@ admf::ADMF_RESULT ADMF_internal::load(bson_reader_t *reader, ADMFJsons* jsons) /
                 GetJsons(geometry)
                 geometry_internal_ = std::make_shared<Geometry_internal>(admfIndex_, &iter);
             }
+            else if (keyName == sdkVersionKey)
+            {
+                sdkVersion_ = std::make_shared<StringReadOnly_internal>(admfIndex_, &iter);
+            }
         }
 
 #ifdef DEBUG
@@ -375,7 +384,9 @@ admf::ADMF_RESULT ADMF_internal::load(bson_reader_t *reader, ADMFJsons* jsons) /
 void ADMF_internal::initMissed()
 {
     if (!schema_)
-        schema_ = std::make_shared<String_internal>(admfIndex_);
+        schema_ = std::make_shared<StringReadOnly_internal>(admfIndex_);
+    if (!sdkVersion_)
+        sdkVersion_ = std::make_shared<StringReadOnly_internal>(admfIndex_);
     if (!material_internal_)
         material_internal_ = std::make_shared<Material_internal>(admfIndex_);
     if (!physics_internal_)
@@ -396,12 +407,13 @@ void ADMF_internal::save(bson_t *doc)
     std::string physicsKey = getNewKey("physics");
     std::string customKey = getNewKey("custom");
     std::string geometryKey = getNewKey("geometry");
-    if (schema_->isEmpty())
-    {
-        schema_->setString(std::to_string(ADMF_SDK_VERSION).c_str());
-    }
+    std::string sdkVersionKey = getNewKey("sdkVersion");
 
+    schema_->str_ = ADMF_SCHEMA;
+    sdkVersion_->str_ = ADMF_SDK_VERSION;
 
+    
+    ADMF_BSON_APPEND_STRING(doc, sdkVersionKey, sdkVersion_);
     ADMF_BSON_APPEND_STRING(doc, schemaKey, schema_);
     ADMF_BSON_APPEND_DOCUMENT(doc, materialKey, material_internal_);
     ADMF_BSON_APPEND_DOCUMENT(doc, physicsKey, physics_internal_);

@@ -25,19 +25,23 @@ typedef struct _bson_reader_t bson_reader_t;
 #define ADMF_SAVE_FUNC_DECLARATION()
 #endif
 
-#define ADMF_INTERNAL_CLASS_CONSTRUCTOR(classname) \
+#define ADMF_INTERNAL_CLASS_CONSTRUCTOR_(classname, baseClass) \
     private: \
-    virtual void load(bson_iter_t *iter) override; \
-    virtual void initMissed() override; \
+        virtual void load(bson_iter_t *iter) override; \
+        virtual void initMissed() override; \
     public: \
-    classname(int admfIndex, bson_iter_t *iter = nullptr) \
-    :Base_internal(admfIndex) \
-    { \
-        load(iter); \
-        initMissed(); \
-    }; \
-    ~classname() = default;\
-    ADMF_SAVE_FUNC_DECLARATION(); \
+        classname(int admfIndex, bson_iter_t *iter = nullptr) \
+        :baseClass(admfIndex) \
+        { \
+            load(iter); \
+            initMissed(); \
+        }; \
+        ~classname() = default;\
+        ADMF_SAVE_FUNC_DECLARATION(); \
+
+
+#define ADMF_INTERNAL_CLASS_CONSTRUCTOR(classname) \
+    ADMF_INTERNAL_CLASS_CONSTRUCTOR_(classname, Base_internal)
 
 
 #define ADMF_BSON_APPEND_ARRAY(doc, key, variable, internalClass) \

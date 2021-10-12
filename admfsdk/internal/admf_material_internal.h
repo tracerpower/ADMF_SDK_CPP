@@ -37,7 +37,6 @@ namespace admf_internal {
 
         virtual admf::MaterialMetaData getMetaData() override;
         
-        virtual admf::ADMF_FLOAT getSDKVersion() override; //上次编辑时的SDK版本
 
     private:
         std::shared_ptr<Array_internal<admf::MaterialLayer>> layerArray_;
@@ -50,7 +49,8 @@ namespace admf_internal {
         std::shared_ptr<String_internal> name_;
         std::shared_ptr<MaterialMetaData_internal> metaData_;
         
-        admf::ADMF_DOUBLE sdkVersion_ = ADMF_SDK_VERSION; //文件里的sdk版本
+        
+
         
 #ifdef ADMF_EDIT
         virtual void setCreatedTime(admf::ADMF_DATE date) override {createTime_ = date;};  //"2018-11-08T12:35:37",
