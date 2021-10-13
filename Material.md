@@ -1,0 +1,585 @@
+# Material
+
+代码示例
+
+```cpp
+admf::ADMF_RESULT result;
+admf::ADMF::ADMFJsons admfJsons;
+auto admf = admf::ADMF::loadFromFile(admfFilePath, result, &admfJsons);
+//admfJsons.material 为如下的json文本内容
+
+auto material = admf->getMaterial();
+//material为如下内容对应的c++对象
+```
+
+Material 格式 <font color="gray">(部分字段有注释)</font>
+
+```jsonc
+{
+  //layers为多层材质数组,每个元素为一层材质
+  "layers": [
+    {
+      "type": "Fabric",
+      "shader": "", //shader model
+      "preview": "150_preview.png",
+      "basic": {
+        "emissive": {
+          "texture": {
+            "path": "237_Emissive.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 0.0,
+          "color": {
+            "r": 0.039215687662363052368,
+            "g": 0.039215687662363052368,
+            "b": 0.039215687662363052368,
+            "colorSpace": ""
+          }
+        },
+        "basecolor": {
+          //diffuse
+          "texture": {
+            "path": "156_Base.png",
+            "colorSpace": "srgb",
+            "dpi": {
+              "x": 156.0576019287109375,
+              "y": 156.0576019287109375
+            },
+            "width": 2048.0,
+            "height": 2048.0,
+            "physicalWidth": 333.333343505859375,
+            "physicalHeight": 333.333343505859375,
+            "channels": 3,
+            "elementSize": 1
+          },
+          //color:色卡信息
+          "color": {
+            "type": "solid", //当前色卡类型，solid为纯色色卡，multi为多色改色色卡(非multi的都认为是solid)
+            "index": 0, //和type一起生效，下面solid或者multi数组里的第index个色卡为当前色卡(业务上未指定色卡时，使用此色卡进行渲染)
+            "solid": {
+              //纯色色卡数组，本例子里有两个色卡，第一个为原色色卡，第二个为红色
+              "block": [
+                {
+                  "name": "",
+                  "type": "",
+                  "value": "",
+                  "isOriginal": 1 //该值为不为0时, type/value被忽略, 表示不叠加改色信息
+                },
+                {
+                  "name": "(255,0,0)",
+                  "type": "RGB",
+                  "value": "255,0,0", //红色色卡
+                  "isOriginal": 0
+                }
+              ]
+            },
+            "multi": {}
+          }
+        },
+        "normal": {
+          "texture": {
+            "path": "171_Normal.png",
+            "colorSpace": "linear",
+            "dpi": {
+              "x": 156.0576019287109375,
+              "y": 156.0576019287109375
+            },
+            "width": 2048.0,
+            "height": 2048.0,
+            "physicalWidth": 333.333343505859375,
+            "physicalHeight": 333.333343505859375,
+            "channels": 3,
+            "elementSize": 1
+          },
+          "value": 1.2000000476837158203
+        },
+        "alpha": {
+          "texture": {
+            "path": "179_Alpha.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 1.0
+        },
+        "metalness": {
+          "texture": {
+            "path": "187_Metalness.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 0.0
+        },
+        "roughness": {
+          "texture": {
+            "path": "195_Roughness.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 0.0
+        },
+        "specular": {
+          "texture": {
+            "path": "203_Specular.png",
+            "colorSpace": "srgb",
+            "dpi": {
+              "x": 156.0576019287109375,
+              "y": 156.0576019287109375
+            },
+            "width": 2048.0,
+            "height": 2048.0,
+            "physicalWidth": 333.333343505859375,
+            "physicalHeight": 333.333343505859375,
+            "channels": 3,
+            "elementSize": 1
+          },
+          "color": {
+            "r": 0.039215687662363052368,
+            "g": 0.039215687662363052368,
+            "b": 0.039215687662363052368,
+            "colorSpace": ""
+          }
+        },
+        "glossiness": {
+          "texture": {
+            "path": "213_Glossiness.png",
+            "colorSpace": "linear",
+            "dpi": {
+              "x": 156.0576019287109375,
+              "y": 156.0576019287109375
+            },
+            "width": 2048.0,
+            "height": 2048.0,
+            "physicalWidth": 333.333343505859375,
+            "physicalHeight": 333.333343505859375,
+            "channels": 3,
+            "elementSize": 1
+          },
+          "value": 1.0
+        },
+        "anisotropy": {
+          "texture": {
+            "path": "221_Anisotropy.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 0.0
+        },
+        "anisotropyRotation": {
+          "texture": {
+            "path": "229_AnisotropyRotation.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 0.0
+        },
+        "ambientOcclusion": {
+          "texture": {
+            "path": "247_AO.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          }
+        },
+        "height": {
+          //heightmap
+          "texture": {
+            "path": "255_Height.png",
+            "colorSpace": "",
+            "dpi": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "width": 0.0,
+            "height": 0.0,
+            "physicalWidth": 0.0,
+            "physicalHeight": 0.0,
+            "channels": 0,
+            "elementSize": 0
+          },
+          "value": 1.0,
+          "level": 1.0
+        },
+        "transform": {
+          "wrapping": "",
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 0.0030000000260770320892,
+            "y": 0.0030000000260770320892
+          },
+          "rotation": 0.0
+        }
+      },
+      "spec": {
+        "refraction": {
+          "color": {
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "colorSpace": ""
+          },
+          "glossiness": 1.0
+        }
+      },
+      "enabled": 1
+    }
+  ],
+  "side": {
+    //侧面材质信息，与layers数组里的单个元素格式一致
+    "type": "",
+    "shader": "",
+    "preview": "8_preview.png",
+    "basic": {
+      "emissive": {
+        "texture": {
+          "path": "95_Emissive.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 0.0,
+        "color": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "colorSpace": ""
+        }
+      },
+      "basecolor": {
+        "texture": {
+          "path": "14_Base.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "color": {
+          "type": "solid",
+          "index": 0,
+          "solid": {
+            "colorSpace": "",
+            "value": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "colorSpace": ""
+            },
+            "inputBlack": 0,
+            "inputWhite": 255,
+            "gamma": 1.0,
+            "outputBlack": 0,
+            "outputWhite": 255,
+            "block": [
+              {
+                "name": "",
+                "type": "",
+                "value": "",
+                "isOriginal": 1
+              }
+            ]
+          },
+          "multi": {}
+        }
+      },
+      "normal": {
+        "texture": {
+          "path": "29_Normal.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.2000000476837158203
+      },
+      "alpha": {
+        "texture": {
+          "path": "37_Alpha.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.0
+      },
+      "metalness": {
+        "texture": {
+          "path": "45_Metalness.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.0
+      },
+      "roughness": {
+        "texture": {
+          "path": "53_Roughness.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.0
+      },
+      "specular": {
+        "texture": {
+          "path": "61_Specular.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "color": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "colorSpace": ""
+        }
+      },
+      "glossiness": {
+        "texture": {
+          "path": "71_Glossiness.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.0
+      },
+      "anisotropy": {
+        "texture": {
+          "path": "79_Anisotropy.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 0.0
+      },
+      "anisotropyRotation": {
+        "texture": {
+          "path": "87_AnisotropyRotation.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 0.0
+      },
+      "ambientOcclusion": {
+        "texture": {
+          "path": "105_AO.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        }
+      },
+      "height": {
+        "texture": {
+          "path": "113_Height.png",
+          "colorSpace": "",
+          "dpi": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "width": 0.0,
+          "height": 0.0,
+          "physicalWidth": 0.0,
+          "physicalHeight": 0.0,
+          "channels": 0,
+          "elementSize": 0
+        },
+        "value": 1.0,
+        "level": 1.0
+      },
+      "transform": {
+        "wrapping": "",
+        "offset": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    "spec": {
+      "refraction": {
+        "color": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "colorSpace": ""
+        },
+        "glossiness": 1.0
+      }
+    },
+    "enabled": 0
+  },
+  "device": {
+    "type": "",
+    "model": "",
+    "revision": "",
+    "serialNumber": ""
+  },
+  "created": {
+    "$date": "2021-10-13T08:10:18.592Z"
+  },
+  "modified": {
+    "$date": "2021-10-13T08:10:18.592Z"
+  },
+  "id": "",
+  "name": "",
+  "metadata": {
+    "source": "135_PANTONE 20-0056TPM.4Ddat",
+    "type": "4ddat",
+    "version": "1.9.0"
+  }
+}
+```

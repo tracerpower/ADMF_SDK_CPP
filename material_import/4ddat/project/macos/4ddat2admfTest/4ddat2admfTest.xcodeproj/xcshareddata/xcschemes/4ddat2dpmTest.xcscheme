@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "0"
+            argument = "1"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/Data/download/feishu/1.admf"
+            argument = "/Volumes/Data/plugin/4ddat/orange.4Ddat"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
