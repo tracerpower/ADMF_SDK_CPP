@@ -563,20 +563,24 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
     "enabled": 0
   },
   "device": {
+    //设备信息(例如扫描仪)
     "type": "",
     "model": "",
     "revision": "",
     "serialNumber": ""
   },
   "created": {
+    //创建时间
     "$date": "2021-10-13T08:10:18.592Z"
   },
   "modified": {
+    //修改时间
     "$date": "2021-10-13T08:10:18.592Z"
   },
   "id": "",
   "name": "",
   "metadata": {
+    //从其他格式转换过来时, 原格式的相关信息
     "source": "135_PANTONE 20-0056TPM.4Ddat",
     "type": "4ddat",
     "version": "1.9.0"
