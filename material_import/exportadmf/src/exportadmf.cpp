@@ -387,7 +387,7 @@ changeColorResult.key = document[#key].GetFloat();}
             document.AddMember("sdkVersion", sdkVersionValue, allocator);
             
             
-            auto schema = admf->getSDKVersion();
+            auto schema = admf->getSchema();
             rapidjson::Value schemaValue(rapidjson::StringRef(schema->getInternalString().c_str()));
             document.AddMember("schema", schemaValue, allocator);
 

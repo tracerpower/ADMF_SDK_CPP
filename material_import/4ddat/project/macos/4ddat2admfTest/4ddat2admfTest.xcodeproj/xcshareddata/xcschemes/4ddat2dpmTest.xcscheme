@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "1"
+            argument = "0"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/Data/download/feishu/AT-&#x7ecf;&#x7f16;&#x4e09;&#x5c42;-3.4Ddat"
+            argument = "/Volumes/Data/download/feishu/1.admf"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
