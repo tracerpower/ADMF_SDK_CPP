@@ -8,6 +8,12 @@ encrypt: base64 + xxtea (暂未使用)
 
 # ADMF Specification
 
-[Material](./Material.md)
+[Material](./doc/Material.md)
 
-[Custom](./Material.md)
+[Custom](./doc/Custom.md)
+
+[Version](./doc/Version.md)
+
+# ChangeLog
+
+[V1.1](./doc/V1.1.md)
