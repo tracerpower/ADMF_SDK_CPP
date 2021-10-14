@@ -412,7 +412,6 @@ void ADMF_internal::save(bson_t *doc)
     schema_->str_ = ADMF_SCHEMA;
     sdkVersion_->str_ = ADMF_SDK_VERSION;
     
-    auto& str1 = schema_->getInternalString();
 
     
     ADMF_BSON_APPEND_STRING(doc, sdkVersionKey, sdkVersion_);
