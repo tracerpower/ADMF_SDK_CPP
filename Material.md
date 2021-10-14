@@ -95,7 +95,7 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
                     {
                       "texture": {
                         //此处为一张纹理
-                        "path": "binary_273", //通过Alpha不为0的像素标识改色区域(灰度图？)
+                        "path": "binary_273", //标识改色区域(灰度图)
                         "colorSpace": "",
                         "dpi": {
                           "x": 0.0,
