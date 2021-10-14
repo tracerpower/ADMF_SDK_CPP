@@ -56,7 +56,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/Data/plugin/4ddat/orange.4Ddat"
+            argument = "&quot;/Volumes/Data/plugin/4ddat/PANTONE 20-0095TPM.4Ddat&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

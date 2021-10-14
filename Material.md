@@ -83,7 +83,54 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
                 }
               ]
             },
-            "multi": {}
+            "multi": {
+              //多色色卡(改色)
+              "block": [
+                //block里的每一个元素都是一个多色改色方案
+                {
+                  "name": "这是多色改色方案名字", //改色方案名字
+                  "mask": [
+                    //mask数组里每一个元素是一个多色改色区域+颜色的组合
+                    //多个组合一起叠加形成一个改色方案，实现对原材质不同区域的改色
+                    {
+                      "texture": {
+                        //此处为一张纹理
+                        "path": "binary_273", //通过Alpha不为0的像素标识改色区域(灰度图？)
+                        "colorSpace": "",
+                        "dpi": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "width": 0.0,
+                        "height": 0.0,
+                        "physicalWidth": 0.0,
+                        "physicalHeight": 0.0,
+                        "channels": 0,
+                        "elementSize": 0
+                      },
+                      "value": "255,255,0" //改色的颜色信息
+                    },
+                    {
+                      "texture": {
+                        "path": "binary_281",
+                        "colorSpace": "",
+                        "dpi": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "width": 0.0,
+                        "height": 0.0,
+                        "physicalWidth": 0.0,
+                        "physicalHeight": 0.0,
+                        "channels": 0,
+                        "elementSize": 0
+                      },
+                      "value": "0,255,0"
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         "normal": {

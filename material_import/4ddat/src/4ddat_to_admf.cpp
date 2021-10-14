@@ -538,6 +538,18 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         height->setValue(kHs->f);
     }
     
+  
+    /*
+    auto baseColorMulti = baseColorData->getMulti();
+    auto multiArray = baseColorMulti->getBlockArray();
+    auto multiBlock = multiArray->append();
+    multiBlock->getName()->setString("这是多色改色方案名字");
+    auto maskArray =  multiBlock->getMaskArray();
+    auto mask1 = maskArray->append();
+    mask1->getValue()->setString("255,255,0");
+    auto mask2 = maskArray->append();
+    mask2->getValue()->setString("0,255,0");
+    */
 
     
     int mapType = RenderCore::MAP_COLOR;
