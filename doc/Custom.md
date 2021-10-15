@@ -13,7 +13,7 @@ auto& version = valueMap["4dstc.version"];
 //时谛内部自定义字段 用于对应ADMF/4ddat在RHI里的shader版本
 
 
-auto& version = valueMap["4dstc.changeColor"];
+auto& changeColor = valueMap["4dstc.changeColor"];
 //时谛内部自定义字段 用于保存diffuse贴图里的改色信息
 
 ```
