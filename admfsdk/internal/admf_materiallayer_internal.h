@@ -52,7 +52,7 @@ namespace admf_internal {
         std::shared_ptr<BinaryData_internal> preview_;
         std::shared_ptr<LayerBasic_internal> basic_;
         std::shared_ptr<LayerSpec_internal> spec_;
-        admf::ADMF_BYTE enabled_ = 0;
+        admf::ADMF_BYTE enabled_ = 1;
 
     };
     

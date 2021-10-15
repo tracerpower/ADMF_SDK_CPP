@@ -333,7 +333,7 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
           "glossiness": 1.0
         }
       },
-      "enabled": 1
+      "enabled": 1 //layer是否启用
     }
   ],
   "side": {
@@ -607,7 +607,7 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
         "glossiness": 1.0
       }
     },
-    "enabled": 0
+    "enabled": 1
   },
   "device": {
     //设备信息(例如扫描仪)

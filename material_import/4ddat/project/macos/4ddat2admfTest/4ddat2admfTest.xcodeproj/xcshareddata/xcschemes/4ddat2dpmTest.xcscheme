@@ -53,10 +53,18 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "&quot;/Volumes/Data/download/feishu/PANTONE 20-0056TPM.4Ddat&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "0"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Volumes/Data/download/feishu/11.admf"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
