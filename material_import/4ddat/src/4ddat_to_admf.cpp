@@ -39,6 +39,7 @@
 #include <fstream>
 #include <string>
 #include "changecolor.h"
+#include "exportadmf.h"
 #include <iomanip>
 
 
@@ -205,9 +206,13 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     admf::ADMF admf = admf::createADMF();
     auto &matInfo = materialEntryInfo.materialInfo;
     
-    admf->getSchema()->setString("1.0");
+    auto &materialConfig = materialEntryInfo.materialConfig;
+
+    
+    admf::Custom custom = admf->getCustom();
     
     admf::Material admfMaterial = admf->getMaterial();
+    
     
     const auto p1 = std::chrono::system_clock::now();
     admf::ADMF_DATE timeStamp = (admf::ADMF_DATE)std::chrono::duration_cast<std::chrono::milliseconds>(p1.time_since_epoch()).count();
@@ -224,9 +229,16 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     metadataSource->updateFromFile(filename.c_str(), false);
     metadata->getType()->setString("4ddat");
     
+    
+    std::string version = std::to_string(materialConfig.versionMajor) + "." + std::to_string(materialConfig.versionMinor) + "." + std::to_string(materialConfig.versionPatch);
+    metadata->getVersion()->setString(version.c_str());
+    
+    custom->getValueMap()["4dstc.version"] = version;
+    
+    /*
     auto id = admfMaterial->getId();
-    std::string version = std::to_string(matInfo.versionMajor) + "." + std::to_string(matInfo.versionMinor) + "." + std::to_string(matInfo.versionPatch);
     id->setString(version.c_str());
+     */
     
     
     
@@ -261,7 +273,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto height = layerBasic->getHeight();
     
     auto baseColor = layerBasic->getBaseColor();
-    auto changeColorData = baseColor->getChangeColorData();
+    //auto changeColorData = baseColor->getChangeColorData();
     auto baseColorData = baseColor->getData();
     auto baseColorSolid = baseColorData->getSolid();
     auto baseColorSolidBlock = baseColorSolid->getBlockArray();
@@ -369,6 +381,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     auto* diffuseColor = matInfo.FindPropertyVarient("diffuseColor");
     if (diffuseColor && diffuseColor->type == RenderCore::MVarient::VEC3)
     {
+        /*
         auto colorSpace = baseColorSolid->getColorSpace();
         colorSpace->setString("srgb");
         
@@ -376,6 +389,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         value->setR(diffuseColor->vec3.x);
         value->setG(diffuseColor->vec3.y);
         value->setB(diffuseColor->vec3.z);
+         */
         
         _hasDiffuseColor = true;
 
@@ -457,47 +471,57 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         anisotropRotation->setValue(kAnisotropyRotation->f);
     }
     
-    
+    CHANGE_COLOR::Result changeColorResult;
+    changeColorResult.version = 0; //default not enabled
     auto* bottomS = matInfo.FindPropertyVarient("bottomS");
     if (bottomS && bottomS->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setBottomS(bottomS->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.bottomS = bottomS->f;
+        changeColorResult.version = 2;
     }
     
     auto* bottomV = matInfo.FindPropertyVarient("bottomV");
     if (bottomV && bottomV->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setBottomV(bottomV->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.bottomV = bottomV->f;
+        changeColorResult.version = 2;
     }
 
     auto* kS = matInfo.FindPropertyVarient("kS");
     if (kS && kS->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setKS(kS->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.kS = kS->f;
+        changeColorResult.version = 2;
     }
     
     auto* kV = matInfo.FindPropertyVarient("kV");
     if (kV && kV->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setKV(kV->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.kV = kV->f;
+        changeColorResult.version = 2;
     }
     
     auto* meanS = matInfo.FindPropertyVarient("meanS");
     if (meanS && meanS->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setMeanS(meanS->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.meanS = meanS->f;
+        changeColorResult.version = 2;
     }
     
     auto* meanV = matInfo.FindPropertyVarient("meanV");
     if (meanV && meanV->type == RenderCore::MVarient::FLOAT)
     {
-        changeColorData->setMeanV(meanV->f);
-        changeColorData->setEnabled(1);
+        changeColorResult.meanV = meanV->f;
+        changeColorResult.version = 2;
+    }
+    
+    
+    if (changeColorResult.version > 1)
+    {
+        const char* changeColorJson = exportChangeColorToJson(changeColorResult);
+        auto& valueMap = custom->getValueMap();
+        valueMap[_4DSTC_CHANGEC_COLOR_KEY] = changeColorJson;
+        free((void*)changeColorJson);
     }
     
     
@@ -514,6 +538,18 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         height->setValue(kHs->f);
     }
     
+  
+    /*
+    auto baseColorMulti = baseColorData->getMulti();
+    auto multiArray = baseColorMulti->getBlockArray();
+    auto multiBlock = multiArray->append();
+    multiBlock->getName()->setString("这是多色改色方案名字");
+    auto maskArray =  multiBlock->getMaskArray();
+    auto mask1 = maskArray->append();
+    mask1->getValue()->setString("255,255,0");
+    auto mask2 = maskArray->append();
+    mask2->getValue()->setString("0,255,0");
+    */
 
     
     int mapType = RenderCore::MAP_COLOR;

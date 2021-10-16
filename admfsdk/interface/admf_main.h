@@ -33,8 +33,12 @@ namespace admf
         static void getSizeLimit(ADMF_UINT &descriptionSizeLimit, ADMF_UINT &binarySizeLimit);
 
         /// 获取版本号
-        virtual String getSchema() = 0; //"1.0"
-                                        ///   获取ADMF材质数据
+        virtual StringReadOnly getSchema() = 0; //"1.0"
+        
+        //上次编辑时的SDK版本
+        virtual  StringReadOnly getSDKVersion() = 0; //"1.1"
+        
+        ///   获取ADMF材质数据
         ///    @return    返回材质数据
         ///    @see Material
         virtual Material getMaterial() = 0;
@@ -50,6 +54,7 @@ namespace admf
         ///    @return    返回几何数据
         ///    @see Geometry
         virtual Geometry getGeometry() = 0;
+        
 
 #ifdef ADMF_EDIT
     public:

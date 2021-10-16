@@ -26,7 +26,7 @@ void BaseColor_internal::load(bson_iter_t *iter) //save
 
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
-    std::string changeColorKey = getNewKey("changeColor");
+    //std::string changeColorKey = getNewKey("changeColor");
 
     while (bson_iter_next(&child))
     {
@@ -42,10 +42,12 @@ void BaseColor_internal::load(bson_iter_t *iter) //save
         {
             data_ = std::make_shared<BaseColorData_internal>(admfIndex_, &child);
         }
+        /*
         else if (changeColorKey == changeColorKey)
         {
             changeColor_ = std::make_shared<BaseColorChangeColorData_internal>(admfIndex_, &child);
         }
+        */
     }
 }
 
@@ -59,8 +61,10 @@ void BaseColor_internal::initMissed()
 
     if (!data_)
         data_ = std::make_shared<BaseColorData_internal>(admfIndex_);
+    /*
     if (!changeColor_)
         changeColor_ = std::make_shared<BaseColorChangeColorData_internal>(admfIndex_);
+     */
 }
 #ifdef ADMF_EDIT
 void BaseColor_internal::save(bson_t *doc)
@@ -88,7 +92,7 @@ void BaseColor_internal::save(bson_t *doc)
 
     ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);
     ADMF_BSON_APPEND_DOCUMENT(doc, colorKey, data_);
-    ADMF_BSON_APPEND_DOCUMENT(doc, changeColorKey, changeColor_);
+    //ADMF_BSON_APPEND_DOCUMENT(doc, changeColorKey, changeColor_);
 }
 #endif
 BaseColorData BaseColor_internal::getData()
@@ -100,12 +104,13 @@ Texture BaseColor_internal::getTexture()
 {
     return Texture(texture_);
 }
+/*
 BaseColorChangeColorData BaseColor_internal::getChangeColorData()
 {
     return BaseColorChangeColorData(changeColor_);
     
 };
-
+*/
 void Specular_internal::load(bson_iter_t *iter) //save
 {
     if (iter == nullptr)

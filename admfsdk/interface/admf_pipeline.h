@@ -48,7 +48,7 @@ namespace admf
     public:
 
         virtual BaseColorData getData() = 0;
-        virtual BaseColorChangeColorData getChangeColorData() = 0;
+        //virtual BaseColorChangeColorData getChangeColorData() = 0;
 
     };
 

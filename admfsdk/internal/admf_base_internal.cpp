@@ -64,6 +64,45 @@ ADMF_UINT String_internal::getString(ADMF_CHAR *buff, ADMF_UINT len)
     return len_ + 1;
 }
 
+
+void StringReadOnly_internal::load(bson_iter_t *iter) //save
+{
+    if (iter == nullptr)
+        return;
+    str_ = getBsonString(iter);
+}
+
+void StringReadOnly_internal::initMissed()
+{
+}
+#ifdef ADMF_EDIT
+void StringReadOnly_internal::save(bson_t *doc)
+{
+    //nothing to do
+}
+#endif
+ADMF_UINT StringReadOnly_internal::getLength()
+{
+    return (ADMF_UINT)str_.length();
+}
+
+bool StringReadOnly_internal::isEmpty()
+{
+    return str_.length() == 0;
+}
+
+ADMF_UINT StringReadOnly_internal::getString(ADMF_CHAR *buff, ADMF_UINT len)
+{
+    if (buff == nullptr)
+        return 0;
+    
+    ADMF_UINT len_ = std::min((ADMF_UINT)(len - 1), (ADMF_UINT)str_.length());
+    strncpy(buff, str_.c_str(), len_);
+    
+    buff[len_] = 0;
+    return len_ + 1;
+}
+
 void Vec2_internal::load(bson_iter_t *iter) //save
 {
     if (iter == nullptr)

@@ -24,11 +24,11 @@ namespace admf_internal {
         virtual admf::BaseColorData getData() override;
         virtual admf::Texture getTexture() override;
         virtual admf::TEX_TYPE getTextureType() override {return admf::TEX_TYPE_BASE;};
-        virtual admf::BaseColorChangeColorData getChangeColorData() override;
+        //virtual admf::BaseColorChangeColorData getChangeColorData() override;
     private:
         std::shared_ptr<BaseColorData_internal> data_;
         std::shared_ptr<Texture_internal> texture_;
-        std::shared_ptr<BaseColorChangeColorData_internal> changeColor_;
+        //std::shared_ptr<BaseColorChangeColorData_internal> changeColor_;
     };
 
     class Specular_internal: public admf::Specular_, public Base_internal

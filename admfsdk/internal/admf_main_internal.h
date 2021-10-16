@@ -20,6 +20,7 @@ namespace admf_internal {
     class Custom_internal;
     class Geometry_internal;
     class String_internal;
+    class StringReadOnly_internal;
     
     typedef std::unordered_map<int, ADMF_internal*> ADMFInternalIndexMap; //int means admfIndex_
     typedef std::unordered_map<int, ZipArchiveEntry::Ptr> ZipEntryMap; //int means baseIndex_
@@ -74,20 +75,21 @@ namespace admf_internal {
         }
         
         
-        virtual admf::String getSchema() override; //"1.0"
+       
         virtual admf::Material getMaterial() override;
         virtual admf::Physics getPhysics() override;
         virtual admf::Custom getCustom() override;
         virtual admf::Geometry getGeometry() override;
-        
-
+        virtual admf::StringReadOnly getSDKVersion() override; //上次编辑时的SDK版本
+        virtual admf::StringReadOnly getSchema() override; //"1.0" 文件格式版本 文件格式不变， 只新增贴图之类的字段时，schema不变 sdkversion更新
         
     private:
-        std::shared_ptr<String_internal> schema_;
+        std::shared_ptr<StringReadOnly_internal> schema_;
         std::shared_ptr<Material_internal> material_internal_;
         std::shared_ptr<Physics_internal> physics_internal_;
         std::shared_ptr<Custom_internal> custom_internal_;
         std::shared_ptr<Geometry_internal> geometry_internal_;
+        std::shared_ptr<StringReadOnly_internal> sdkVersion_; //文件里的sdk版本
         
     private:
         ZipEntryMap zipEntryMap_; //record all the entries used by binary data()

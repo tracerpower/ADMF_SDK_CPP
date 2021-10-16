@@ -228,6 +228,7 @@ void BaseColorDataSolid_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_ARRAY(doc, blockKey, blockArray_, BaseColorDataSolidBlock_internal);
 }
 #endif
+/*
 String BaseColorDataSolid_internal::getColorSpace() //"srgb",
 {
     return String(colorSpace_);
@@ -262,7 +263,7 @@ ADMF_INT BaseColorDataSolid_internal::getOutputWhite() //0,
 {
     return outputWhite_;
 }
-
+*/
 Array<BaseColorDataSolidBlock> BaseColorDataSolid_internal::getBlockArray()
 {
     return blockArray_;
@@ -572,7 +573,7 @@ String BaseColorDataMultiBlockMask_internal::getValue()
     return value_;
 }
 
-
+/*
 
 void BaseColorChangeColorData_internal::load(bson_iter_t *iter) //save
 {
@@ -659,3 +660,5 @@ void BaseColorChangeColorData_internal::save(bson_t* doc)
     
 }
 #endif
+*/
+
