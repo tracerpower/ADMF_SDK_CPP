@@ -53,10 +53,18 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "&quot;/Volumes/Data/plugin/4ddat/orange.4Ddat&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "2"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&quot;/Volumes/Data/download/feishu/4MM  LACE NON-WICKING --- 8-26-2021 15_33_51.zip&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

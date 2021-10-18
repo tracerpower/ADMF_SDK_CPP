@@ -107,7 +107,7 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
     try
     {
         admf::ADMF admf = admf::createADMF();
-        admf->getSchema()->setString("1.0");
+
         admf::Material admfMaterial = admf->getMaterial();
 
         const auto p1 = std::chrono::system_clock::now();
@@ -152,6 +152,9 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
 
         auto *name = firstNode->name();
         assert(strcmp(name, "swatch") == 0);
+        
+        auto meta = admfMaterial->getMetaData();
+        meta->getType()->setString("xtex");
 
         {
             auto *node = firstNode->first_node("uuid");
@@ -160,6 +163,7 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
                 auto *value = node->value();
                 auto id = admfMaterial->getId();
                 id->setString(value);
+                
             }
         }
 
@@ -172,6 +176,8 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
                 materialName->setString(value);
             }
         }
+        
+        
 
         admf::ADMF_RESULT result = admf->saveToFile(admfFilePath_);
         return result == admf::ADMF_SUCCESS;

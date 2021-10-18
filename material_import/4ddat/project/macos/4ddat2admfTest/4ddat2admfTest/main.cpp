@@ -14,6 +14,17 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
+#include <algorithm>
+
+bool iequals(const std::string& a, const std::string& b)
+{
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+        return tolower(a) == tolower(b);
+    });
+}
+
 ///Users/yushihang/Documents/未命名文件夹/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/未命名文件夹/temp/1/1.admf /Users/yushihang/Documents/未命名文件夹/temp/1/out 9 9
 int main(int argc, const char * argv[]) {
     if (argc < 7)
@@ -34,9 +45,19 @@ int main(int argc, const char * argv[]) {
     
     
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    int type = -1;
+    std::string fileType = argv[1];
+    if (iequals(fileType, "admf"))
+        type = 0;
+    else if (iequals(fileType, "4ddat"))
+        type = 1;
+    else if (iequals(fileType, "xtex"))
+        type = 2;
     
-    int type = std::stoi(argv[1]);
-
+    if (type < 0){
+        type = std::stoi(argv[1]);
+    }
+    
     const char* inputPath = argv[2];
     const char* outputAdmf = argv[3];
     const char* extractAdmfDir = argv[4];
