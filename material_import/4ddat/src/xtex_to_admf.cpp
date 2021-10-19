@@ -71,13 +71,34 @@ struct XTexMap{
 };
 
 bool _parseU3m(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const std::string& filename, XTexMap& xTexMap){
+    
+    auto count = zipArchive->GetEntriesCount();
+    
+    //parseXML
+    std::istream *u3mDataStream = nullptr;
+    for (int i = 0; i < count; i++)
+    {
+        
+        auto entry = zipArchive->GetEntry(i);
+        auto &name = entry->GetName();
+        if (hasEnding(name, ".u3m"))
+        {
+            u3mDataStream = entry->GetDecompressionStream();
+            break;
+        }
+    }
+    
+    if (u3mDataStream == nullptr)
+        return false;
+    
+    
     return true;
 }
 
 bool _parseXML(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const std::string& filename, XTexMap& xTexMap){
     
     auto count = zipArchive->GetEntriesCount();
-    admf::Material admfMaterial = admf->getMaterial();
+   
     //parseXML
     std::istream *xmlDataStream = nullptr;
     for (int i = 0; i < count; i++)
@@ -96,6 +117,8 @@ bool _parseXML(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const 
         return false;
     
     
+    
+    admf::Material admfMaterial = admf->getMaterial();
     
     std::string xmlContent(std::istreambuf_iterator<char>(*xmlDataStream), {});
     
