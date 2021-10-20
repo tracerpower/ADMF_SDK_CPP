@@ -206,6 +206,7 @@ namespace admf_internal
         void setType(admf::TEX_TYPE type);
         
         virtual admf::TextureFileType getTypeByBinaryData() override;
+        static admf::TextureFileType getTypeByBinaryData(const unsigned char* data, admf::ADMF_UINT len);
         std::string getExtensionByTextureFileType(admf::TextureFileType type);
         
 #ifdef ADMF_EDIT

@@ -723,32 +723,23 @@ const std::vector<std::pair<admf::TextureFileType, std::vector<unsigned char>>> 
     {admf::TextureFileType::TIFF, {0x4D,0x4D,0x00,0x2B}},
 
 };
-
-
-admf::TextureFileType Texture_internal::getTypeByBinaryData()
+admf::TextureFileType Texture_internal::getTypeByBinaryData(const unsigned char* data, admf::ADMF_UINT len)
 {
-    if (!binaryData_)
-        return admf::TextureFileType::RAW;
-    
-    
-    auto dataLen = binaryData_->getDataLength();
-    unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
-    memset(dataBuff, 0, dataLen);
 
-    binaryData_->getData(dataBuff, dataLen);
-    
+    if (data == nullptr)
+        return admf::TextureFileType::None;
     admf::TextureFileType result = admf::TextureFileType::RAW;
     
     for (auto it = G_BinaryTypeData.begin(); it != G_BinaryTypeData.end(); it ++)
     {
         auto v = it->second;
-        if (dataLen < v.size())
+        if (len < v.size())
             continue;
         
         bool needContinue = false;
         for (int i = 0; i < v.size(); i++)
         {
-            if (dataBuff[i] != v[i])
+            if (data[i] != v[i])
             {
                 needContinue = true;
                 break;
@@ -761,8 +752,25 @@ admf::TextureFileType Texture_internal::getTypeByBinaryData()
         result = it->first;
         break;
     }
+    
+    
+    
+    return result;
+}
 
-
+admf::TextureFileType Texture_internal::getTypeByBinaryData()
+{
+    if (!binaryData_)
+        return admf::TextureFileType::RAW;
+    
+    
+    auto dataLen = binaryData_->getDataLength();
+    unsigned char* dataBuff = (unsigned char*)malloc(dataLen);
+    memset(dataBuff, 0, dataLen);
+    
+    binaryData_->getData(dataBuff, dataLen);
+    
+    admf::TextureFileType result = Texture_internal::getTypeByBinaryData(dataBuff, (admf::ADMF_UINT)dataLen);
     
     free(dataBuff);
     dataBuff = NULL;
