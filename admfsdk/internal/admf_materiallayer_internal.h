@@ -43,6 +43,8 @@ namespace admf_internal {
         virtual admf::LayerSpec getSpec() override;
 
         virtual admf::ADMF_BYTE isEnabled() override;
+        
+        virtual admf::String getName() override;
 #ifdef ADMF_EDIT
         virtual void setEnabled(admf::ADMF_BYTE enabled) override;
 #endif
@@ -53,6 +55,7 @@ namespace admf_internal {
         std::shared_ptr<LayerBasic_internal> basic_;
         std::shared_ptr<LayerSpec_internal> spec_;
         admf::ADMF_BYTE enabled_ = 1;
+        admf::String name_;
 
     };
     

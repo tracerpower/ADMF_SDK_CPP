@@ -30,8 +30,8 @@ namespace admf
         ///    @return    返回材质预览图
         virtual BinaryData getPreview() = 0; //content of "/preview.png"
 
-        ///   获取材质层基本
-        ///    @return    返回材质层基本
+        ///   获取材质基础数据(各贴图)
+        ///    @return    返回材质基础数据(各贴图)
         virtual LayerBasic getBasic() = 0;
         ///   获取材质Spec
         ///    @return    返回材质Spec
@@ -40,10 +40,14 @@ namespace admf
 		///   是否启用
 		///    @return    是否启用
         virtual ADMF_BYTE isEnabled() = 0;
+        
+        ///   Layer名称
+        ///    @return    Layer名称
+        virtual String getName() = 0;
+        
 
 #ifdef ADMF_EDIT
 		///   设置是否启用
-        ///    @return   设置是否启用
 		virtual void setEnabled(admf::ADMF_BYTE enabled) = 0;
 #endif
     };
