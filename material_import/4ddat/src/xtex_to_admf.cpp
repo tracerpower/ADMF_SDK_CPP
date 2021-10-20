@@ -47,7 +47,12 @@
 #include "rapidxml_print.hpp"
 #include "rapidxml_utils.hpp"
 
+#include "rapidjson/document.h"
+#include "datestring_to_int.hpp"
+
 extern std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNew);
+
+
 
 bool hasEnding(std::string const &fullString, std::string const &ending)
 {
@@ -70,6 +75,28 @@ struct XTexMap{
     std::string displacement;
 };
 
+
+void _parseU3mMaterialLayer(const admf::MaterialLayer& admfMaterialLayer, const rapidjson::Value& u3mLayer)
+{
+    auto admfBasic = admfMaterialLayer->getBasic();
+    
+    if (u3mLayer.HasMember("alpha"))
+    {
+        auto& u3mAlpha = u3mLayer["alpha"];
+        
+        auto admfAlpha = admfBasic->getAlpha();
+        
+        if (u3mAlpha.HasMember("constant"))
+        {
+            double alpha = u3mAlpha["constant"].GetDouble();
+            admfAlpha->setValue(<#ADMF_FLOAT value#>)
+            
+            
+        }
+       
+    }
+}
+
 bool _parseU3m(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const std::string& filename, XTexMap& xTexMap){
     
     auto count = zipArchive->GetEntriesCount();
@@ -90,6 +117,108 @@ bool _parseU3m(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const 
     
     if (u3mDataStream == nullptr)
         return false;
+    
+    std::string u3mContent(std::istreambuf_iterator<char>(*u3mDataStream), {});
+    rapidjson::Document doc;
+    doc.Parse(u3mContent.c_str());
+    
+    if (doc.HasParseError())
+        return false;
+    
+    admf::Material admfMaterial = admf->getMaterial();
+    
+    auto metadata = admfMaterial->getMetaData();
+    metadata->getType()->setString("xtex");
+    
+    auto metadataSource = metadata->getSource();
+    
+#if (defined __APPLE__) || (defined _WIN32)
+#ifdef __APPLE__
+    namespace fs = std::__fs::filesystem;
+#else
+    namespace fs = std::filesystem;
+#endif
+    auto path = fs::path(filename);
+    
+    std::string sourceFileName = path.filename().string();
+#else
+    std::string sourceFileName;
+    auto pos = filename.rfind("/");
+    if (pos == std::string::npos)
+    {
+        sourceFileName = filename;
+    }
+    else
+    {
+        sourceFileName = filename.substr(pos + 1);
+    }
+#endif
+    metadataSource->setName(sourceFileName.c_str());
+    metadataSource->updateFromFile(filename.c_str(), false);
+    
+    if (doc.HasMember("schema"))
+    {
+        auto schema = doc["schema"].GetString();
+        metadata->getVersion()->setString(schema);
+    }
+    
+    if (doc.HasMember("material"))
+    {
+        auto& u3mMaterial = doc["material"];
+        if (u3mMaterial.HasMember("created"))
+        {
+            std::string createdDate = u3mMaterial["created"].GetString();
+            if (!hasEnding(createdDate, "Z"))
+                createdDate.append("Z");
+            int64_t date;
+            admfExport::bson_error_t error;
+            admfExport::_bson_iso8601_date_parse(createdDate.c_str(), (int32_t)createdDate.size(), &date, &error);
+            admfMaterial->setCreatedTime(date);
+        }
+        
+        if (u3mMaterial.HasMember("modified"))
+        {
+            std::string modifiedDate = u3mMaterial["modified"].GetString();
+            if (!hasEnding(modifiedDate, "Z"))
+                modifiedDate.append("Z");
+            int64_t date;
+            admfExport::bson_error_t error;
+            admfExport::_bson_iso8601_date_parse(modifiedDate.c_str(), (int32_t)modifiedDate.size(), &date, &error);
+            admfMaterial->setCreatedTime(date);
+        }
+        
+        if (u3mMaterial.HasMember("id"))
+        {
+            auto id = u3mMaterial["id"].GetString();
+            admfMaterial->getId()->setString(id);
+        }
+        
+        
+        if (u3mMaterial.HasMember("front"))
+        {
+            auto& front = u3mMaterial["front"];
+            if (!front.IsNull())
+            {
+                auto materialLayer = admfMaterial->getLayerArray()->append();
+                _parseU3mMaterialLayer(materialLayer, front);
+            }
+        }
+        
+        
+        if (u3mMaterial.HasMember("back"))
+        {
+            auto& back = u3mMaterial["back"];
+            if (!back.IsNull())
+            {
+                auto materialLayer = admfMaterial->getLayerArray()->append();
+                _parseU3mMaterialLayer(materialLayer, back);
+            }
+
+        }
+        
+        
+ 
+    }
     
     
     return true;
@@ -129,34 +258,8 @@ bool _parseXML(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const 
     
     auto materialLayer = admfMaterial->getLayerArray()->append();
     
-    auto metadata = admfMaterial->getMetaData();
-    auto metadataSource = metadata->getSource();
-    
-#if (defined __APPLE__) || (defined _WIN32)
-#ifdef __APPLE__
-    namespace fs = std::__fs::filesystem;
-#else
-    namespace fs = std::filesystem;
-#endif
-    auto path = fs::path(filename);
-    
-    std::string sourceFileName = path.filename().string();
-#else
-    std::string sourceFileName;
-    auto pos = filename.rfind("/");
-    if (pos == std::string::npos)
-    {
-        sourceFileName = filename;
-    }
-    else
-    {
-        sourceFileName = filename.substr(pos + 1);
-    }
-#endif
-    
-    metadataSource->setName(sourceFileName.c_str());
-    metadataSource->updateFromFile(filename.c_str(), false);
-    metadata->getType()->setString("xtex");
+
+
     
     
     //parse XML
@@ -168,7 +271,7 @@ bool _parseXML(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const 
     auto *name = firstNode->name();
     assert(strcmp(name, "swatch") == 0);
     
-    metadata->getType()->setString("xtex");
+
     
     {
         auto *node = firstNode->first_node("uuid");
