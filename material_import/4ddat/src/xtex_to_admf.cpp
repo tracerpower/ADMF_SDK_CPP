@@ -251,7 +251,60 @@ void _parseU3mTexture(const admf::Texture& admfTexture, const rapidjson::Value& 
             if (!needHandleFactorAndOffset)
                 admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
             else{
-                admf::TextureFileType type = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char*)content.c_str(), (admf::ADMF_UINT)content.length());
+                admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char*)content.c_str(), (admf::ADMF_UINT)content.length());
+                
+                FIMEMORY* stream = FreeImage_OpenMemory();
+                FreeImage_WriteMemory(content.c_str(), 1, (unsigned)content.length(), stream);
+                FreeImage_SeekMemory(stream, 0, SEEK_SET);
+                
+                FREE_IMAGE_FORMAT format = FIF_PNG;
+                switch (textureBinaryType) {
+                case admf::TextureFileType::PNG:
+                    format = FIF_PNG;
+                    break;
+                case admf::TextureFileType::JPG:
+                    format = FIF_JPEG;
+                    break;
+                case admf::TextureFileType::GIF:
+                    format = FIF_GIF;
+                    break;
+                case admf::TextureFileType::TIFF:
+                    format = FIF_TIFF;
+                    break;
+                    
+                default:
+                    admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
+                    return;
+                }
+                FIBITMAP* bitmap = FreeImage_LoadFromMemory(format, stream);
+                
+                
+                int width = FreeImage_GetWidth(bitmap);
+                int height = FreeImage_GetHeight(bitmap);
+   
+                int bpp = FreeImage_GetBPP(bitmap);
+                
+                if (bpp != 32){
+                    FIBITMAP* bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
+                    if (bitmap != NULL)
+                        FreeImage_Unload(bitmap);
+                    bitmap = bmpTemp;
+                    bpp = FreeImage_GetBPP(bitmap);
+                    
+                }
+                BYTE *bits = (BYTE*)malloc(height * width * 4);
+                // convert the bitmap to raw bits (top-left pixel first)
+                FreeImage_ConvertToRawBits(bits, bitmap, width * 4, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+                
+                
+                for (int w = 0; w< width; w++){
+                    
+                }
+                FreeImage_Unload(bitmap);
+                
+                free(bits);
+                
+                FreeImage_CloseMemory(stream);
             }
         }
         
