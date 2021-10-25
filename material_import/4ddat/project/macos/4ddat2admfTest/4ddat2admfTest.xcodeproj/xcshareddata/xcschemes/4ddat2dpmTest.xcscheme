@@ -52,11 +52,19 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "0"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&quot;/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/4ab4670aca655f15ecff359e760c45b1.admf&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "1"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Volumes/Data/download/feishu/tt1018.4Ddat&quot;"
+            argument = "&quot;/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/PANTONE-20-0056TPM.4Ddat&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
