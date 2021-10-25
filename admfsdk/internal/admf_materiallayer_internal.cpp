@@ -31,6 +31,7 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
     std::string enabledKey = getNewKey("enabled");
+    std::string nameKey = getNewKey("name");
 
     while (bson_iter_next(&child))
     {
@@ -61,7 +62,10 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
         else if (keyName == enabledKey)
         {
             enabled_ = (ADMF_BYTE)bson_iter_as_int64(&child);
-
+        }
+        else if (keyName == nameKey)
+        {
+            name_ = std::make_shared<String_internal>(admfIndex_, &child);
         }
     }
 }
@@ -81,6 +85,8 @@ void MaterialLayer_internal::initMissed()
         basic_ = std::make_shared<LayerBasic_internal>(admfIndex_);
     if (!spec_)
         spec_ = std::make_shared<LayerSpec_internal>(admfIndex_);
+    if (!name_)
+        name_ = std::make_shared<String_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
@@ -92,6 +98,7 @@ void MaterialLayer_internal::save(bson_t *doc)
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
     std::string enabledKey = getNewKey("enabled");
+    std::string nameKey = getNewKey("name");
 
     ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
     ADMF_BSON_APPEND_STRING(doc, shaderKey, shader_);
@@ -99,6 +106,7 @@ void MaterialLayer_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, basicKey, basic_);
     ADMF_BSON_APPEND_DOCUMENT(doc, specKey, spec_);
     ADMF_BSON_APPEND_INT32(doc, enabledKey, enabled_);
+    ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
 }
 #endif
 String MaterialLayer_internal::getType() //"Fabric",
@@ -108,6 +116,11 @@ String MaterialLayer_internal::getType() //"Fabric",
 String MaterialLayer_internal::getShader() //着色类型
 {
     return String(shader_);
+}
+
+String MaterialLayer_internal::getName()
+{
+    return name_;
 }
 
 BinaryData MaterialLayer_internal::getPreview() //content of "/preview.png"
