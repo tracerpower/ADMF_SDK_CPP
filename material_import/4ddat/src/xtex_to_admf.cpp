@@ -552,6 +552,12 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer& admfMaterialLayer, const 
     }
     
   
+    if (admfBasic->getMetalness()->getTexture()->getBinaryData()->getDataLength() > 0)
+    {
+        admfMaterialLayer->getType()->setString("silk");
+    }
+    else
+        admfMaterialLayer->getType()->setString("leather");
    
  
   
@@ -664,6 +670,10 @@ bool _parseU3m(const admf::ADMF& admf, const ZipArchive::Ptr& zipArchive, const 
             
             
         }
+        
+        
+  
+        
         
     } catch (...) {
         return false;
