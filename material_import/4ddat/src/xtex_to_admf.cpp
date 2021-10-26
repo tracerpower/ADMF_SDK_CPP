@@ -343,7 +343,7 @@ void _parseU3mTexture(const admf::Texture& admfTexture, const rapidjson::Value& 
                 int height = FreeImage_GetHeight(bitmap);
                 int pitch = FreeImage_GetPitch(bitmap);
                 int bpp = FreeImage_GetBPP(bitmap);
-                //int channel = bpp / 8;
+
                 
                 /*
                  if (bpp != 32){
@@ -534,7 +534,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer& admfMaterialLayer, const 
     }
     
     {
-        const char* key = "refraction";
+        const char* key = "ior";
         
         if (u3mLayer.HasMember(key))
         {
