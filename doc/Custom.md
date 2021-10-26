@@ -34,7 +34,7 @@ Custom 格式 <font color="gray">(各厂商可自行加入字段, key/value 只�
   //时谛内部自定义字段 用于对应ADMF/4ddat在RHI里的shader版本
 
   "4dstc.uvtype": 0 //0 or 1
-  //时谛内部自定义字段 用于对应ADMF/4ddat在RHI里的shader版本
+  //时谛内部自定义字段 指定uv类型 0-物理uv 1-standard uv(不知道学名叫啥)
   //多层时和changeColor一样处理， 例如 4dstc.uvtype2 4dstc.uvtypeSide
 }
 ```
