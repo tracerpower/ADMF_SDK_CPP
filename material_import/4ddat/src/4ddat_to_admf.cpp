@@ -234,7 +234,7 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, int uvtyp
     metadata->getVersion()->setString(version.c_str());
     
     auto& valueMap = custom->getValueMap();
-    valueMap["4dstc.uvtype"] = uvtype;
+    valueMap["4dstc.uvtype"] = std::to_string(uvtype);
     valueMap["4dstc.version"] = version;
     
     /*
@@ -880,7 +880,7 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCo
     
     assert(outDatasHead->materialNum == 1);
     
-    int uvType = outDatasHead->leftSpace.uvType[0];
+    int uvType = outDatasHead->leftSpace.uvType[0] - '0';
     
     std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
      time_span = t2-t1;
