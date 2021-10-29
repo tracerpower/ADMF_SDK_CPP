@@ -116,6 +116,10 @@ namespace admf_internal
         ZipArchiveEntry::Ptr getZipEntry();
         admf::String getAssignedName();
         admf::String getRawName();
+        
+
+        //如果BinaryData_internal被释放， 返回的std::istream*也会被reset， 多次调用这个函数，返回的是同一个指针(待验证)
+        std::istream* getCompressedStream();
 
 		std::string getNameString() {
 			if (!assignedName_->isEmpty())
@@ -123,6 +127,8 @@ namespace admf_internal
 			if (!name_->getInternalString().empty())
 				return std::to_string(baseIndex_) + "_" + name_->getInternalString();
 			return std::string("binary_") + std::to_string(baseIndex_);
+            
+            
 		};
     private:
         std::shared_ptr<String_internal> name_; //in zip

@@ -362,6 +362,15 @@ ADMF_UINT BinaryData_internal::getDataLength()
     }
 }
 
+std::istream*  BinaryData_internal::getCompressedStream()
+{
+    auto zipEntry = getZipEntry();
+    if (!zipEntry)
+        return nullptr;
+    
+    return zipEntry->GetRawStream();
+}
+
 ADMF_UINT BinaryData_internal::getData(const void *buff, admf::ADMF_UINT len)
 {
     auto zipEntry = getZipEntry();
