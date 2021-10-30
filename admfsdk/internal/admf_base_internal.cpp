@@ -672,6 +672,39 @@ std::shared_ptr<String_internal> Texture_internal::getTypeName_internal()
     case TEX_TYPE_HEIGHT:
         str = new String_internal("Height");
         break;
+    case TEX_TYPE_CLEARCOAT_NORMAL:
+        str = new String_internal("ClearCoatNormal");
+        break;
+    case TEX_TYPE_CLEARCOAT_ROUGHNESS:
+        str = new String_internal("ClearCoatRoughness");
+        break;
+    case TEX_TYPE_CLEARCOAT_VALUE:
+        str = new String_internal("ClearCoatValue");
+        break;
+    case TEX_TYPE_SHEEN_TINT:
+        str = new String_internal("SheenTint");
+        break;
+    case TEX_TYPE_SHEEN_VALUE:
+        str = new String_internal("SheenValue");
+        break;
+    case TEX_TYPE_SPECULAR_TINT:
+        str = new String_internal("SpecularTint");
+        break;
+    case TEX_TYPE_SUBSURFACE_COLOR:
+        str = new String_internal("SubSurfaceColor");
+        break;
+    case TEX_TYPE_SUBSURFACE_RADIUS:
+        str = new String_internal("SubSurfaceRadius");
+        break;
+    case TEX_TYPE_SUBSURFACE_VALUE:
+        str = new String_internal("SubSurfaceValue");
+        break;
+    case TEX_TYPE_TRANSMISSION:
+        str = new String_internal("Tranmission");
+        break;
+    case TEX_TYPE_IOR:
+        str = new String_internal("IOR");
+        break;
     default:
         str = new String_internal("Unknown");
         break;

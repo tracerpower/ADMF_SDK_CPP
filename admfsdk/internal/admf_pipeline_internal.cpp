@@ -125,6 +125,7 @@ void Specular_internal::load(bson_iter_t *iter) //save
 
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
+    std::string valueKey = getNewKey("value");
 
     while (bson_iter_next(&child))
     {
@@ -139,6 +140,10 @@ void Specular_internal::load(bson_iter_t *iter) //save
         else if (keyName == colorKey)
         {
             color_ = std::make_shared<ColorRGB_internal>(admfIndex_, &child);
+        }
+        else if (keyName == valueKey)
+        {
+            value_ = (ADMF_FLOAT)bson_iter_as_double(&child);
         }
     }
 }
@@ -160,9 +165,11 @@ void Specular_internal::save(bson_t *doc)
     texture_->setType(getTextureType());
     std::string textureKey = getNewKey("texture");
     std::string colorKey = getNewKey("color");
+    std::string valueKey = getNewKey("value");
 
     ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);
     ADMF_BSON_APPEND_DOCUMENT(doc, colorKey, color_);
+    ADMF_BSON_APPEND_DOUBLE(doc, valueKey, value_);
 }
 #endif
 Texture Specular_internal::getTexture()
@@ -253,7 +260,7 @@ ColorRGB Emissive_internal::getColor()
 
 
 
-void AmbientOcclusion_internal::load(bson_iter_t *iter) //save
+void SubSurfaceColor_internal::load(bson_iter_t *iter) //save
 {
     if (iter == nullptr)
         return;
@@ -266,45 +273,59 @@ void AmbientOcclusion_internal::load(bson_iter_t *iter) //save
         return;
     
     std::string textureKey = getNewKey("texture");
-
+    std::string colorKey = getNewKey("color");
     
     while (bson_iter_next(&child))
     {
         std::string keyName = bson_iter_key(&child);
         assert(bson_iter_value(&child) != nullptr);
-
+        /*printf("Found element key: \"%s\"\n", keyName.c_str()); */
         if (keyName == textureKey)
         {
             texture_ = std::make_shared<Texture_internal>(admfIndex_, &child);
             texture_->setType(getTextureType());
         }
-
+        else if (keyName == colorKey)
+        {
+            color_ = std::make_shared<ColorRGB_internal>(admfIndex_, &child);
+        }
     }
 }
 
-void AmbientOcclusion_internal::initMissed()
+void SubSurfaceColor_internal::initMissed()
 {
     if (!texture_)
     {
         texture_ = std::make_shared<Texture_internal>(admfIndex_);
         texture_->setType(getTextureType());
     }
+    
+    if (!color_)
+        color_ = std::make_shared<ColorRGB_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
-void AmbientOcclusion_internal::save(bson_t *doc)
+void SubSurfaceColor_internal::save(bson_t *doc)
 {
     texture_->setType(getTextureType());
     std::string textureKey = getNewKey("texture");
+    std::string colorKey = getNewKey("color");
+    
+    
     ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, colorKey, color_);
+    
 }
 #endif
-
-Texture AmbientOcclusion_internal::getTexture()
+Texture SubSurfaceColor_internal::getTexture()
 {
     return Texture(texture_);
 }
 
+ColorRGB SubSurfaceColor_internal::getColor()
+{
+    return ColorRGB(color_);
+}
 
 
 
@@ -375,17 +396,17 @@ Texture Height_internal::getTexture()
 }
 
 #ifdef ADMF_EDIT
-#define Save_Implementation(classname)  \
+#define TextureAndValue_Save_Implementation(classname)  \
 void classname::save(bson_t* doc)                                             \
 {                                                                             \
-texture_->setType(getTextureType());                                           \
-std::string textureKey = getNewKey("texture");                            \
-std::string valueKey = getNewKey("value");                                \
-ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);                      \
-ADMF_BSON_APPEND_DOUBLE(doc, valueKey, value_);                            \
+    texture_->setType(getTextureType());                                           \
+    std::string textureKey = getNewKey("texture");                            \
+    std::string valueKey = getNewKey("value");                                \
+    ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);                      \
+    ADMF_BSON_APPEND_DOUBLE(doc, valueKey, value_);                            \
 } 
 #else
-#define Save_Implementation(x)
+#define TextureAndValue_Save_Implementation(x)
 #endif
 
 #define TextureAndValueContainer_Internal_Implementation(classname)               \
@@ -440,7 +461,67 @@ ADMF_BSON_APPEND_DOUBLE(doc, valueKey, value_);                            \
         }                                                                         \
     }                                                                             \
                                                                                   \
-    Save_Implementation(classname)                                                          \
+    TextureAndValue_Save_Implementation(classname)                                                          \
+
+
+#ifdef ADMF_EDIT
+#define Texture_Save_Implementation(classname)  \
+void classname::save(bson_t* doc)                                             \
+{                                                                             \
+    texture_->setType(getTextureType());                                           \
+    std::string textureKey = getNewKey("texture");                            \
+    ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);                      \
+} 
+#else
+#define Texture_Save_Implementation(x)
+#endif
+
+#define TextureContainer_Internal_Implementation(classname)               \
+    void classname::load(bson_iter_t *iter)                                       \
+    {                                                                             \
+        if (iter == nullptr)                                                      \
+            return;                                                               \
+                                                                                  \
+        if (!BSON_ITER_HOLDS_DOCUMENT(iter))                                      \
+            return;                                                               \
+                                                                                  \
+        bson_iter_t child;                                                        \
+        if (!bson_iter_recurse(iter, &child))                                     \
+            return;                                                               \
+                                                                                  \
+        std::string textureKey = getNewKey("texture");                            \
+                                                                                  \
+        while (bson_iter_next(&child))                                            \
+        {                                                                         \
+            std::string keyName = bson_iter_key(&child);                          \
+            assert(bson_iter_value(&child) != nullptr);                           \
+            /*printf("Found element key: \"%s\"\n", keyName.c_str()); */              \
+            if (keyName == textureKey)                                            \
+            {                                                                     \
+                texture_ = std::make_shared<Texture_internal>(admfIndex_, &child); \
+                texture_->setType(getTextureType());                              \
+            }                                                                     \
+        }                                                                         \
+    }                                                                             \
+                                                                                  \
+    Texture classname::getTexture()                                               \
+    {                                                                             \
+        return Texture(texture_);                                                 \
+    }                                                                             \
+                                                                                  \
+                                                                                    \
+    void classname::initMissed()                                                  \
+    {                                                                             \
+        if (!texture_)                                                            \
+        {                                                                         \
+            texture_ = std::make_shared<Texture_internal>(admfIndex_);             \
+            texture_->setType(getTextureType());                                  \
+        }                                                                         \
+    }                                                                             \
+                                                                                  \
+    Texture_Save_Implementation(classname)                                          \
+
+
 
 TextureAndValueContainer_Internal_Implementation(Normal_internal);
 TextureAndValueContainer_Internal_Implementation(Alpha_internal);
@@ -449,5 +530,14 @@ TextureAndValueContainer_Internal_Implementation(Roughness_internal);
 TextureAndValueContainer_Internal_Implementation(Glossiness_internal);
 TextureAndValueContainer_Internal_Implementation(Anisotropy_internal);
 TextureAndValueContainer_Internal_Implementation(AnisotropyRotation_internal);
-
+TextureContainer_Internal_Implementation(AmbientOcclusion_internal);
+TextureContainer_Internal_Implementation(ClearCoatNormal_internal);
+TextureAndValueContainer_Internal_Implementation(ClearCoatRoughness_internal);
+TextureAndValueContainer_Internal_Implementation(ClearCoatValue_internal);
+TextureAndValueContainer_Internal_Implementation(SheenTint_internal);
+TextureAndValueContainer_Internal_Implementation(SheenValue_internal);
+TextureAndValueContainer_Internal_Implementation(SpecularTint_internal);
+TextureAndValueContainer_Internal_Implementation(SubSurfaceRadius_internal);
+TextureAndValueContainer_Internal_Implementation(SubSurfaceValue_internal);
+TextureAndValueContainer_Internal_Implementation(Transmission_internal);
 

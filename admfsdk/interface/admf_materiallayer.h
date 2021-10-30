@@ -12,6 +12,7 @@
 #ifndef admf_materiallayer_h
 #define admf_materiallayer_h
 
+#include "admf_pipeline.h"
 namespace admf
 {
 
@@ -63,7 +64,7 @@ namespace admf
     };
 
     /// 材质层折射率类
-    class LayerRefraction_
+    class LayerRefraction_ : public TextureAndValueContainer
     {
     public:
         ///     获取材质颜色
@@ -74,6 +75,7 @@ namespace admf
         ///    @return    返回材质光泽度
         ///    @see ADMFFLOAT
         virtual ADMF_FLOAT getGlossiness() = 0;
+
 #ifdef ADMF_EDIT
     public:
         /// 设置光泽度
@@ -133,15 +135,39 @@ namespace admf
         ///    @return    返回Height贴图
         ///    @see Height
         virtual Height getHeight() = 0;
+        
         ///     获取Transform
         ///    @return    返回Transform
         ///    @see LayerTransform
         virtual LayerTransform getTransform() = 0;
 
+        
+        
+        virtual ClearCoatNormal getClearCoatNormal() = 0;
+        
+        virtual ClearCoatRoughness getClearCoatRoughness() = 0;
+        
+        virtual ClearCoatValue getClearCoatValue() = 0;
+        
+        virtual SheenTint getSheenTint() = 0;
+        
+        virtual SheenValue getSheenValue() = 0;
+        
+        virtual SpecularTint getSpecularTint() = 0;
+        
+        virtual SubSurfaceColor getSubSurfaceColor() = 0;
+        
+        virtual SubSurfaceRadius getSubSurfaceRadius() = 0;
+        
+        virtual SubSurfaceValue getSubSurfaceValue() = 0;
+        
+        virtual Transmission getTransmission() = 0;
+        
+
 
     };
 
-    /// 材质层空间类
+    /// 材质层Transform类
     class LayerTransform_
     {
     public:

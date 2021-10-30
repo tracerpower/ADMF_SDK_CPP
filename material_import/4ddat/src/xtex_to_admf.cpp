@@ -520,10 +520,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer& admfMaterialLayer, const 
             if (u3mData.HasMember("constant"))
             {
                 double value = u3mData["constant"].GetDouble();
-                auto color = admfData->getColor();
-                color->setR(value);
-                color->setG(value);
-                color->setB(value);
+                admfData->setValue(value);
             }
             if (u3mData.HasMember("texture"))
             {
@@ -545,9 +542,13 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer& admfMaterialLayer, const 
             if (u3mData.HasMember("constant"))
             {
                 double value = u3mData["constant"].GetDouble();
-                admfData->setGlossiness(value);
+                admfData->setValue(value);
             }
-     
+            if (u3mData.HasMember("texture"))
+            {
+                auto& texture = u3mData["texture"];
+                _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive);
+            }
         }
     }
     

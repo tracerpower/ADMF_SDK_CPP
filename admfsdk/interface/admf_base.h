@@ -64,6 +64,17 @@ namespace admf
         TEX_TYPE_EMISSIVE, ///<自发光贴图
         TEX_TYPE_AO, ///<AO贴图
         TEX_TYPE_HEIGHT, ///<HEIGHT
+        TEX_TYPE_CLEARCOAT_NORMAL,
+        TEX_TYPE_CLEARCOAT_ROUGHNESS,
+        TEX_TYPE_CLEARCOAT_VALUE,
+        TEX_TYPE_SHEEN_TINT,
+        TEX_TYPE_SHEEN_VALUE,
+        TEX_TYPE_SPECULAR_TINT,
+        TEX_TYPE_SUBSURFACE_COLOR,
+        TEX_TYPE_SUBSURFACE_RADIUS,
+        TEX_TYPE_SUBSURFACE_VALUE,
+        TEX_TYPE_TRANSMISSION,
+        TEX_TYPE_IOR,
         TEX_TYPE_UNKNOWN     ///<未知类型
     };
 
@@ -119,6 +130,20 @@ namespace admf
     ADMF_DEF(Emissive);
     ADMF_DEF(AmbientOcclusion);
     ADMF_DEF(Height);
+    ADMF_DEF(ClearCoatNormal);
+    
+    
+    ADMF_DEF(ClearCoatRoughness);
+    ADMF_DEF(ClearCoatValue);
+    ADMF_DEF(SheenTint);
+    ADMF_DEF(SheenValue);
+    ADMF_DEF(SpecularTint);
+    ADMF_DEF(SubSurfaceColor);
+    ADMF_DEF(SubSurfaceRadius);
+    ADMF_DEF(SubSurfaceValue);
+    ADMF_DEF(Transmission);
+
+    
     
     /// 字符串类
     class StringReadOnly_
