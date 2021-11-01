@@ -116,6 +116,8 @@ namespace admf_internal
         ZipArchiveEntry::Ptr getZipEntry();
         admf::String getAssignedName();
         admf::String getRawName();
+        
+        bool isEmpty() override {return getDataLength() == 0;};
 
 		std::string getNameString() {
 			if (!assignedName_->isEmpty())

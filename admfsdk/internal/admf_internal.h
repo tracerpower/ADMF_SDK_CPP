@@ -73,7 +73,7 @@ typedef struct _bson_reader_t bson_reader_t;
 
 #define ADMF_BSON_APPEND_BINARY(doc, key, variable)   \
     {   \
-        BSON_APPEND_UTF8(doc, key.c_str(), variable->getNameString().c_str()); \
+        BSON_APPEND_UTF8(doc, key.c_str(), variable->isEmpty() ?  "" :variable->getNameString().c_str()); \
         variable->save(doc);    \
     }
 

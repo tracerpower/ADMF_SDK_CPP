@@ -23,6 +23,9 @@
 #ifndef __APPLE__
 #include <assert.h>
 #endif
+
+#include <stdio.h>
+#include <stdlib.h>
 using namespace admf_internal;
 using namespace admf;
 
@@ -263,7 +266,7 @@ void BinaryData_internal::load(bson_iter_t *iter) //save
 
 void BinaryData_internal::initMissed()
 {
-    if (!name_)
+    if (!name_ || name_->isEmpty())
         name_ = std::make_shared<String_internal>(admfIndex_);
     if (!assignedName_)
         assignedName_ = std::make_shared<String_internal>(admfIndex_);
@@ -364,13 +367,52 @@ ADMF_UINT BinaryData_internal::getDataLength()
 
 ADMF_UINT BinaryData_internal::getData(const void *buff, admf::ADMF_UINT len)
 {
-    auto zipEntry = getZipEntry();
-    if (!zipEntry)
+    if (len == 0 || buff == nullptr)
         return 0;
-    size_t len_ = len;
-    //zip_helper::ZIPResult result =
-    zipEntry->ExtractData((ADMF_BYTE *)buff, len_);
-    return (ADMF_UINT)len_;
+    switch (originInfo_.originType)
+    {
+    case OriginType::ZipEntry:
+        {
+            auto zipEntry = getZipEntry();
+            if (!zipEntry)
+                return 0;
+            size_t len_ = len;
+            //zip_helper::ZIPResult result =
+            zipEntry->ExtractData((ADMF_BYTE *)buff, len_);
+            return (ADMF_UINT)len_;
+        }
+        break;
+        
+    case OriginType::File:
+        {
+            FILE *file = fopen(originInfo_.content.c_str(), "rb");
+            if (file == nullptr)
+                return 0;
+            
+            auto readNum = fread((void*)buff, len, 1, file);
+            fclose(file);
+            
+            return (ADMF_UINT)readNum;
+        }
+        break;
+        
+    case OriginType::Data:
+        {
+            int len_ = std::min(len, getDataLength());
+            if (len_ <= 0)
+                return len_;
+        
+            memcpy((void*)buff, originInfo_.content.c_str(), len_);
+            return len_;
+        }
+        break;
+        
+    default:
+        return 0;
+    }
+
+    
+    
 }
 
 String BinaryData_internal::getAssignedName()

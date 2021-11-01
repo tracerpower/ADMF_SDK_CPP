@@ -256,6 +256,8 @@ namespace admf
         ///    @return    返回导出结果
         ///    @see ADMFRESULT
         virtual ADMF_RESULT exportToFile(const char *filePath) = 0;
+        
+        virtual bool isEmpty() = 0;
 
 #ifdef ADMF_EDIT
     public:

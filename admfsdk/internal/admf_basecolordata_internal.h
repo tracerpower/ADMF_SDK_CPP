@@ -57,6 +57,7 @@ namespace admf_internal {
         virtual admf::Array<admf::BaseColorDataSolidBlock> getBlockArray() override;
 
     private:
+        /*
         std::shared_ptr<String_internal> colorSpace_;
         std::shared_ptr<ColorRGB_internal> value_;
         admf::ADMF_INT inputBlack_ = 0;
@@ -64,6 +65,7 @@ namespace admf_internal {
         admf::ADMF_FLOAT gamma_ = 1;
         admf::ADMF_INT outputBlack_ = 0;
         admf::ADMF_INT outputWhite_ = 255;
+        */
         std::shared_ptr<Array_internal<admf::BaseColorDataSolidBlock>> blockArray_;
         
 #ifdef ADMF_EDIT

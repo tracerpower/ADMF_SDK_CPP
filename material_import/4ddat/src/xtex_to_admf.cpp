@@ -102,21 +102,21 @@ std::string _getContentFromZip(const ZipArchive::Ptr &zipArchive, const std::str
             if (name == target)
             {
                 stream = entry->GetDecompressionStream();
-                break;
+                return std::string(std::istreambuf_iterator<char>(*stream), {});
             }
             break;
         case CompareType::Surfix:
             if (hasEnding(name, target))
             {
                 stream = entry->GetDecompressionStream();
-                break;
+                return std::string(std::istreambuf_iterator<char>(*stream), {});
             }
             break;
         case CompareType::Contain:
             if (name.find(target) != std::string::npos)
             {
                 stream = entry->GetDecompressionStream();
-                break;
+                return std::string(std::istreambuf_iterator<char>(*stream), {});
             }
             break;
             break;
@@ -125,35 +125,18 @@ std::string _getContentFromZip(const ZipArchive::Ptr &zipArchive, const std::str
             break;
         }
     }
+    
 
-    if (stream == nullptr)
-        return "";
+    return "";
 
-    std::string content(std::istreambuf_iterator<char>(*stream), {});
-    return content;
 }
 
 std::string _getFileContentByMapType(const ZipArchive::Ptr &zipArchive, const std::string &mapType, const XTexMap &xTexMap, const std::string &suffix)
 {
-    std::string content;
-    /*
-    if (mapType == "alpha")
-    {
-        if (!xTexMap.alpha.empty())
-            content = _getContentFromZip(zipArchive, xTexMap.alpha, CompareType::Match);
-        if (content.empty())
-            content = _getContentFromZip(zipArchive, "_ALPHA.", CompareType::Contain);
-        return content;
-    }
-    else if (mapType == "anisotropy_rotation")
-    {
-        
-        content = _getContentFromZip(zipArchive, "_ALPHA.", CompareType::Contain);
-        return content;
-    }
-    */
-    content = _getContentFromZip(zipArchive, suffix, CompareType::Surfix);
-    return content;
+
+
+    return _getContentFromZip(zipArchive, suffix, CompareType::Surfix);
+
 }
 
 void _factorAndOffset(BYTE &byte, const std::string &mode, double factor, double offset)
@@ -186,7 +169,7 @@ void _factorAndOffset(BYTE &byte, const std::string &mode, double factor, double
     byte = std::min(std::max(255, (int)byte), 0);
 }
 
-void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &u3mTexture, const std::string &mapType, const XTexMap &xTexMap, const ZipArchive::Ptr &zipArchive)
+void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &u3mTexture, const std::string &mapType, const XTexMap &xTexMap, const ZipArchive::Ptr &zipArchive, bool ignoreFactorAndOffset = false)
 {
 
     std::string imageFileSuffix = "not a valid suffix!@#$%^&*()/\\[]<>";
@@ -272,30 +255,34 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
     {
 
         bool needHandleFactorAndOffset = false;
-        if (::abs(offsetVec3.r) > _epsilon || ::abs(offsetVec3.g) > _epsilon || ::abs(offsetVec3.b) > _epsilon)
+        if (!ignoreFactorAndOffset)
         {
-            needHandleFactorAndOffset = true;
-        }
-        if (!needHandleFactorAndOffset)
-        {
-            if (mode == "overlay" || mode == "max" || mode == "min")
+            if (::abs(offsetVec3.r) > _epsilon || ::abs(offsetVec3.g) > _epsilon || ::abs(offsetVec3.b) > _epsilon)
             {
-                //https://en.wikipedia.org/wiki/Blend_modes
                 needHandleFactorAndOffset = true;
             }
-            else if (mode == "add" || mode == "subtract")
+            if (!needHandleFactorAndOffset)
             {
-                if (::abs(factorVec3.r) > _epsilon || ::abs(factorVec3.g) > _epsilon || ::abs(factorVec3.b) > _epsilon)
+                if (mode == "overlay" || mode == "max" || mode == "min")
+                {
+                    //https://en.wikipedia.org/wiki/Blend_modes
                     needHandleFactorAndOffset = true;
-            }
-            else /*if (mode == "multiply" || mode == "divide")*/
-            {
-                if ((factorVec3.r >= 0 && (::abs(factorVec3.r - 1.0) > _epsilon)) ||
-                    (factorVec3.g >= 0 && (::abs(factorVec3.g - 1.0) > _epsilon)) ||
-                    (factorVec3.b >= 0 && (::abs(factorVec3.b - 1.0) > _epsilon)))
-                    needHandleFactorAndOffset = true;
+                }
+                else if (mode == "add" || mode == "subtract")
+                {
+                    if (::abs(factorVec3.r) > _epsilon || ::abs(factorVec3.g) > _epsilon || ::abs(factorVec3.b) > _epsilon)
+                        needHandleFactorAndOffset = true;
+                }
+                else /*if (mode == "multiply" || mode == "divide")*/
+                {
+                    if ((factorVec3.r >= 0 && (::abs(factorVec3.r - 1.0) > _epsilon)) ||
+                        (factorVec3.g >= 0 && (::abs(factorVec3.g - 1.0) > _epsilon)) ||
+                        (factorVec3.b >= 0 && (::abs(factorVec3.b - 1.0) > _epsilon)))
+                        needHandleFactorAndOffset = true;
+                }
             }
         }
+      
 
         if (!needHandleFactorAndOffset)
             admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
@@ -484,7 +471,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                 auto &texture = u3mData["texture"];                                              \
                 if (!texture.IsNull())                                                           \
                 {                                                                                \
-                    _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive); \
+                    _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive, true); \
                 }                                                                                \
             }                                                                                    \
         }                                                                                        \
@@ -500,7 +487,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("displacement", getHeight);
 
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("metalness", getMetalness);
-    UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("normal", getNormal);
+    UPDATE_ADMF_DATA_FROM_U3M_TEXTURE("normal", getNormal);
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("roughness", getRoughness);
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("sheen_tint", getSheenTint);
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("sheen_value", getSheenValue);
@@ -757,7 +744,7 @@ bool _parseXML(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
         admfMaterial->setCreatedTime(timeStamp);
         admfMaterial->setModifiedTime(timeStamp);
 
-        auto materialLayer = admfMaterial->getLayerArray()->append();
+
 
         rapidxml::xml_node<> *firstNode = doc.first_node();
 
@@ -835,7 +822,7 @@ bool _parseXML(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
                                 {
                                     normalValue = 1.;
                                 }
-                                materialLayer->getBasic()->getNormal()->setValue(normalValue);
+                                //materialLayer->getBasic()->getNormal()->setValue(normalValue);
                             }
                         }
                     }
