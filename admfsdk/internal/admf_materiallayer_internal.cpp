@@ -400,6 +400,28 @@ void LayerBasic_internal::initMissed()
         ambientOcclusion_ = std::make_shared<AmbientOcclusion_internal>(admfIndex_);
     if (!height_)
         height_ = std::make_shared<Height_internal>(admfIndex_);
+    if (!clearCoatNormal_)
+        clearCoatNormal_ = std::make_shared<ClearCoatNormal_internal>(admfIndex_);
+    if (!clearCoatRoughness_)
+        clearCoatRoughness_ = std::make_shared<ClearCoatRoughness_internal>(admfIndex_);
+    if (!clearCoatValue_)
+        clearCoatValue_ = std::make_shared<ClearCoatValue_internal>(admfIndex_);
+    if (!sheenTint_)
+        sheenTint_ = std::make_shared<SheenTint_internal>(admfIndex_);
+    if (!sheenValue_)
+        sheenValue_ = std::make_shared<SheenValue_internal>(admfIndex_);
+    if (!specularTint_)
+        specularTint_ = std::make_shared<SpecularTint_internal>(admfIndex_);
+    if (!subSurfaceColor_)
+        subSurfaceColor_ = std::make_shared<SubSurfaceColor_internal>(admfIndex_);
+    if (!subSurfaceRadius_)
+        subSurfaceRadius_ = std::make_shared<SubSurfaceRadius_internal>(admfIndex_);
+    if (!subSurfaceValue_)
+        subSurfaceValue_ = std::make_shared<SubSurfaceValue_internal>(admfIndex_);
+    if (!transmission_)
+        transmission_ = std::make_shared<Transmission_internal>(admfIndex_);
+
+    
     if (!transform_)
         transform_ = std::make_shared<LayerTransform_internal>(admfIndex_);
 
