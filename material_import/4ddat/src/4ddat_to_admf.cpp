@@ -177,7 +177,7 @@ void test()
     
 }
 
-admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const MaterialEntryInfo& materialEntryInfo, S4DTextureDataVec* outTextureDatas, const std::string& admfFilePath, int threadCount, int pngCompressLevel)
+admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, int uvtype, const MaterialEntryInfo& materialEntryInfo, S4DTextureDataVec* outTextureDatas, const std::string& admfFilePath, int threadCount, int pngCompressLevel)
 {
     
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
@@ -233,7 +233,9 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
     std::string version = std::to_string(materialConfig.versionMajor) + "." + std::to_string(materialConfig.versionMinor) + "." + std::to_string(materialConfig.versionPatch);
     metadata->getVersion()->setString(version.c_str());
     
-    custom->getValueMap()["4dstc.version"] = version;
+    auto& valueMap = custom->getValueMap();
+    valueMap["4dstc.uvtype"] = std::to_string(uvtype);
+    valueMap["4dstc.version"] = version;
     
     /*
     auto id = admfMaterial->getId();
@@ -538,6 +540,21 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, const Mat
         height->setValue(kHs->f);
     }
     
+
+
+    
+  
+    /*
+    auto baseColorMulti = baseColorData->getMulti();
+    auto multiArray = baseColorMulti->getBlockArray();
+    auto multiBlock = multiArray->append();
+    multiBlock->getName()->setString("这是多色改色方案名字");
+    auto maskArray =  multiBlock->getMaskArray();
+    auto mask1 = maskArray->append();
+    mask1->getValue()->setString("255,255,0");
+    auto mask2 = maskArray->append();
+    mask2->getValue()->setString("0,255,0");
+    */
 
     
     int mapType = RenderCore::MAP_COLOR;
@@ -863,6 +880,8 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCo
     
     assert(outDatasHead->materialNum == 1);
     
+    int uvType = outDatasHead->leftSpace.uvType[0] - '0';
+    
     std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
      time_span = t2-t1;
     printf("before getAllMaterialsEntites:%f\n", time_span.count());
@@ -877,7 +896,7 @@ bool _4ddatToAdmf(const char* filename_, const char* admfFilePath_, int threadCo
         
         MaterialEntryInfo& materialEntryInfo = matEntities[i];
         
-        auto result = materialEntryInfoToAdmf(filename, materialEntryInfo, outTextureDatas, admfFilePath,  threadCount,  pngCompressLevel);
+        auto result = materialEntryInfoToAdmf(filename, uvType, materialEntryInfo, outTextureDatas, admfFilePath,  threadCount,  pngCompressLevel);
         printf("convert %s to %s success\n", filename.c_str(), admfFilePath.c_str());
         
         std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();

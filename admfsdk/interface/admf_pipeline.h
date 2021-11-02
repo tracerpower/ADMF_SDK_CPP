@@ -113,7 +113,7 @@ namespace admf
     /// Height
     class Height_: public TextureContainer
     {
-
+    public:
         virtual admf::ADMF_FLOAT getValue() = 0;
         virtual admf::ADMF_FLOAT getLevel() = 0;
 #ifdef ADMF_EDIT
