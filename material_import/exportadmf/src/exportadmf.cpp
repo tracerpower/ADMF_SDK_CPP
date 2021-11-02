@@ -197,6 +197,19 @@ extern "C" {
         vectorLambda(basic->getEmissive()->getTexture());
         vectorLambda(basic->getAmbientOcclusion()->getTexture());
         vectorLambda(basic->getHeight()->getTexture());
+        vectorLambda(basic->getClearCoatNormal()->getTexture());
+        vectorLambda(basic->getClearCoatRoughness()->getTexture());
+        vectorLambda(basic->getClearCoatValue()->getTexture());
+        vectorLambda(basic->getSheenTint()->getTexture());
+        vectorLambda(basic->getSheenValue()->getTexture());
+        vectorLambda(basic->getSpecularTint()->getTexture());
+        vectorLambda(basic->getSubSurfaceColor()->getTexture());
+        vectorLambda(basic->getSubSurfaceRadius()->getTexture());
+        vectorLambda(basic->getSubSurfaceValue()->getTexture());
+        vectorLambda(basic->getTransmission()->getTexture());
+       
+     
+
         for (auto& texture : textureVector)
         {
             auto binaryData = texture->getBinaryData();

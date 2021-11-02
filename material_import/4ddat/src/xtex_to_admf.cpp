@@ -50,6 +50,7 @@
 #include "rapidjson/document.h"
 #include "datestring_to_int.hpp"
 
+bool g_isMetalnessPipeline = false;
 extern std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNew);
 
 bool hasEnding(std::string const &fullString, std::string const &ending)
@@ -125,18 +126,14 @@ std::string _getContentFromZip(const ZipArchive::Ptr &zipArchive, const std::str
             break;
         }
     }
-    
 
     return "";
-
 }
 
 std::string _getFileContentByMapType(const ZipArchive::Ptr &zipArchive, const std::string &mapType, const XTexMap &xTexMap, const std::string &suffix)
 {
 
-
     return _getContentFromZip(zipArchive, suffix, CompareType::Surfix);
-
 }
 
 void _factorAndOffset(BYTE &byte, const std::string &mode, double factor, double offset)
@@ -169,10 +166,35 @@ void _factorAndOffset(BYTE &byte, const std::string &mode, double factor, double
     byte = std::min(std::max(255, (int)byte), 0);
 }
 
-void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &u3mTexture, const std::string &mapType, const XTexMap &xTexMap, const ZipArchive::Ptr &zipArchive, bool ignoreFactorAndOffset = false)
+void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture &admfTexture_, const rapidjson::Value &u3mTexture, const std::string &mapType, const XTexMap &xTexMap, const ZipArchive::Ptr &zipArchive, bool ignoreFactorAndOffset = false)
 {
 
+    bool isRoughness = mapType == "roughness";
+
+    admf::Texture admfTexture = admfTexture_;
+
     std::string imageFileSuffix = "not a valid suffix!@#$%^&*()/\\[]<>";
+    if (u3mTexture.HasMember("image"))
+    {
+        auto &image = u3mTexture["image"];
+        if (image.HasMember("path"))
+        {
+            std::string path = image["path"].GetString();
+            auto pos = path.rfind("_");
+            if (pos != std::string::npos)
+            {
+                imageFileSuffix = path.substr(pos);
+            }
+        }
+    }
+    std::string content = _getFileContentByMapType(zipArchive, mapType, xTexMap, imageFileSuffix);
+    bool hasTextureContent = !content.empty();
+
+    if (isRoughness && !g_isMetalnessPipeline && hasTextureContent)
+    {
+        admfTexture = admfLayerBasic->getGlossiness()->getTexture();
+    }
+
     if (u3mTexture.HasMember("image"))
     {
         auto &image = u3mTexture["image"];
@@ -194,16 +216,6 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
         {
             auto height = image["height"].GetDouble();
             admfTexture->setHeight(height);
-        }
-
-        if (image.HasMember("path"))
-        {
-            std::string path = image["path"].GetString();
-            auto pos = path.rfind("_");
-            if (pos != std::string::npos)
-            {
-                imageFileSuffix = path.substr(pos);
-            }
         }
     }
 
@@ -250,17 +262,26 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
 
     float _epsilon = 0.001;
 
-    std::string content = _getFileContentByMapType(zipArchive, mapType, xTexMap, imageFileSuffix);
-    if (!content.empty())
+    if (hasTextureContent)
     {
 
         bool needHandleFactorAndOffset = false;
         if (!ignoreFactorAndOffset)
         {
-            if (::abs(offsetVec3.r) > _epsilon || ::abs(offsetVec3.g) > _epsilon || ::abs(offsetVec3.b) > _epsilon)
+
+            if (isRoughness && !g_isMetalnessPipeline)
             {
                 needHandleFactorAndOffset = true;
             }
+
+            if (!needHandleFactorAndOffset)
+            {
+                if (::abs(offsetVec3.r) > _epsilon || ::abs(offsetVec3.g) > _epsilon || ::abs(offsetVec3.b) > _epsilon)
+                {
+                    needHandleFactorAndOffset = true;
+                }
+            }
+
             if (!needHandleFactorAndOffset)
             {
                 if (mode == "overlay" || mode == "max" || mode == "min")
@@ -282,7 +303,6 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
                 }
             }
         }
-      
 
         if (!needHandleFactorAndOffset)
             admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
@@ -323,21 +343,36 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
                 if (bitmap == nullptr)
                     break;
 
+                int bpp = FreeImage_GetBPP(bitmap);
+                FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
+
+                int channel = bpp / 8;
+                if (bpp != 32 && bpp != 24)
+                {
+                    FIBITMAP *bmpTemp = nullptr;
+                    if (FreeImage_IsTransparent(bitmap))
+                    {
+                        bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
+               
+                    }
+                    else
+                    {
+                        bmpTemp = FreeImage_ConvertTo24Bits(bitmap);
+                    }
+                    if (bitmap != nullptr)
+                        FreeImage_Unload(bitmap);
+                    bitmap = bmpTemp;
+                    bmpTemp = nullptr;
+         
+                    bpp = FreeImage_GetBPP(bitmap);
+                    channel = bpp / 8;
+                }
+     
+
                 int width = FreeImage_GetWidth(bitmap);
                 int height = FreeImage_GetHeight(bitmap);
                 int pitch = FreeImage_GetPitch(bitmap);
-                int bpp = FreeImage_GetBPP(bitmap);
 
-                /*
-                 if (bpp != 32){
-                 FIBITMAP* bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
-                 if (bitmap != NULL)
-                 FreeImage_Unload(bitmap);
-                 bitmap = bmpTemp;
-                 bpp = FreeImage_GetBPP(bitmap);
-                 
-                 }
-                 */
                 BYTE *bits = (BYTE *)malloc(height * pitch);
                 // convert the bitmap to raw bits (top-left pixel first)
                 FreeImage_ConvertToRawBits(bits, bitmap, pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
@@ -345,16 +380,26 @@ void _parseU3mTexture(const admf::Texture &admfTexture, const rapidjson::Value &
                 FreeImage_Unload(bitmap);
 
                 offsetVec3.r *= 255;
+                offsetVec3.g *= 255;
+                offsetVec3.b *= 255;
 
                 for (int row = 0; row < height; row++)
                 {
                     for (int col = 0; col < width; col++)
                     {
-                        int index = row * width + col;
+                        int index = row * pitch + col * channel;
                         _factorAndOffset(bits[index], mode, factorVec3.r, offsetVec3.r);
                         _factorAndOffset(bits[index + 1], mode, factorVec3.g, offsetVec3.g);
                         _factorAndOffset(bits[index + 2], mode, factorVec3.b, offsetVec3.b);
-                        //factor和offset就没有alpha， 所以就算channel为4的话， alpha也不处理了
+
+                        if (isRoughness && !g_isMetalnessPipeline)
+                        {
+                            bits[index] = 255 - bits[index];
+                            bits[index + 1] = 255 - bits[index + 1];
+                            bits[index + 2] = 255 - bits[index + 2];
+                        }
+
+                        //factor和offset就没有alpha通道， 所以就算channel为4的话， alpha也不处理了
                     }
                 }
 
@@ -403,78 +448,85 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
         admfMaterialLayer->getShader()->setString(shader);
     }
 
-#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE(key, admfDataMethod)                             \
-    {                                                                                            \
-        if (u3mLayer.HasMember(key))                                                             \
-        {                                                                                        \
-            auto &u3mData = u3mLayer[key];                                                       \
-            auto admfData = admfBasic->admfDataMethod();                                         \
-            if (u3mData.HasMember("constant"))                                                   \
-            {                                                                                    \
-                auto &constant = u3mData["constant"];                                            \
-                if (!constant.IsNull())                                                          \
-                {                                                                                \
-                    double value = constant.GetDouble();                                         \
-                    admfData->setValue(value);                                                   \
-                }                                                                                \
-            }                                                                                    \
-            if (u3mData.HasMember("texture"))                                                    \
-            {                                                                                    \
-                auto &texture = u3mData["texture"];                                              \
-                if (!texture.IsNull())                                                           \
-                {                                                                                \
-                    _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive); \
-                }                                                                                \
-            }                                                                                    \
-        }                                                                                        \
+#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE(key, admfDataMethod)                                        \
+    {                                                                                                       \
+        if (u3mLayer.HasMember(key))                                                                        \
+        {                                                                                                   \
+            auto &u3mData = u3mLayer[key];                                                                  \
+            auto admfData = admfBasic->admfDataMethod();                                                    \
+            if (u3mData.HasMember("constant"))                                                              \
+            {                                                                                               \
+                auto &constant = u3mData["constant"];                                                       \
+                if (!constant.IsNull())                                                                     \
+                {                                                                                           \
+                    double value = constant.GetDouble();                                                    \
+                    admfData->setValue(value);                                                              \
+                    if (strcmp(key, "roughness") == 0 && !g_isMetalnessPipeline)                                    \
+                    {                                                                                       \
+                        double newValue = 1.0 - value;                                                      \
+                        newValue = std::min(1.0, newValue);                                                 \
+                        newValue = std::max(0.0, newValue);                                                 \
+                        admfBasic->getGlossiness()->setValue(newValue);                                     \
+                    }                                                                                       \
+                }                                                                                           \
+            }                                                                                               \
+            if (u3mData.HasMember("texture"))                                                               \
+            {                                                                                               \
+                auto &texture = u3mData["texture"];                                                         \
+                if (!texture.IsNull())                                                                      \
+                {                                                                                           \
+                    _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive); \
+                }                                                                                           \
+            }                                                                                               \
+        }                                                                                                   \
     }
 
-#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_COLOR(key, admfDataMethod)                                   \
-    {                                                                                                  \
-        if (u3mLayer.HasMember(key))                                                                   \
-        {                                                                                              \
-            auto &u3mData = u3mLayer[key];                                                             \
-            auto admfData = admfBasic->admfDataMethod();                                               \
-            if (u3mData.HasMember("constant"))                                                         \
-            {                                                                                          \
-                auto &constant = u3mData["constant"];                                                  \
-                if (!constant.IsNull())                                                                \
-                {                                                                                      \
-                    if (constant.HasMember("r") && constant.HasMember("g") && constant.HasMember("b")) \
-                    {                                                                                  \
-                        auto admfColor = admfData->getColor();                                         \
-                        admfColor->setR(constant["r"].GetDouble());                                    \
-                        admfColor->setG(constant["g"].GetDouble());                                    \
-                        admfColor->setB(constant["b"].GetDouble());                                    \
-                    }                                                                                  \
-                }                                                                                      \
-                if (u3mData.HasMember("texture"))                                                      \
-                {                                                                                      \
-                    auto &texture = u3mData["texture"];                                                \
-                    if (!texture.IsNull())                                                             \
-                    {                                                                                  \
-                        _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive);   \
-                    }                                                                                  \
-                }                                                                                      \
-            }                                                                                          \
-        }                                                                                              \
+#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_COLOR(key, admfDataMethod)                                            \
+    {                                                                                                           \
+        if (u3mLayer.HasMember(key))                                                                            \
+        {                                                                                                       \
+            auto &u3mData = u3mLayer[key];                                                                      \
+            auto admfData = admfBasic->admfDataMethod();                                                        \
+            if (u3mData.HasMember("constant"))                                                                  \
+            {                                                                                                   \
+                auto &constant = u3mData["constant"];                                                           \
+                if (!constant.IsNull())                                                                         \
+                {                                                                                               \
+                    if (constant.HasMember("r") && constant.HasMember("g") && constant.HasMember("b"))          \
+                    {                                                                                           \
+                        auto admfColor = admfData->getColor();                                                  \
+                        admfColor->setR(constant["r"].GetDouble());                                             \
+                        admfColor->setG(constant["g"].GetDouble());                                             \
+                        admfColor->setB(constant["b"].GetDouble());                                             \
+                    }                                                                                           \
+                }                                                                                               \
+                if (u3mData.HasMember("texture"))                                                               \
+                {                                                                                               \
+                    auto &texture = u3mData["texture"];                                                         \
+                    if (!texture.IsNull())                                                                      \
+                    {                                                                                           \
+                        _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive); \
+                    }                                                                                           \
+                }                                                                                               \
+            }                                                                                                   \
+        }                                                                                                       \
     }
 
-#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE(key, admfDataMethod)                                   \
-    {                                                                                            \
-        if (u3mLayer.HasMember(key))                                                             \
-        {                                                                                        \
-            auto &u3mData = u3mLayer[key];                                                       \
-            auto admfData = admfBasic->admfDataMethod();                                         \
-            if (u3mData.HasMember("texture"))                                                    \
-            {                                                                                    \
-                auto &texture = u3mData["texture"];                                              \
-                if (!texture.IsNull())                                                           \
-                {                                                                                \
-                    _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive, true); \
-                }                                                                                \
-            }                                                                                    \
-        }                                                                                        \
+#define UPDATE_ADMF_DATA_FROM_U3M_TEXTURE(key, admfDataMethod)                                                    \
+    {                                                                                                             \
+        if (u3mLayer.HasMember(key))                                                                              \
+        {                                                                                                         \
+            auto &u3mData = u3mLayer[key];                                                                        \
+            auto admfData = admfBasic->admfDataMethod();                                                          \
+            if (u3mData.HasMember("texture"))                                                                     \
+            {                                                                                                     \
+                auto &texture = u3mData["texture"];                                                               \
+                if (!texture.IsNull())                                                                            \
+                {                                                                                                 \
+                    _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive, true); \
+                }                                                                                                 \
+            }                                                                                                     \
+        }                                                                                                         \
     }
 
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("alpha", getAlpha);
@@ -537,7 +589,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                 auto &texture = u3mData["texture"];
                 if (!texture.IsNull())
                 {
-                    _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive);
+                    _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
                 }
             }
         }
@@ -567,7 +619,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                     auto &texture = u3mData["texture"];
                     if (!texture.IsNull())
                     {
-                        _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive);
+                        _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
                     }
                 }
             }
@@ -599,7 +651,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                     auto &texture = u3mData["texture"];
                     if (!texture.IsNull())
                     {
-                        _parseU3mTexture(admfData->getTexture(), texture, key, xTexMap, zipArchive);
+                        _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
                     }
                 }
             }
@@ -618,6 +670,8 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
 {
     try
     {
+        auto count = zipArchive->GetEntriesCount();
+
         rapidjson::Document doc;
         std::string u3mContent = _getContentFromZip(zipArchive, ".u3m", CompareType::Surfix);
         if (u3mContent.empty())
@@ -701,6 +755,7 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
                 if (!front.IsNull())
                 {
                     auto materialLayer = admfMaterial->getLayerArray()->append();
+                    materialLayer->setEnabled(1);
                     _parseU3mMaterialLayer(materialLayer, front, xTexMap, zipArchive);
                 }
             }
@@ -743,8 +798,6 @@ bool _parseXML(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
         admf::ADMF_DATE timeStamp = (admf::ADMF_DATE)std::chrono::duration_cast<std::chrono::milliseconds>(p1.time_since_epoch()).count();
         admfMaterial->setCreatedTime(timeStamp);
         admfMaterial->setModifiedTime(timeStamp);
-
-
 
         rapidxml::xml_node<> *firstNode = doc.first_node();
 
@@ -901,6 +954,21 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
     ZipArchive::Ptr zipArchive = ZipFile::Open(filename_);
     if (!zipArchive)
         return false;
+
+    //parseXML
+    std::istream *stream = nullptr;
+    for (int i = 0; i < zipArchive->GetEntriesCount(); i++)
+    {
+
+        auto entry = zipArchive->GetEntry(i);
+        auto &name = entry->GetName();
+
+        if (name.find("_MTL.") != std::string::npos)
+        {
+            g_isMetalnessPipeline = true;
+            break;
+        }
+    }
 
     try
     {
