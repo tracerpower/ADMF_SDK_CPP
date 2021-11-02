@@ -266,7 +266,7 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
     {
 
         bool needHandleFactorAndOffset = false;
-        if (!ignoreFactorAndOffset)
+        if (!ignoreFactorAndOffset && mode != "recolor")
         {
 
             if (isRoughness && !g_isMetalnessPipeline)
@@ -550,48 +550,93 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("transmission", getTransmission);
     //ior不支持texture
     //https://github.com/vizoogmbh/u3m/blob/master/u3m1.0/U3M.pdf
-
+    
+#define ADD_SOLID_BLOCK(r, g, b, isOriginal) \
+    {  \
+        std::string solidColor = "";  \
+        auto solidBlock = solidBlockArray->append();  \
+        solidColor.append(std::to_string(r)).append(",").append(std::to_string(g)).append(",").append(std::to_string(b));  \
+        solidBlock->getValue()->setString(solidColor.c_str());  \
+        solidColor = std::string("(") + solidColor;  \
+        solidColor += ")";  \
+        solidBlock->getName()->setString(solidColor.c_str());  \
+        solidBlock->setOriginal(isOriginal);  \
+    }
     {
         const char *key = "basecolor";
 
         if (u3mLayer.HasMember(key))
         {
+            
             auto &u3mData = u3mLayer[key];
-
             auto admfData = admfBasic->getBaseColor();
+            bool hasTexture = false;
+            
+            auto baseData = admfData->getData();
+            baseData->getType()->setString("solid");
+            baseData->setIndex(0);
+            auto solidBlockArray = baseData->getSolid()->getBlockArray();
+            
+            if (u3mData.HasMember("texture"))
+            {
+                auto &texture = u3mData["texture"];
+                if (!texture.IsNull())
+                {
+                    hasTexture = true;
+                    _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
+                    
+               
+                    
+        
+                    
+                    std::string mode;
+                    if (texture.HasMember("mode"))
+                    {
+                        mode = texture["mode"].GetString();
+                    }
+                    
+                    if (mode == "recolor")
+                    {
+                       
+                        if (texture.HasMember("factor"))
+                        {
+                            auto &factor = texture["factor"];
+                            if (factor.HasMember("r") && factor.HasMember("g") && factor.HasMember("b"))
+                            {
+                                
+                                int r = 255 * factor["r"].GetDouble();
+                                int g = 255 * factor["g"].GetDouble();
+                                int b = 255 * factor["b"].GetDouble();
+                                ADD_SOLID_BLOCK(r, g, b, false);
+                            }
 
-            if (u3mData.HasMember("constant"))
+                            
+                        }
+                    }
+                }
+            }
+            
+            if (!hasTexture && u3mData.HasMember("constant"))
             {
                 auto &constant = u3mData["constant"];
                 if (!constant.IsNull())
                 {
                     if (constant.HasMember("r") && constant.HasMember("g") && constant.HasMember("b"))
                     {
-                        auto baseData = admfData->getData();
-                        baseData->getType()->setString("solid");
-                        baseData->setIndex(0);
-                        auto solidBlock = baseData->getSolid()->getBlockArray()->append();
                         int r = 255 * constant["r"].GetDouble();
                         int g = 255 * constant["g"].GetDouble();
                         int b = 255 * constant["b"].GetDouble();
-                        std::string solidColor = "";
-                        solidColor.append(std::to_string(r)).append(",").append(std::to_string(g)).append(",").append(std::to_string(b));
-                        solidBlock->getValue()->setString(solidColor.c_str());
-                        solidColor = std::string("(") + solidColor;
-                        solidColor += ")";
-                        solidBlock->getName()->setString(solidColor.c_str());
-                        solidBlock->setOriginal(false);
+                        ADD_SOLID_BLOCK(r, g, b, false);
                     }
                 }
             }
-            if (u3mData.HasMember("texture"))
+            
+            
+            if (solidBlockArray->size() == 0)
             {
-                auto &texture = u3mData["texture"];
-                if (!texture.IsNull())
-                {
-                    _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
-                }
+                ADD_SOLID_BLOCK(0, 0, 0, true);
             }
+            
         }
     }
 
