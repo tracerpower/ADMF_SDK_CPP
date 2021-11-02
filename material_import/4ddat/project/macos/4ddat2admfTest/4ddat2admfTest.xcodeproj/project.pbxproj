@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B1B64408260D6D5300CADA90 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1B64407260D6D5300CADA90 /* main.cpp */; };
+		B116A613273124A8007FE2A7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B116A612273124A8007FE2A7 /* main.cpp */; };
 		B1ECDC1F26130BDE00EAC0A3 /* lib4ddat_to_admf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1B64415260D6D6F00CADA90 /* lib4ddat_to_admf.a */; };
 		B1F0411F268D629D0073DC6C /* libexportadmf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1F0411E268D628E0073DC6C /* libexportadmf.a */; };
 /* End PBXBuildFile section */
@@ -56,10 +56,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B116A612273124A8007FE2A7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B18A242D2700ABFA00005B91 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
 		B18A242F2700AC1C00005B91 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		B1B64404260D6D5300CADA90 /* 4ddat2admfTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 4ddat2admfTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1B64407260D6D5300CADA90 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B1B6440F260D6D6F00CADA90 /* 4ddat_to_admf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = 4ddat_to_admf.xcodeproj; path = ../4ddat_to_admf.xcodeproj; sourceTree = "<group>"; };
 		B1F04119268D628E0073DC6C /* exportadmf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = exportadmf.xcodeproj; path = ../../../../exportadmf/project/macos/exportadmf.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,7 +108,7 @@
 		B1B64406260D6D5300CADA90 /* 4ddat2admfTest */ = {
 			isa = PBXGroup;
 			children = (
-				B1B64407260D6D5300CADA90 /* main.cpp */,
+				B116A612273124A8007FE2A7 /* main.cpp */,
 			);
 			path = 4ddat2admfTest;
 			sourceTree = "<group>";
@@ -236,7 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1B64408260D6D5300CADA90 /* main.cpp in Sources */,
+				B116A613273124A8007FE2A7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
