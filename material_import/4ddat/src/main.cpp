@@ -25,7 +25,7 @@ bool iequals(const std::string& a, const std::string& b)
     });
 }
 
-///Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/1.admf /Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/out 9 9
+///Users/yushihang/Documents/未命名文件夹/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/未命名文件夹/temp/1/1.admf /Users/yushihang/Documents/未命名文件夹/temp/1/out 9 9
 int main(int argc, const char * argv[]) {
     if (argc < 7)
     {
@@ -114,5 +114,5 @@ int main(int argc, const char * argv[]) {
         break;
     }
 
-    return 0;
+	return 0;
 }
