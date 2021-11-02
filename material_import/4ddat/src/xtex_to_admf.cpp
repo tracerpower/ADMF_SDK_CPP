@@ -40,7 +40,7 @@
 #include <iomanip>
 
 #include <ctpl_stl.h>
-#include <experimental/filesystem>
+
 #include "ZipFile.h"
 
 #include "rapidxml_iterators.hpp"

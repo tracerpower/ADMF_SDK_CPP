@@ -13,6 +13,9 @@
 #include <ctype.h>
 #include <limits.h>
 #include <errno.h>
+#ifdef _WIN32
+#include "bson-macros.h"
+#endif
 namespace admfExport {
     
 #define BSON_ERROR_JSON 1
