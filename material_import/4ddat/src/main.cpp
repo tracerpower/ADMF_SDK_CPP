@@ -8,7 +8,8 @@
 #include "4ddat_to_admf.hpp"
 #include "xtex_to_admf.hpp"
 #include "exportadmf.h"
-#include <string>
+#include <stdio.h>
+#include <string.h>
 
 #include <iostream>
 #include <ctime>
@@ -18,11 +19,13 @@
 
 bool iequals(const std::string& a, const std::string& b)
 {
-    return std::equal(a.begin(), a.end(),
-                      b.begin(), b.end(),
-                      [](char a, char b) {
-        return tolower(a) == tolower(b);
-    });
+#if (defined _WIN32) 
+    return _stricmp(a.c_str(), b.c_str()) == 0;
+#elif (defined __APPLE__)
+    return stricmp(a.c_str(), b.c_str()) == 0;
+#else
+    return strncasecmp(a.c_str(), b.c_str(), a.length()) == 0;
+#endif
 }
 
 ///Users/yushihang/Documents/未命名文件夹/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/未命名文件夹/temp/1/1.admf /Users/yushihang/Documents/未命名文件夹/temp/1/out 9 9

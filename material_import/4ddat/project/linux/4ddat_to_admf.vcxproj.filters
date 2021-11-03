@@ -16,6 +16,12 @@
     <ClCompile Include="..\..\..\3rd\lz4\xxhash.c">
       <Filter>src\3rd\lz4</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\datestring_to_int.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xtex_to_admf.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -35,6 +41,9 @@
     </Filter>
     <Filter Include="src\3rd\ctpl">
       <UniqueIdentifier>{31c9f07b-943b-4123-85db-54474aad11d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rd\rapidxml">
+      <UniqueIdentifier>{97c0fe2c-ed29-4d33-be98-0cc17ffef6e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +70,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\3rd\ctpl\ctpl_stl.h">
       <Filter>src\3rd\ctpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\datestring_to_int.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xtex_to_admf.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\rapidxml\rapidxml.hpp">
+      <Filter>src\3rd\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\rapidxml\rapidxml_iterators.hpp">
+      <Filter>src\3rd\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\rapidxml\rapidxml_print.hpp">
+      <Filter>src\3rd\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3rd\rapidxml\rapidxml_utils.hpp">
+      <Filter>src\3rd\rapidxml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
