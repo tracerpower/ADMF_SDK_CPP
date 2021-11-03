@@ -19,10 +19,16 @@
 
 bool iequals(const std::string& a, const std::string& b)
 {
+    
 #if (defined _WIN32) 
     return _stricmp(a.c_str(), b.c_str()) == 0;
 #elif (defined __APPLE__)
-    return stricmp(a.c_str(), b.c_str()) == 0;
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+        return tolower(a) == tolower(b);
+    });
+
 #else
     return strncasecmp(a.c_str(), b.c_str(), a.length()) == 0;
 #endif
