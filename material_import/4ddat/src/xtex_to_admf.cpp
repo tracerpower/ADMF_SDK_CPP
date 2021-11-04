@@ -262,9 +262,13 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
 
     float _epsilon = 0.001;
 
+    
+    
+    FREE_IMAGE_FORMAT format = FIF_PNG;
+    bool needConvertFormat = false;
+    
     if (hasTextureContent)
     {
-
         bool needHandleFactorAndOffset = false;
         if (!ignoreFactorAndOffset && mode != "recolor")
         {
@@ -302,9 +306,39 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                         needHandleFactorAndOffset = true;
                 }
             }
+            
+        }
+        
+        
+        
+        admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char *)content.c_str(), (admf::ADMF_UINT)content.length());
+        
+        
+        switch (textureBinaryType)
+        {
+        case admf::TextureFileType::PNG:
+            format = FIF_PNG;
+            break;
+        case admf::TextureFileType::JPG:
+            format = FIF_JPEG;
+            break;
+        case admf::TextureFileType::GIF:
+            format = FIF_GIF;
+            break;
+        case admf::TextureFileType::TIFF:
+            format = FIF_TIFF;
+            break;
+            
+        default:
+            break;
+        }
+        
+        if (!needConvertFormat)
+        {
+            needConvertFormat = format != FIF_PNG;
         }
 
-        if (!needHandleFactorAndOffset)
+        if (!needHandleFactorAndOffset && !needConvertFormat)
             admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
         else
         {
@@ -313,28 +347,6 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
 
             do
             {
-                admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char *)content.c_str(), (admf::ADMF_UINT)content.length());
-
-                FREE_IMAGE_FORMAT format = FIF_PNG;
-                switch (textureBinaryType)
-                {
-                case admf::TextureFileType::PNG:
-                    format = FIF_PNG;
-                    break;
-                case admf::TextureFileType::JPG:
-                    format = FIF_JPEG;
-                    break;
-                case admf::TextureFileType::GIF:
-                    format = FIF_GIF;
-                    break;
-                case admf::TextureFileType::TIFF:
-                    format = FIF_TIFF;
-                    break;
-
-                default:
-
-                    break;
-                }
                 FIMEMORY *stream = FreeImage_OpenMemory();
                 FreeImage_WriteMemory(content.c_str(), 1, (unsigned)content.length(), stream);
                 FreeImage_SeekMemory(stream, 0, SEEK_SET);
@@ -343,79 +355,88 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                 if (bitmap == nullptr)
                     break;
 
-                int bpp = FreeImage_GetBPP(bitmap);
-                FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
-
-                int channel = bpp / 8;
-                if (bpp != 32 && bpp != 24)
+        
+                
+                if (needHandleFactorAndOffset)
                 {
-                    FIBITMAP *bmpTemp = nullptr;
-                    if (FreeImage_IsTransparent(bitmap))
+                    
+                    int bpp = FreeImage_GetBPP(bitmap);
+                    FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
+                    
+                    int channel = bpp / 8;
+                    if (bpp != 32 && bpp != 24)
                     {
-                        bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
-               
-                    }
-                    else
-                    {
-                        bmpTemp = FreeImage_ConvertTo24Bits(bitmap);
-                    }
-                    if (bitmap != nullptr)
-                        FreeImage_Unload(bitmap);
-                    bitmap = bmpTemp;
-                    bmpTemp = nullptr;
-         
-                    bpp = FreeImage_GetBPP(bitmap);
-                    channel = bpp / 8;
-                }
-     
-
-                int width = FreeImage_GetWidth(bitmap);
-                int height = FreeImage_GetHeight(bitmap);
-                int pitch = FreeImage_GetPitch(bitmap);
-
-                BYTE *bits = (BYTE *)malloc(height * pitch);
-                // convert the bitmap to raw bits (top-left pixel first)
-                FreeImage_ConvertToRawBits(bits, bitmap, pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
-
-                FreeImage_Unload(bitmap);
-
-                offsetVec3.r *= 255;
-                offsetVec3.g *= 255;
-                offsetVec3.b *= 255;
-
-                for (int row = 0; row < height; row++)
-                {
-                    for (int col = 0; col < width; col++)
-                    {
-                        int index = row * pitch + col * channel;
-                        _factorAndOffset(bits[index], mode, factorVec3.r, offsetVec3.r);
-                        _factorAndOffset(bits[index + 1], mode, factorVec3.g, offsetVec3.g);
-                        _factorAndOffset(bits[index + 2], mode, factorVec3.b, offsetVec3.b);
-
-                        if (isRoughness && !g_isMetalnessPipeline)
+                        FIBITMAP *bmpTemp = nullptr;
+                        if (FreeImage_IsTransparent(bitmap))
                         {
-                            bits[index] = 255 - bits[index];
-                            bits[index + 1] = 255 - bits[index + 1];
-                            bits[index + 2] = 255 - bits[index + 2];
+                            bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
                         }
-
-                        //factor和offset就没有alpha通道， 所以就算channel为4的话， alpha也不处理了
+                        else
+                        {
+                            bmpTemp = FreeImage_ConvertTo24Bits(bitmap);
+                        }
+                        if (bitmap != nullptr)
+                            FreeImage_Unload(bitmap);
+                        bitmap = bmpTemp;
+                        bmpTemp = nullptr;
+                        
+                        bpp = FreeImage_GetBPP(bitmap);
+                        channel = bpp / 8;
                     }
+                    
+                    
+                    int width = FreeImage_GetWidth(bitmap);
+                    int height = FreeImage_GetHeight(bitmap);
+                    int pitch = FreeImage_GetPitch(bitmap);
+                    
+                    BYTE *bits = (BYTE *)malloc(height * pitch);
+                    // convert the bitmap to raw bits (top-left pixel first)
+                    FreeImage_ConvertToRawBits(bits, bitmap, pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+                    
+                    FreeImage_Unload(bitmap);
+                    
+                    offsetVec3.r *= 255;
+                    offsetVec3.g *= 255;
+                    offsetVec3.b *= 255;
+                    
+                    for (int row = 0; row < height; row++)
+                    {
+                        for (int col = 0; col < width; col++)
+                        {
+                            int index = row * pitch + col * channel;
+                            _factorAndOffset(bits[index], mode, factorVec3.r, offsetVec3.r);
+                            _factorAndOffset(bits[index + 1], mode, factorVec3.g, offsetVec3.g);
+                            _factorAndOffset(bits[index + 2], mode, factorVec3.b, offsetVec3.b);
+                            
+                            if (isRoughness && !g_isMetalnessPipeline)
+                            {
+                                bits[index] = 255 - bits[index];
+                                bits[index + 1] = 255 - bits[index + 1];
+                                bits[index + 2] = 255 - bits[index + 2];
+                            }
+                            
+                            //factor和offset就没有alpha通道， 所以就算channel为4的话， alpha也不处理了
+                        }
+                    }
+                    
+                    
+                    bitmap = FreeImage_ConvertFromRawBits(bits, width, height, pitch, bpp, FI_RGBA_RED_MASK,
+                                                                        FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+
                 }
 
-                FIBITMAP *bitmap_new = FreeImage_ConvertFromRawBits(bits, width, height, pitch, bpp, FI_RGBA_RED_MASK,
-                                                                    FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+               
 
-                free(bits);
+   
 
                 FIMEMORY *stream_new = FreeImage_OpenMemory();
-                if (!FreeImage_SaveToMemory(FIF_PNG, bitmap_new, stream_new))
+                if (!FreeImage_SaveToMemory(FIF_PNG, bitmap, stream_new))
                 {
                     FreeImage_CloseMemory(stream_new);
                     break;
                 }
 
-                FreeImage_Unload(bitmap_new);
+                FreeImage_Unload(bitmap);
                 FreeImage_SeekMemory(stream_new, 0, SEEK_SET);
                 BYTE *pngRawData = nullptr;
                 DWORD pngRawDataSize = 0;
