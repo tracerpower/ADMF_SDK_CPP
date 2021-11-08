@@ -215,7 +215,7 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
         if (image.HasMember("height"))
         {
             auto height = image["height"].GetDouble();
-            admfTexture->setPhysicalHeight(height*10); //u3m是cm， admf是mm
+            admfTexture->setPhysicalHeight(height * 10); //u3m是cm， admf是mm
         }
     }
 
@@ -262,11 +262,9 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
 
     float _epsilon = 0.001;
 
-    
-    
     FREE_IMAGE_FORMAT format = FIF_PNG;
     bool needConvertFormat = false;
-    
+
     if (hasTextureContent)
     {
         bool needHandleFactorAndOffset = false;
@@ -306,14 +304,10 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                         needHandleFactorAndOffset = true;
                 }
             }
-            
         }
-        
-        
-        
+
         admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char *)content.c_str(), (admf::ADMF_UINT)content.length());
-        
-        
+
         switch (textureBinaryType)
         {
         case admf::TextureFileType::PNG:
@@ -328,18 +322,16 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
         case admf::TextureFileType::TIFF:
             format = FIF_TIFF;
             break;
-            
+
         default:
             break;
         }
-        
+
         if (!needConvertFormat)
         {
             needConvertFormat = format != FIF_PNG;
         }
-        
 
-        
         bool needReadTextureSize = true; //u3m没有具体的纹理尺寸数据，而admf必须需要， 所以必须处理
 
         if (!needReadTextureSize && !needHandleFactorAndOffset && !needConvertFormat)
@@ -367,9 +359,9 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                     admfTexture->setHeight(height);
 
                     admfTexture->setElementSize(1);
-                    
+
                     FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
-                    
+
                     int channel = -1;
                     switch (colourType)
                     {
@@ -392,20 +384,17 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                     default:
                         break;
                     }
-                    
-                    admfTexture->setChannels(channel);
 
+                    admfTexture->setChannels(channel);
                 }
                 if (!needHandleFactorAndOffset && !needConvertFormat)
                     break;
-       
+
                 if (needHandleFactorAndOffset)
                 {
-                    
+
                     int bpp = FreeImage_GetBPP(bitmap);
-     
-                    
-                    
+
                     int channel = bpp / 8;
                     if (bpp != 32 && bpp != 24)
                     {
@@ -422,28 +411,26 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                             FreeImage_Unload(bitmap);
                         bitmap = bmpTemp;
                         bmpTemp = nullptr;
-                        
+
                         bpp = FreeImage_GetBPP(bitmap);
                         channel = bpp / 8;
                     }
-                    
-                    
+
                     int width = FreeImage_GetWidth(bitmap);
                     int height = FreeImage_GetHeight(bitmap);
-                    
 
                     int pitch = FreeImage_GetPitch(bitmap);
-                    
+
                     BYTE *bits = (BYTE *)malloc(height * pitch);
                     // convert the bitmap to raw bits (top-left pixel first)
                     FreeImage_ConvertToRawBits(bits, bitmap, pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
-                    
+
                     FreeImage_Unload(bitmap);
-                    
+
                     offsetVec3.r *= 255;
                     offsetVec3.g *= 255;
                     offsetVec3.b *= 255;
-                    
+
                     for (int row = 0; row < height; row++)
                     {
                         for (int col = 0; col < width; col++)
@@ -452,27 +439,22 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                             _factorAndOffset(bits[index], mode, factorVec3.r, offsetVec3.r);
                             _factorAndOffset(bits[index + 1], mode, factorVec3.g, offsetVec3.g);
                             _factorAndOffset(bits[index + 2], mode, factorVec3.b, offsetVec3.b);
-                            
+
                             if (isRoughness && !g_isMetalnessPipeline)
                             {
                                 bits[index] = 255 - bits[index];
                                 bits[index + 1] = 255 - bits[index + 1];
                                 bits[index + 2] = 255 - bits[index + 2];
                             }
-                            
+
                             //factor和offset就没有alpha通道， 所以就算channel为4的话， alpha也不处理了
                         }
                     }
-                    
-                    
+
                     bitmap = FreeImage_ConvertFromRawBits(bits, width, height, pitch, bpp, FI_RGBA_RED_MASK,
-                                                                        FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
-
+                                                          FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+                    free(bits);
                 }
-
-               
-
-   
 
                 FIMEMORY *stream_new = FreeImage_OpenMemory();
                 if (!FreeImage_SaveToMemory(FIF_PNG, bitmap, stream_new))
@@ -492,6 +474,7 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                     break;
                 }
                 admfTexture->getBinaryData()->updateFromData(pngRawData, (admf::ADMF_UINT)pngRawDataSize);
+                FreeImage_CloseMemory(stream_new);
                 success = true;
             } while (0);
 
@@ -527,7 +510,7 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                 {                                                                                           \
                     double value = constant.GetDouble();                                                    \
                     admfData->setValue(value);                                                              \
-                    if (strcmp(key, "roughness") == 0 && !g_isMetalnessPipeline)                                    \
+                    if (strcmp(key, "roughness") == 0 && !g_isMetalnessPipeline)                            \
                     {                                                                                       \
                         double newValue = 1.0 - value;                                                      \
                         newValue = std::min(1.0, newValue);                                                 \
@@ -616,33 +599,33 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
     UPDATE_ADMF_DATA_FROM_U3M_TEXTURE_VALUE("transmission", getTransmission);
     //ior不支持texture
     //https://github.com/vizoogmbh/u3m/blob/master/u3m1.0/U3M.pdf
-    
-#define ADD_SOLID_BLOCK(r, g, b, isOriginal) \
-    {  \
-        std::string solidColor = "";  \
-        auto solidBlock = solidBlockArray->append();  \
-        solidColor.append(std::to_string(r)).append(",").append(std::to_string(g)).append(",").append(std::to_string(b));  \
-        solidBlock->getValue()->setString(solidColor.c_str());  \
-        solidColor = std::string("(") + solidColor;  \
-        solidColor += ")";  \
-        solidBlock->getName()->setString(solidColor.c_str());  \
-        solidBlock->setOriginal(isOriginal);  \
+
+#define ADD_SOLID_BLOCK(r, g, b, isOriginal)                                                                              \
+    {                                                                                                                     \
+        std::string solidColor = "";                                                                                      \
+        auto solidBlock = solidBlockArray->append();                                                                      \
+        solidColor.append(std::to_string(r)).append(",").append(std::to_string(g)).append(",").append(std::to_string(b)); \
+        solidBlock->getValue()->setString(solidColor.c_str());                                                            \
+        solidColor = std::string("(") + solidColor;                                                                       \
+        solidColor += ")";                                                                                                \
+        solidBlock->getName()->setString(solidColor.c_str());                                                             \
+        solidBlock->setOriginal(isOriginal);                                                                              \
     }
     {
         const char *key = "basecolor";
 
         if (u3mLayer.HasMember(key))
         {
-            
+
             auto &u3mData = u3mLayer[key];
             auto admfData = admfBasic->getBaseColor();
             bool hasTexture = false;
-            
+
             auto baseData = admfData->getData();
             baseData->getType()->setString("solid");
             baseData->setIndex(0);
             auto solidBlockArray = baseData->getSolid()->getBlockArray();
-            
+
             if (u3mData.HasMember("texture"))
             {
                 auto &texture = u3mData["texture"];
@@ -650,38 +633,32 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                 {
                     hasTexture = true;
                     _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
-                    
-               
-                    
-        
-                    
+
                     std::string mode;
                     if (texture.HasMember("mode"))
                     {
                         mode = texture["mode"].GetString();
                     }
-                    
+
                     if (mode == "recolor")
                     {
-                       
+
                         if (texture.HasMember("factor"))
                         {
                             auto &factor = texture["factor"];
                             if (factor.HasMember("r") && factor.HasMember("g") && factor.HasMember("b"))
                             {
-                                
+
                                 int r = 255 * factor["r"].GetDouble();
                                 int g = 255 * factor["g"].GetDouble();
                                 int b = 255 * factor["b"].GetDouble();
                                 ADD_SOLID_BLOCK(r, g, b, false);
                             }
-
-                            
                         }
                     }
                 }
             }
-            
+
             if (!hasTexture && u3mData.HasMember("constant"))
             {
                 auto &constant = u3mData["constant"];
@@ -696,13 +673,11 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                     }
                 }
             }
-            
-            
+
             if (solidBlockArray->size() == 0)
             {
                 ADD_SOLID_BLOCK(0, 0, 0, true);
             }
-            
         }
     }
 
@@ -781,7 +756,6 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
 {
     try
     {
-
 
         rapidjson::Document doc;
         std::string u3mContent = _getContentFromZip(zipArchive, ".u3m", CompareType::Surfix);
@@ -890,8 +864,191 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
 
     return true;
 }
-/*
 
+std::vector<std::string> _split(const std::string &s, char seperator)
+{
+    std::vector<std::string> output;
+
+    std::string::size_type prev_pos = 0, pos = 0;
+
+    while ((pos = s.find(seperator, pos)) != std::string::npos)
+    {
+        std::string substring(s.substr(prev_pos, pos - prev_pos));
+
+        output.push_back(substring);
+
+        prev_pos = ++pos;
+    }
+
+    output.push_back(s.substr(prev_pos, pos - prev_pos)); // Last word
+
+    return output;
+}
+
+void _parseXtexTexture(const std::string &content, const admf::Texture &admfTexture, int &width_, int &height_, bool needInverse = false)
+{
+    bool success = false;
+
+    do
+    {
+
+        admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char *)content.c_str(), (admf::ADMF_UINT)content.length());
+        auto format = FIF_UNKNOWN;
+
+        switch (textureBinaryType)
+        {
+        case admf::TextureFileType::PNG:
+            format = FIF_PNG;
+            break;
+        case admf::TextureFileType::JPG:
+            format = FIF_JPEG;
+            break;
+        case admf::TextureFileType::GIF:
+            format = FIF_GIF;
+            break;
+        case admf::TextureFileType::TIFF:
+            format = FIF_TIFF;
+            break;
+
+        default:
+            break;
+        }
+
+        bool needConvertFormat = format != FIF_PNG;
+
+        FIMEMORY *stream = FreeImage_OpenMemory();
+        FreeImage_WriteMemory(content.c_str(), 1, (unsigned)content.length(), stream);
+        FreeImage_SeekMemory(stream, 0, SEEK_SET);
+        FIBITMAP *bitmap = FreeImage_LoadFromMemory(format, stream);
+        FreeImage_CloseMemory(stream);
+        if (bitmap == nullptr)
+            break;
+
+        int width = FreeImage_GetWidth(bitmap);
+        int height = FreeImage_GetHeight(bitmap);
+        admfTexture->setWidth(width);
+        admfTexture->setHeight(height);
+        
+        width_ = width;
+        height_ = height;
+
+        admfTexture->setElementSize(1);
+        
+
+        FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
+
+        int channel = -1;
+        switch (colourType)
+        {
+        case FIC_MINISWHITE:
+            channel = 1;
+            break;
+        case FIC_MINISBLACK:
+            channel = 1;
+            break;
+        case FIC_RGB:
+            channel = 3;
+            break;
+        case FIC_PALETTE:
+            break;
+        case FIC_RGBALPHA:
+            channel = 4;
+            break;
+        case FIC_CMYK:
+            break;
+        default:
+            break;
+        }
+
+        admfTexture->setChannels(channel);
+
+        if (!needConvertFormat)
+            break;
+
+        int bpp = FreeImage_GetBPP(bitmap);
+
+        channel = bpp / 8;
+        if (bpp != 32 && bpp != 24)
+        {
+            FIBITMAP *bmpTemp = nullptr;
+            if (FreeImage_IsTransparent(bitmap))
+            {
+                bmpTemp = FreeImage_ConvertTo32Bits(bitmap);
+            }
+            else
+            {
+                bmpTemp = FreeImage_ConvertTo24Bits(bitmap);
+            }
+            if (bitmap != nullptr)
+                FreeImage_Unload(bitmap);
+            bitmap = bmpTemp;
+            bmpTemp = nullptr;
+
+            bpp = FreeImage_GetBPP(bitmap);
+            channel = bpp / 8;
+        }
+
+        width = FreeImage_GetWidth(bitmap);
+        height = FreeImage_GetHeight(bitmap);
+
+        int pitch = FreeImage_GetPitch(bitmap);
+
+        BYTE *bits = (BYTE *)malloc(height * pitch);
+        // convert the bitmap to raw bits (top-left pixel first)
+        FreeImage_ConvertToRawBits(bits, bitmap, pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+
+        FreeImage_Unload(bitmap);
+        
+        if (needInverse)
+        {
+            for (int row = 0; row < height; row++)
+            {
+                for (int col = 0; col < width; col++)
+                {
+                    int index = row * pitch + col * channel;
+                    
+                    bits[index] = 255 - bits[index];
+                    bits[index + 1] = 255 - bits[index + 1];
+                    bits[index + 2] = 255 - bits[index + 2];
+                }
+            }
+        }
+        
+
+
+
+        bitmap = FreeImage_ConvertFromRawBits(bits, width, height, pitch, bpp, FI_RGBA_RED_MASK,
+                                              FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+        free(bits);
+        bits = nullptr;
+
+        FIMEMORY *stream_new = FreeImage_OpenMemory();
+        if (!FreeImage_SaveToMemory(FIF_PNG, bitmap, stream_new))
+        {
+            FreeImage_CloseMemory(stream_new);
+            break;
+        }
+
+        FreeImage_Unload(bitmap);
+        FreeImage_SeekMemory(stream_new, 0, SEEK_SET);
+        BYTE *pngRawData = nullptr;
+        DWORD pngRawDataSize = 0;
+        BOOL acquireResult = FreeImage_AcquireMemory(stream_new, &pngRawData, &pngRawDataSize);
+        if (!acquireResult)
+        {
+            FreeImage_CloseMemory(stream_new);
+            break;
+        }
+        admfTexture->getBinaryData()->updateFromData(pngRawData, (admf::ADMF_UINT)pngRawDataSize);
+        FreeImage_CloseMemory(stream_new);
+        success = true;
+    } while (0);
+
+    if (!success)
+        admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
+    
+    return;
+}
 bool _parseXtex(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const std::string &filename, const XTexMap &xTexMap)
 {
     try
@@ -905,127 +1062,372 @@ bool _parseXtex(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const
         rapidxml::xml_document<> doc;
         doc.parse<0>((char *)(xtexContent.c_str()));
 
-
-        
-
-        
         rapidxml::xml_node<> *firstNode = doc.first_node();
-        
+
         auto *name = firstNode->name();
-        assert(strcmp(name, "swatch") == 0);
-        
-        {
-            auto *node = firstNode->first_node("uuid");
-            if (node)
-            {
-                auto *value = node->value();
-                if (value)
-                {
-                    auto id = admfMaterial->getId();
-                    id->setString(value);
-                }
-            }
-        }
-        
+        assert(strcmp(name, "material") == 0);
         admf::Material admfMaterial = admf->getMaterial();
-        
-        auto metadata = admfMaterial->getMetaData();
-        metadata->getType()->setString("xtex");
-        
-        auto metadataSource = metadata->getSource();
-        
-#if (defined __APPLE__) || (defined _WIN32)
-#ifdef __APPLE__
-        namespace fs = std::__fs::filesystem;
-#else
-        namespace fs = std::filesystem;
-#endif
-        auto path = fs::path(filename);
-        
-        std::string sourceFileName = path.filename().string();
-#else
-        std::string sourceFileName;
-        auto pos = filename.rfind("/");
-        if (pos == std::string::npos)
         {
-            sourceFileName = filename;
-        }
-        else
-        {
-            sourceFileName = filename.substr(pos + 1);
-        }
-#endif
-        metadataSource->setName(sourceFileName.c_str());
-        metadataSource->updateFromFile(filename.c_str(), false);
-        
-        if (doc.HasMember("schema"))
-        {
-            auto schema = doc["schema"].GetString();
-            metadata->getVersion()->setString(schema);
+            auto *metaNode = firstNode->first_node("meta");
+            if (metaNode)
+            {
+                auto device = admfMaterial->getDevice();
+
+                auto *idNode = metaNode->first_node("id");
+                if (idNode)
+                    device->getType()->setString(idNode->value());
+
+                auto *deviceNode = metaNode->first_node("device");
+                if (deviceNode)
+                    device->getModel()->setString(deviceNode->value());
+
+                auto *versionNode = metaNode->first_node("version");
+                if (versionNode)
+                    device->getRevision()->setString(versionNode->value());
+            }
         }
         
-        if (doc.HasMember("material"))
+        float physicalWidth = 0;
+        float physicalHeight = 0;
         {
-            auto &u3mMaterial = doc["material"];
-            if (u3mMaterial.HasMember("created"))
+            auto *sizeNode = firstNode->first_node("size");
+            if (sizeNode)
             {
-                std::string createdDate = u3mMaterial["created"].GetString();
-                if (!hasEnding(createdDate, "Z"))
-                    createdDate.append("Z");
-                int64_t date;
-                admfExport::bson_error_t error;
-                admfExport::_bson_iso8601_date_parse(createdDate.c_str(), (int32_t)createdDate.size(), &date, &error);
-                admfMaterial->setCreatedTime(date);
+                auto *widthNode = sizeNode->first_node("width");
+                if (widthNode)
+                    physicalWidth = std::stof(widthNode->value())  * 10;
+                
+                auto *heightNode = sizeNode->first_node("height");
+                if (heightNode)
+                    physicalHeight = std::stof(heightNode->value()) * 10;
             }
-            
-            if (u3mMaterial.HasMember("modified"))
+        }
+
+        {
+            auto *parametersNode = firstNode->first_node("parameters");
+            if (parametersNode)
             {
-                std::string modifiedDate = u3mMaterial["modified"].GetString();
-                if (!hasEnding(modifiedDate, "Z"))
-                    modifiedDate.append("Z");
-                int64_t date;
-                admfExport::bson_error_t error;
-                admfExport::_bson_iso8601_date_parse(modifiedDate.c_str(), (int32_t)modifiedDate.size(), &date, &error);
-                admfMaterial->setCreatedTime(date);
-            }
-            
-            if (u3mMaterial.HasMember("id"))
-            {
-                auto id = u3mMaterial["id"].GetString();
-                admfMaterial->getId()->setString(id);
-            }
-            
-            if (u3mMaterial.HasMember("front"))
-            {
-                auto &front = u3mMaterial["front"];
-                if (!front.IsNull())
+                auto *texturesNode = parametersNode->first_node("textures");
+                auto *shadingNode = parametersNode->first_node("shading");
+
+                if (texturesNode && shadingNode)
                 {
-                    auto materialLayer = admfMaterial->getLayerArray()->append();
-                    materialLayer->setEnabled(1);
-                    _parseU3mMaterialLayer(materialLayer, front, xTexMap, zipArchive);
+                    auto admfLayer = admfMaterial->getLayerArray()->append();
+                    admfLayer->setEnabled(true);
+                    admfLayer->getType()->setString("leather");
+                    auto admfLayerBasic = admfLayer->getBasic();
+
+                   
+                    int width = 0, height = 0;
+                    float dpiX = 0, dpiY = 0;
+                    
+                    bool hasDiffuseTexture = false;
+                    {
+               
+                        auto colorTextureNode = texturesNode->first_node("color");
+                        if (colorTextureNode && strlen(colorTextureNode->value()) > 0)
+                        {
+                            std::string str = _getContentFromZip(zipArchive, colorTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getBaseColor()->getTexture(), width, height);
+                                hasDiffuseTexture = true;
+                            }
+                        }
+                        
+                        if (!hasDiffuseTexture){
+                            
+                            auto colorTextureNode = texturesNode->first_node("color_combined");
+                            if (colorTextureNode && strlen(colorTextureNode->value()) > 0)
+                            {
+                                std::string str = _getContentFromZip(zipArchive, colorTextureNode->value(), CompareType::Match);
+                                if (!str.empty())
+                                {
+                                    _parseXtexTexture(str, admfLayerBasic->getBaseColor()->getTexture(), width, height);
+                                    hasDiffuseTexture = true;
+                                }
+                            }
+                        }
+                        
+                        if (hasDiffuseTexture && physicalWidth > 0 && physicalHeight > 0)
+                        {
+                            dpiX = width / (physicalWidth / 25.4);
+                            dpiY = height / (physicalHeight / 25.4);
+                            
+                            admfLayerBasic->getBaseColor()->getTexture()->setPhysicalWidth(physicalWidth);
+                            admfLayerBasic->getBaseColor()->getTexture()->setPhysicalHeight(physicalHeight);
+                            admfLayerBasic->getBaseColor()->getTexture()->getDpi()->setX(dpiX);
+                            admfLayerBasic->getBaseColor()->getTexture()->getDpi()->setY(dpiY);
+                        }
+                        
+                      
+                    }
+
+                    //specular
+                    {
+                        auto specularTextureNode = texturesNode->first_node("specular");
+                        if (specularTextureNode && strlen(specularTextureNode->value()) > 0)
+                        {
+
+                            std::string str = _getContentFromZip(zipArchive, specularTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getSpecular()->getTexture(), width, height);
+                                
+                                
+                                admfLayerBasic->getSpecular()->getTexture()->setPhysicalWidth(width / dpiX * 25.4);
+                                admfLayerBasic->getSpecular()->getTexture()->setPhysicalHeight(height / dpiY * 25.4);
+                                admfLayerBasic->getSpecular()->getTexture()->getDpi()->setX(dpiX);
+                                admfLayerBasic->getSpecular()->getTexture()->getDpi()->setY(dpiY);
+                            }
+                        }
+
+                        auto colorSpecularShading = shadingNode->first_node("color_specular");
+                        if (colorSpecularShading && strlen(colorSpecularShading->value()) > 0)
+                        {
+                            auto array = _split(colorSpecularShading->value(), ',');
+                            if (array.size() >= 3)
+                            {
+                                auto specular = admfLayerBasic->getSpecular();
+                                auto specularColor = specular->getColor();
+                                specularColor->setR(std::stof(array[0]));
+                                specularColor->setG(std::stof(array[1]));
+                                specularColor->setB(std::stof(array[2]));
+                            }
+                        }
+                    }
+                    
+                    
+                    //rough
+                    {
+                        auto roughTextureNode = texturesNode->first_node("rough");
+                        if (roughTextureNode && strlen(roughTextureNode->value()) > 0)
+                        {
+
+                            std::string str = _getContentFromZip(zipArchive, roughTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getGlossiness()->getTexture(), width, height, true);
+                                admfLayerBasic->getGlossiness()->getTexture()->setPhysicalWidth(width / dpiX * 25.4);
+                                admfLayerBasic->getGlossiness()->getTexture()->setPhysicalHeight(height / dpiY * 25.4);
+                                admfLayerBasic->getGlossiness()->getTexture()->getDpi()->setX(dpiX);
+                                admfLayerBasic->getGlossiness()->getTexture()->getDpi()->setY(dpiY);
+                                
+                            }
+                            
+                        }
+                        
+                        auto roughnessShading = shadingNode->first_node("roughness");
+                        if (roughnessShading && strlen(roughnessShading->value()) > 0)
+                        {
+                            admfLayerBasic->getGlossiness()->setValue(std::stof(roughnessShading->value()));
+                        }
+                    }
+                    
+                    //normal
+                    {
+                        auto normalTextureNode = texturesNode->first_node("normal");
+                        if (normalTextureNode && strlen(normalTextureNode->value()) > 0)
+                        {
+                            
+                            std::string str = _getContentFromZip(zipArchive, normalTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getNormal()->getTexture(), width, height);
+                                admfLayerBasic->getNormal()->getTexture()->setPhysicalWidth(width / dpiX * 25.4);
+                                admfLayerBasic->getNormal()->getTexture()->setPhysicalHeight(height / dpiY * 25.4);
+                                admfLayerBasic->getNormal()->getTexture()->getDpi()->setX(dpiX);
+                                admfLayerBasic->getNormal()->getTexture()->getDpi()->setY(dpiY);
+                                
+                            }
+                        }
+                        
+                        auto bumpShading = shadingNode->first_node("bump");
+                        if (bumpShading && strlen(bumpShading->value()) > 0)
+                        {
+                            admfLayerBasic->getNormal()->setValue(std::stof(bumpShading->value()));
+                        }
+                    }
+                    
+                    //displacement
+                    {
+                        auto displacementTextureNode = texturesNode->first_node("displacement");
+                        if (displacementTextureNode && strlen(displacementTextureNode->value()) > 0)
+                        {
+
+                            std::string str = _getContentFromZip(zipArchive, displacementTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getHeight()->getTexture(), width, height);
+                                admfLayerBasic->getHeight()->getTexture()->setPhysicalWidth(width / dpiX * 25.4);
+                                admfLayerBasic->getHeight()->getTexture()->setPhysicalHeight(height / dpiY * 25.4);
+                                admfLayerBasic->getHeight()->getTexture()->getDpi()->setX(dpiX);
+                                admfLayerBasic->getHeight()->getTexture()->getDpi()->setY(dpiY);
+                                
+                            }
+                        }
+                        
+                        auto dispHeightShading = shadingNode->first_node("disp_height");
+                        if (dispHeightShading && strlen(dispHeightShading->value()) > 0)
+                        {
+                            admfLayerBasic->getHeight()->setValue(std::stof(dispHeightShading->value()));
+                        }
+                    }
+                    
+                    //alpha
+                    {
+                        auto alphaTextureNode = texturesNode->first_node("alpha");
+                        if (alphaTextureNode && strlen(alphaTextureNode->value()) > 0)
+                        {
+
+                            std::string str = _getContentFromZip(zipArchive, alphaTextureNode->value(), CompareType::Match);
+                            if (!str.empty())
+                            {
+                                _parseXtexTexture(str, admfLayerBasic->getAlpha()->getTexture(), width, height);
+                                
+                                admfLayerBasic->getAlpha()->getTexture()->setPhysicalWidth(width / dpiX * 25.4);
+                                admfLayerBasic->getAlpha()->getTexture()->setPhysicalHeight(height / dpiY * 25.4);
+                                admfLayerBasic->getAlpha()->getTexture()->getDpi()->setX(dpiX);
+                                admfLayerBasic->getAlpha()->getTexture()->getDpi()->setY(dpiY);
+                                
+                            }
+                        }
+                        
+     
+       
+                    }
+                    
+                    {
+                        auto anisotropyShading = shadingNode->first_node("anisotropy");
+                        if (anisotropyShading && strlen(anisotropyShading->value()) > 0)
+                        {
+                            admfLayerBasic->getAnisotropy()->setValue(std::stof(anisotropyShading->value()));
+                        }
+                    }
+                    
+                    
+                    {
+                        auto fresnelShading = shadingNode->first_node("fresnel");
+                        if (fresnelShading && strlen(fresnelShading->value()) > 0)
+                        {
+                            admfLayerBasic->getSpecular()->setValue(std::stof(fresnelShading->value()));
+                        }
+                    }
+                    
+                    {
+                        auto subsurfaceScatteringShading = shadingNode->first_node("subsurface_scattering");
+                        if (subsurfaceScatteringShading && strlen(subsurfaceScatteringShading->value()) > 0)
+                        {
+                            admfLayerBasic->getSubSurfaceValue()->setValue(std::stof(subsurfaceScatteringShading->value()));
+                        }
+                    }
+                    
+                    //diffuse
+                    {
+                        
+                        if (!hasDiffuseTexture){
+                            auto colorDiffuseShading = shadingNode->first_node("color_diffuse");
+                            if (colorDiffuseShading && strlen(colorDiffuseShading->value()) > 0)
+                            {
+                                auto array = _split(colorDiffuseShading->value(), ',');
+                                if (array.size() >= 3)
+                                {
+                                    
+                                    int pitch = width * 3;
+                                    int extra = pitch % 32;
+                                    int quotient = pitch / 32;
+                                    pitch = (extra > 0 ? 1: 0) + quotient;
+                                    pitch *= 32;
+                                    
+                                    int totalSize = pitch * height;
+                                    
+                                    int r  = std::stof(array[0])*255;
+                                    int g  = std::stof(array[1])*255;
+                                    int b  = std::stof(array[2])*255;
+                                    
+                                    int bpp = 24;
+                                    
+                                    do {
+                                        BYTE* bits = (BYTE*)malloc(totalSize);
+                                        for (int row = 0; row < height; row++)
+                                        {
+                                            for (int col = 0; col < width; col++)
+                                            {
+                                                int index = row * pitch + col * 3;
+                                                
+                                                bits[index] = r;
+                                                bits[index + 1] = g;
+                                                bits[index + 2] = b;
+                                            }
+                                        }
+                                        
+                                        FIBITMAP* bitmap = FreeImage_ConvertFromRawBits(bits, width, height, pitch, bpp, FI_RGBA_RED_MASK,
+                                                                                        FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+                                        free(bits);
+                                        bits = nullptr;
+                                        
+                                        FIMEMORY *stream_new = FreeImage_OpenMemory();
+                                        if (!FreeImage_SaveToMemory(FIF_PNG, bitmap, stream_new))
+                                        {
+                                            FreeImage_CloseMemory(stream_new);
+                                            break;
+                                        }
+                                        
+                                        FreeImage_Unload(bitmap);
+                                        FreeImage_SeekMemory(stream_new, 0, SEEK_SET);
+                                        BYTE *pngRawData = nullptr;
+                                        DWORD pngRawDataSize = 0;
+                                        BOOL acquireResult = FreeImage_AcquireMemory(stream_new, &pngRawData, &pngRawDataSize);
+                                        if (!acquireResult)
+                                        {
+                                            FreeImage_CloseMemory(stream_new);
+                                            break;
+                                        }
+                                        auto texture = admfLayerBasic->getBaseColor()->getTexture();
+                                        texture->getBinaryData()->updateFromData(pngRawData, (admf::ADMF_UINT)pngRawDataSize);
+                                        texture->setElementSize(1);
+                                        texture->setChannels(3);
+                                        texture->setWidth(width);
+                                        texture->setHeight(height);
+                                        
+                                        texture->setPhysicalWidth(physicalWidth);
+                                        texture->setPhysicalHeight(physicalHeight);
+                                        texture->getDpi()->setX(dpiX);
+                                        texture->getDpi()->setY(dpiY);
+                                        FreeImage_CloseMemory(stream_new);
+                                        
+                                    }while(0);
+                                    
+                                  
+                                    
+                                    
+   
+                                  
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                    auto admfBaseData = admfLayerBasic->getBaseColor()->getData();
+                    auto solidBlock = admfBaseData->getSolid()->getBlockArray()->append();
+                    admfBaseData->setIndex(0);
+                    admfBaseData->getType()->setString("solid");
+
+                    solidBlock->setOriginal(1);
                 }
             }
-            
-            if (u3mMaterial.HasMember("back"))
-            {
-                auto &back = u3mMaterial["back"];
-                if (!back.IsNull())
-                {
-                    auto materialLayer = admfMaterial->getLayerArray()->append();
-                    materialLayer->setEnabled(1);
-                    _parseU3mMaterialLayer(materialLayer, back, xTexMap, zipArchive);
-                }
-            }
         }
+
+    
     }
     catch (...)
     {
         return false;
     }
-    
+
     return true;
 }
- */
 
 bool _parseXML(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const std::string &filename, XTexMap &xTexMap)
 {
@@ -1226,22 +1628,19 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
         if (!_parseXML(admf, zipArchive, filename_, xTexMap))
         {
             printf("parseXML %s failed\n", filename_ ? filename_ : "");
-			return false;
-
+            return false;
         }
 
-        
         bool parseMaterialSuccess = _parseU3m(admf, zipArchive, filename_, xTexMap);
         if (!parseMaterialSuccess)
         {
-            //parseMaterialSuccess = _parseXtex(admf, zipArchive, filename_, xTexMap);
+            parseMaterialSuccess = _parseXtex(admf, zipArchive, filename_, xTexMap);
             if (!parseMaterialSuccess)
             {
                 printf("parseU3m %s failed\n", filename_ ? filename_ : "");
                 return false;
             }
         }
-
 
         admf::ADMF_RESULT result = admf->saveToFile(admfFilePath_);
         return result == admf::ADMF_SUCCESS;
