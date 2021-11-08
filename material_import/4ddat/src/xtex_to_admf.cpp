@@ -1043,9 +1043,15 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
 
         XTexMap xTexMap;
         if (!_parseXML(admf, zipArchive, filename_, xTexMap))
+        {
+            printf("parseXML %s failed\n", filename_ ? filename_ : "");
             return false;
+        }
         if (!_parseU3m(admf, zipArchive, filename_, xTexMap))
-            return false;
+		{
+			printf("parseU3m %s failed\n", filename_ ? filename_ : "");
+			return false;
+		}
 
         admf::ADMF_RESULT result = admf->saveToFile(admfFilePath_);
         return result == admf::ADMF_SUCCESS;
