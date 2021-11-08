@@ -209,13 +209,13 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
         if (image.HasMember("width"))
         {
             auto width = image["width"].GetDouble();
-            admfTexture->setWidth(width);
+            admfTexture->setPhysicalWidth(width * 10); //u3m是cm， admf是mm
         }
 
         if (image.HasMember("height"))
         {
             auto height = image["height"].GetDouble();
-            admfTexture->setHeight(height);
+            admfTexture->setPhysicalHeight(height*10); //u3m是cm， admf是mm
         }
     }
 
@@ -337,8 +337,12 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
         {
             needConvertFormat = format != FIF_PNG;
         }
+        
 
-        if (!needHandleFactorAndOffset && !needConvertFormat)
+        
+        bool needReadTextureSize = true; //u3m没有具体的纹理尺寸数据，而admf必须需要， 所以必须处理
+
+        if (!needReadTextureSize && !needHandleFactorAndOffset && !needConvertFormat)
             admfTexture->getBinaryData()->updateFromData(content.c_str(), (admf::ADMF_UINT)content.length());
         else
         {
@@ -355,13 +359,52 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                 if (bitmap == nullptr)
                     break;
 
-        
-                
+                if (needReadTextureSize)
+                {
+                    int width = FreeImage_GetWidth(bitmap);
+                    int height = FreeImage_GetHeight(bitmap);
+                    admfTexture->setWidth(width);
+                    admfTexture->setHeight(height);
+
+                    admfTexture->setElementSize(1);
+                    
+                    FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
+                    
+                    int channel = -1;
+                    switch (colourType)
+                    {
+                    case FIC_MINISWHITE:
+                        channel = 1;
+                        break;
+                    case FIC_MINISBLACK:
+                        channel = 1;
+                        break;
+                    case FIC_RGB:
+                        channel = 3;
+                        break;
+                    case FIC_PALETTE:
+                        break;
+                    case FIC_RGBALPHA:
+                        channel = 4;
+                        break;
+                    case FIC_CMYK:
+                        break;
+                    default:
+                        break;
+                    }
+                    
+                    admfTexture->setChannels(channel);
+
+                }
+                if (!needHandleFactorAndOffset && !needConvertFormat)
+                    break;
+       
                 if (needHandleFactorAndOffset)
                 {
                     
                     int bpp = FreeImage_GetBPP(bitmap);
-                    FREE_IMAGE_COLOR_TYPE colourType = FreeImage_GetColorType(bitmap);
+     
+                    
                     
                     int channel = bpp / 8;
                     if (bpp != 32 && bpp != 24)
@@ -387,6 +430,8 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                     
                     int width = FreeImage_GetWidth(bitmap);
                     int height = FreeImage_GetHeight(bitmap);
+                    
+
                     int pitch = FreeImage_GetPitch(bitmap);
                     
                     BYTE *bits = (BYTE *)malloc(height * pitch);
@@ -736,7 +781,7 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
 {
     try
     {
-        auto count = zipArchive->GetEntriesCount();
+
 
         rapidjson::Document doc;
         std::string u3mContent = _getContentFromZip(zipArchive, ".u3m", CompareType::Surfix);
@@ -845,6 +890,142 @@ bool _parseU3m(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const 
 
     return true;
 }
+/*
+
+bool _parseXtex(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const std::string &filename, const XTexMap &xTexMap)
+{
+    try
+    {
+        
+
+        std::string xtexContent = _getContentFromZip(zipArchive, ".xtex", CompareType::Surfix);
+        if (xtexContent.empty())
+            return false;
+        //parse XML
+        rapidxml::xml_document<> doc;
+        doc.parse<0>((char *)(xtexContent.c_str()));
+
+
+        
+
+        
+        rapidxml::xml_node<> *firstNode = doc.first_node();
+        
+        auto *name = firstNode->name();
+        assert(strcmp(name, "swatch") == 0);
+        
+        {
+            auto *node = firstNode->first_node("uuid");
+            if (node)
+            {
+                auto *value = node->value();
+                if (value)
+                {
+                    auto id = admfMaterial->getId();
+                    id->setString(value);
+                }
+            }
+        }
+        
+        admf::Material admfMaterial = admf->getMaterial();
+        
+        auto metadata = admfMaterial->getMetaData();
+        metadata->getType()->setString("xtex");
+        
+        auto metadataSource = metadata->getSource();
+        
+#if (defined __APPLE__) || (defined _WIN32)
+#ifdef __APPLE__
+        namespace fs = std::__fs::filesystem;
+#else
+        namespace fs = std::filesystem;
+#endif
+        auto path = fs::path(filename);
+        
+        std::string sourceFileName = path.filename().string();
+#else
+        std::string sourceFileName;
+        auto pos = filename.rfind("/");
+        if (pos == std::string::npos)
+        {
+            sourceFileName = filename;
+        }
+        else
+        {
+            sourceFileName = filename.substr(pos + 1);
+        }
+#endif
+        metadataSource->setName(sourceFileName.c_str());
+        metadataSource->updateFromFile(filename.c_str(), false);
+        
+        if (doc.HasMember("schema"))
+        {
+            auto schema = doc["schema"].GetString();
+            metadata->getVersion()->setString(schema);
+        }
+        
+        if (doc.HasMember("material"))
+        {
+            auto &u3mMaterial = doc["material"];
+            if (u3mMaterial.HasMember("created"))
+            {
+                std::string createdDate = u3mMaterial["created"].GetString();
+                if (!hasEnding(createdDate, "Z"))
+                    createdDate.append("Z");
+                int64_t date;
+                admfExport::bson_error_t error;
+                admfExport::_bson_iso8601_date_parse(createdDate.c_str(), (int32_t)createdDate.size(), &date, &error);
+                admfMaterial->setCreatedTime(date);
+            }
+            
+            if (u3mMaterial.HasMember("modified"))
+            {
+                std::string modifiedDate = u3mMaterial["modified"].GetString();
+                if (!hasEnding(modifiedDate, "Z"))
+                    modifiedDate.append("Z");
+                int64_t date;
+                admfExport::bson_error_t error;
+                admfExport::_bson_iso8601_date_parse(modifiedDate.c_str(), (int32_t)modifiedDate.size(), &date, &error);
+                admfMaterial->setCreatedTime(date);
+            }
+            
+            if (u3mMaterial.HasMember("id"))
+            {
+                auto id = u3mMaterial["id"].GetString();
+                admfMaterial->getId()->setString(id);
+            }
+            
+            if (u3mMaterial.HasMember("front"))
+            {
+                auto &front = u3mMaterial["front"];
+                if (!front.IsNull())
+                {
+                    auto materialLayer = admfMaterial->getLayerArray()->append();
+                    materialLayer->setEnabled(1);
+                    _parseU3mMaterialLayer(materialLayer, front, xTexMap, zipArchive);
+                }
+            }
+            
+            if (u3mMaterial.HasMember("back"))
+            {
+                auto &back = u3mMaterial["back"];
+                if (!back.IsNull())
+                {
+                    auto materialLayer = admfMaterial->getLayerArray()->append();
+                    materialLayer->setEnabled(1);
+                    _parseU3mMaterialLayer(materialLayer, back, xTexMap, zipArchive);
+                }
+            }
+        }
+    }
+    catch (...)
+    {
+        return false;
+    }
+    
+    return true;
+}
+ */
 
 bool _parseXML(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const std::string &filename, XTexMap &xTexMap)
 {
@@ -1044,8 +1225,14 @@ bool _xtexToAdmf(const char *filename_, const char *admfFilePath_, int threadCou
         XTexMap xTexMap;
         if (!_parseXML(admf, zipArchive, filename_, xTexMap))
             return false;
-        if (!_parseU3m(admf, zipArchive, filename_, xTexMap))
-            return false;
+        
+        bool parseMaterialSuccess = _parseU3m(admf, zipArchive, filename_, xTexMap);
+        if (!parseMaterialSuccess)
+        {
+            //parseMaterialSuccess = _parseXtex(admf, zipArchive, filename_, xTexMap);
+            if (!parseMaterialSuccess)
+                return false;
+        }
 
         admf::ADMF_RESULT result = admf->saveToFile(admfFilePath_);
         return result == admf::ADMF_SUCCESS;
