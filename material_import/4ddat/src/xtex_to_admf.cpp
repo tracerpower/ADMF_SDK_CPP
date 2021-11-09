@@ -633,7 +633,16 @@ void _parseU3mMaterialLayer(const admf::MaterialLayer &admfMaterialLayer, const 
                 {
                     hasTexture = true;
                     _parseU3mTexture(admfBasic, admfData->getTexture(), texture, key, xTexMap, zipArchive);
-
+                    
+                    float physicalWidth = admfData->getTexture()->getPhysicalWidth();
+                    float physicalHeight = admfData->getTexture()->getPhysicalHeight();
+                    if (physicalWidth > 0 && physicalHeight > 0)
+                    {
+                        auto scale = admfBasic->getTransform()->getScale();
+                        scale->setX(1.0/physicalWidth);
+                        scale->setY(1.0/physicalHeight);
+                    }
+                    
                     std::string mode;
                     if (texture.HasMember("mode"))
                     {
@@ -1415,9 +1424,20 @@ bool _parseXtex(const admf::ADMF &admf, const ZipArchive::Ptr &zipArchive, const
                     admfBaseData->getType()->setString("solid");
 
                     solidBlock->setOriginal(1);
+                    if (physicalWidth > 0 && physicalHeight > 0)
+                    {
+                        auto scale = admfLayerBasic->getTransform()->getScale();
+                        scale->setX(1.0/physicalWidth);
+                        scale->setY(1.0/physicalHeight);
+                    }
+     
                 }
+        
+              
             }
         }
+        
+    
 
     
     }
