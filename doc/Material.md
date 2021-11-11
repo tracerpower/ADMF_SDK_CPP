@@ -500,14 +500,14 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
       },
       "spec": {
         "refraction": {
-          "color": {
+          "color": {  //对应4ddat的 refractionColor
             "r": 0.0,
             "g": 0.0,
             "b": 0.0,
             "colorSpace": ""
           },
-          "glossiness": 1.0,
-          "texture": {
+          "glossiness": 1.0, //对应4ddat的 refractionGlossiness
+          "texture": {   //对应u3m的IOR
               "path": "",
               "colorSpace": "",
               "dpi": {
@@ -521,10 +521,10 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
               "channels": 0,
               "elementSize": 0
           },
-          "value": 1.3999999761581420898
+          "value": 1.3999999761581420898  //对应u3m的IOR
         }
       },
-      "enabled": 1 //layer是否启用
+      "enabled": 1 //layer是否启用
     }
   ],
   "side": {
