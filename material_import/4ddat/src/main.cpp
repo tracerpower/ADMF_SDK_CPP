@@ -42,7 +42,7 @@ int main(int argc, const char * argv[]) {
         printf("usage: %s <input file type> <input file path> <output admf path> <output dir> <thread count> <png compress level(0-9)>\n\n", exeName);
         printf("input file type:\n");
         printf("    0 : admf (output admf path will be ignored)\n");
-        printf("    1 : 4ddat\n\n");
+        printf("    1 : 4ddat\n");
         printf("    2 : xTex\n\n");
         printf("examples:\n");
         printf("    admf : %s 0 test.admf \"\" /temp/output 2 6 \n", exeName);
