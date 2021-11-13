@@ -142,13 +142,6 @@ namespace admf_internal
 #define TextureAndValueContainer_Internal_Declaration(basename, texType, defaultValue) \
     TextureAndValueContainer_Internal_Declaration_(basename##internal, basename, texType, defaultValue)
 
-    TextureAndValueContainer_Internal_Declaration(Normal_internal, Normal_, TEX_TYPE_NORMAL, 1.0f);
-    TextureAndValueContainer_Internal_Declaration(Alpha_internal, Alpha_, TEX_TYPE_ALPHA, 1.0f);
-    TextureAndValueContainer_Internal_Declaration(Metalness_internal, Metalness_, TEX_TYPE_METALNESS, 1.0f);
-    TextureAndValueContainer_Internal_Declaration(Roughness_internal, Roughness_, TEX_TYPE_ROUGHNESS, 1.0f);
-    TextureAndValueContainer_Internal_Declaration(Glossiness_internal, Glossiness_, TEX_TYPE_GLOSSINESS, 1.0f);
-    TextureAndValueContainer_Internal_Declaration(Anisotropy_internal, Anisotropy_, TEX_TYPE_ANISOTROPY, 0.0f);
-    TextureAndValueContainer_Internal_Declaration(AnisotropyRotation_internal, AnisotropyRotation_, TEX_TYPE_ANISOTROPY_ROTATION, 0.0f);
 
 #define TextureContainer_Internal_Declaration_(classname, basename, texType)        \
     class classname : public admf::basename, public Base_internal                   \

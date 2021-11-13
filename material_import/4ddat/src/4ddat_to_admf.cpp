@@ -541,7 +541,11 @@ admf::ADMF_RESULT materialEntryInfoToAdmf(const std::string& filename, int uvtyp
     }
     
 
-
+    auto* kIOR = matInfo.FindPropertyVarient("kIOR");
+    if (kIOR && kIOR->type == RenderCore::MVarient::FLOAT)
+    {
+        specRefraction->setValue(kIOR->f);
+    }
     
   
     /*
