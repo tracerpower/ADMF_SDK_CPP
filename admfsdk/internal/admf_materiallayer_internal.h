@@ -86,7 +86,7 @@ namespace admf_internal {
         std::shared_ptr<ColorRGB_internal> color_;
         admf::ADMF_FLOAT glossiness_ = 1;
         std::shared_ptr<Texture_internal> texture_;
-        admf::ADMF_FLOAT value_ = 1.4f;
+        admf::ADMF_FLOAT value_ = 1.5f;
         
 #ifdef ADMF_EDIT
     public:
