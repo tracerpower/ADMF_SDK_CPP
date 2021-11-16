@@ -131,7 +131,7 @@ void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
     bson_iter_t child;
     if (!bson_iter_recurse(iter, &child))
         return;
-
+/*
     std::string colorSpaceKey = getNewKey("colorSpace");
     std::string valueKey = getNewKey("value");
     std::string inputBlackKey = getNewKey("inputBlack");
@@ -139,6 +139,7 @@ void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
     std::string gammaKey = getNewKey("gamma");
     std::string outputBlackKey = getNewKey("outputBlack");
     std::string outputWhiteKey = getNewKey("outputWhite");
+ */
     std::string blockKey = getNewKey("block");
 
     while (bson_iter_next(&child))
@@ -146,6 +147,7 @@ void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
         std::string keyName = bson_iter_key(&child);
         assert(bson_iter_value(&child) != nullptr);
         //printf("Found element key: \"%s\"\n", keyName.c_str());
+        /*
         if (keyName == colorSpaceKey)
         {
             colorSpace_ = std::make_shared<String_internal>(admfIndex_, &child);
@@ -174,7 +176,7 @@ void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
         {
             outputWhite_ = (ADMF_UINT)bson_iter_as_int64(&child);
         }
-        else if (keyName == blockKey)
+        else*/ if (keyName == blockKey)
         {
             if (!BSON_ITER_HOLDS_ARRAY(&child))
                 continue;
@@ -200,15 +202,17 @@ void BaseColorDataSolid_internal::load(bson_iter_t *iter) //save
 
 void BaseColorDataSolid_internal::initMissed()
 {
+    /*
     if (!colorSpace_)
         colorSpace_ = std::make_shared<String_internal>(admfIndex_);
     if (!value_)
         value_ = std::make_shared<ColorRGB_internal>(admfIndex_);
+     */
 }
 #ifdef ADMF_EDIT
 void BaseColorDataSolid_internal::save(bson_t *doc)
 {
-
+/*
     std::string colorSpaceKey = getNewKey("colorSpace");
     std::string valueKey = getNewKey("value");
     std::string inputBlackKey = getNewKey("inputBlack");
@@ -216,8 +220,10 @@ void BaseColorDataSolid_internal::save(bson_t *doc)
     std::string gammaKey = getNewKey("gamma");
     std::string outputBlackKey = getNewKey("outputBlack");
     std::string outputWhiteKey = getNewKey("outputWhite");
+ */
     std::string blockKey = getNewKey("block");
 
+    /*
     ADMF_BSON_APPEND_STRING(doc, colorSpaceKey, colorSpace_);
     ADMF_BSON_APPEND_DOCUMENT(doc, valueKey, value_);
     ADMF_BSON_APPEND_INT32(doc, inputBlackKey, inputBlack_);
@@ -225,6 +231,7 @@ void BaseColorDataSolid_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOUBLE(doc, gammaKey, gamma_);
     ADMF_BSON_APPEND_INT32(doc, outputBlackKey, outputBlack_);
     ADMF_BSON_APPEND_INT32(doc, outputWhiteKey, outputWhite_);
+     */
     ADMF_BSON_APPEND_ARRAY(doc, blockKey, blockArray_, BaseColorDataSolidBlock_internal);
 }
 #endif

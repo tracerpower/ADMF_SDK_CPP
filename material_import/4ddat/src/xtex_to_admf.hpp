@@ -9,10 +9,10 @@
 #define _xtex_to_admf_hpp
 
 #include <stdio.h>
-
+extern "C" bool _xtexToAdmf(const char* filename_, const char* admfFilePath_, int threadCount, int pngCompressLevel);
 
 #endif /* _xtex_to_admf_hpp */
 
 
-extern "C" bool _xtexToAdmf(const char* filename_, const char* admfFilePath_, int threadCount, int pngCompressLevel);
+
 

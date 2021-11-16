@@ -129,7 +129,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -139,7 +139,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -159,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -169,7 +169,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -179,7 +179,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -189,7 +189,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
@@ -199,7 +199,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;$(ProjectDir)../../src/3rd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../3rd;$(ProjectDir)../../../;/root/projects/admfsdk/admfsdk/interface;/root/projects/admfsdk/admfsdk/internal;/root/projects/admfsdk/3rd/ZipLib;/root/projects/4ddat_to_admf/3rd;/root/projects/exportadmf/src/3rd/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BSON_COMPILATION;ADMF_EDIT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>

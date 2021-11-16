@@ -6,14 +6,35 @@
 //
 
 #include "4ddat_to_admf.hpp"
+#include "xtex_to_admf.hpp"
 #include "exportadmf.h"
-#include <string>
+#include <stdio.h>
+#include <string.h>
 
 #include <iostream>
 #include <ctime>
 #include <ratio>
 #include <chrono>
-///Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/1.admf /Users/yushihang/Documents/鏈懡鍚嶆枃浠跺す/temp/1/out 9 9
+#include <algorithm>
+
+bool iequals(const std::string& a, const std::string& b)
+{
+    
+#if (defined _WIN32) 
+    return _stricmp(a.c_str(), b.c_str()) == 0;
+#elif (defined __APPLE__)
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+        return tolower(a) == tolower(b);
+    });
+
+#else
+    return strncasecmp(a.c_str(), b.c_str(), a.length()) == 0;
+#endif
+}
+
+///Users/yushihang/Documents/未命名文件夹/temp/1/4ddat2admfTest 1 '/Users/yushihang/Downloads/L210602001(1).4Ddat' /Users/yushihang/Documents/未命名文件夹/temp/1/1.admf /Users/yushihang/Documents/未命名文件夹/temp/1/out 9 9
 int main(int argc, const char * argv[]) {
     if (argc < 7)
     {
@@ -21,7 +42,7 @@ int main(int argc, const char * argv[]) {
         printf("usage: %s <input file type> <input file path> <output admf path> <output dir> <thread count> <png compress level(0-9)>\n\n", exeName);
         printf("input file type:\n");
         printf("    0 : admf (output admf path will be ignored)\n");
-        printf("    1 : 4ddat\n\n");
+        printf("    1 : 4ddat\n");
         printf("    2 : xTex\n\n");
         printf("examples:\n");
         printf("    admf : %s 0 test.admf \"\" /temp/output 2 6 \n", exeName);
@@ -33,8 +54,19 @@ int main(int argc, const char * argv[]) {
     
     
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    int type = -1;
+    std::string fileType = argv[1];
+    if (iequals(fileType, "admf"))
+        type = 0;
+    else if (iequals(fileType, "4ddat"))
+        type = 1;
+    else if (iequals(fileType, "xtex"))
+        type = 2;
     
-    int type = std::stoi(argv[1]);
+    if (type < 0){
+        type = std::stoi(argv[1]);
+    }
+    
     const char* inputPath = argv[2];
     const char* outputAdmf = argv[3];
     const char* extractAdmfDir = argv[4];
@@ -71,7 +103,7 @@ int main(int argc, const char * argv[]) {
             printf("_4ddatToAdmf:%f\n", time_span.count());
             extractAdmf(outputAdmf, extractAdmfDir);
             std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
-            ;
+
             time_span = t3-t2;
             printf("extractAdmf:%f\n",time_span.count());
             time_span = t3-t1;
@@ -81,7 +113,8 @@ int main(int argc, const char * argv[]) {
         
     case 2:
         {
-            
+            _xtexToAdmf(inputPath, outputAdmf, threadCount, pngComressLevel);
+            extractAdmf(outputAdmf, extractAdmfDir);
         }
         break;
         
@@ -90,5 +123,5 @@ int main(int argc, const char * argv[]) {
         break;
     }
 
-    return 0;
+	return 0;
 }

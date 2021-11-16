@@ -54,9 +54,8 @@ namespace admf_internal {
         std::shared_ptr<BinaryData_internal> preview_;
         std::shared_ptr<LayerBasic_internal> basic_;
         std::shared_ptr<LayerSpec_internal> spec_;
-        admf::ADMF_BYTE enabled_ = 1;
+        admf::ADMF_BYTE enabled_ = 0;
         admf::String name_;
-
     };
     
     
@@ -77,15 +76,22 @@ namespace admf_internal {
     {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(LayerRefraction_internal);
     public:
-        virtual admf::ColorRGB getColor() override;
+        virtual admf::ColorRGB getColor() override {return color_;};
         virtual admf::ADMF_FLOAT getGlossiness() override {return glossiness_;};
+        virtual admf::Texture getTexture() override {return texture_;};
+        virtual admf::TEX_TYPE getTextureType() override {return admf::TEX_TYPE_IOR;};
+        virtual admf::ADMF_FLOAT getValue() override {return value_;}
+
     private:
         std::shared_ptr<ColorRGB_internal> color_;
         admf::ADMF_FLOAT glossiness_ = 1;
+        std::shared_ptr<Texture_internal> texture_;
+        admf::ADMF_FLOAT value_ = 1.5f;
         
 #ifdef ADMF_EDIT
     public:
         virtual void setGlossiness(admf::ADMF_FLOAT glossiness) override {glossiness_ = glossiness;};
+        virtual void setValue(admf::ADMF_FLOAT value) override {value_ = value;};
 #endif
     };
     
@@ -105,6 +111,18 @@ namespace admf_internal {
         virtual admf::AnisotropyRotation getAnisotropyRotation() override;
         virtual admf::AmbientOcclusion getAmbientOcclusion() override;
         virtual admf::Height getHeight() override;
+        
+        virtual admf::ClearCoatNormal getClearCoatNormal() override;
+        virtual admf::ClearCoatRoughness getClearCoatRoughness() override;
+        virtual admf::ClearCoatValue getClearCoatValue() override;
+        virtual admf::SheenTint getSheenTint() override;
+        virtual admf::SheenValue getSheenValue() override;
+        virtual admf::SpecularTint getSpecularTint() override;
+        virtual admf::SubSurfaceColor getSubSurfaceColor() override;
+        virtual admf::SubSurfaceRadius getSubSurfaceRadius() override;
+        virtual admf::SubSurfaceValue getSubSurfaceValue() override;
+        virtual admf::Transmission getTransmission() override;
+        
         virtual admf::LayerTransform getTransform() override;
         
     private:
@@ -121,6 +139,19 @@ namespace admf_internal {
         std::shared_ptr<Emissive_internal> emissive_;
         std::shared_ptr<AmbientOcclusion_internal> ambientOcclusion_;
         std::shared_ptr<Height_internal> height_;
+        
+        std::shared_ptr<ClearCoatNormal_internal> clearCoatNormal_;
+        std::shared_ptr<ClearCoatRoughness_internal> clearCoatRoughness_;
+        std::shared_ptr<ClearCoatValue_internal> clearCoatValue_;
+        std::shared_ptr<SheenTint_internal> sheenTint_;
+        std::shared_ptr<SheenValue_internal> sheenValue_;
+        std::shared_ptr<SpecularTint_internal> specularTint_;
+        std::shared_ptr<SubSurfaceColor_internal> subSurfaceColor_;
+        std::shared_ptr<SubSurfaceRadius_internal> subSurfaceRadius_;
+        std::shared_ptr<SubSurfaceValue_internal> subSurfaceValue_;
+        std::shared_ptr<Transmission_internal> transmission_;
+        
+        
         std::shared_ptr<LayerTransform_internal> transform_;
         
 
