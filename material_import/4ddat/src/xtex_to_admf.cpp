@@ -51,6 +51,8 @@
 #include "rapidxml_print.hpp"
 #include "rapidxml_utils.hpp"
 
+#include <string.h>
+
 std::string replaceAll(const char *pszSrc, const char *pszOld, const char *pszNew)
 {
     std::string strContent, strTemp;
