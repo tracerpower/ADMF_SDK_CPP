@@ -14,6 +14,7 @@
 #if (defined _WIN32) || (defined __APPLE__)
 #include <filesystem>
 #else
+#include "opencv2/opencv.hpp"
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <linux/limits.h>
@@ -332,6 +333,30 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
             needConvertFormat = format != FIF_PNG;
         }
 
+#if (defined _WIN32) || (defined __APPLE__)
+#else
+        if (needConvertFormat)
+        {
+            try
+            {
+				std::vector<uchar> data = std::vector<uchar>(content.c_str(), content.c_str() + content.length());
+				cv::Mat srcImage = cv::imdecode(data, cv::IMREAD_COLOR);
+				std::vector<uchar> buffer;
+				buffer.resize(100 * 1024 * 1024);
+				cv::imencode(".png", srcImage, buffer);
+				std::string content_(buffer.begin(), buffer.end());
+				content = content_;
+                format = FIF_PNG;
+                printf("opencv convert success");
+            }
+            catch (...)
+            {
+                printf("opencv convert failed");
+            }
+
+        }
+#endif
+
         bool needReadTextureSize = true; //u3m没有具体的纹理尺寸数据，而admf必须需要， 所以必须处理
 
         if (!needReadTextureSize && !needHandleFactorAndOffset && !needConvertFormat)
@@ -351,6 +376,7 @@ void _parseU3mTexture(const admf::LayerBasic admfLayerBasic, const admf::Texture
                 if (bitmap == nullptr)
                     break;
 
+  
                 if (needReadTextureSize)
                 {
                     int width = FreeImage_GetWidth(bitmap);
@@ -893,14 +919,17 @@ std::vector<std::string> _split(const std::string &s, char seperator)
 
     return output;
 }
-
+#if (defined _WIN32) || (defined __APPLE__)
 void _parseXtexTexture(const std::string &content, const admf::Texture &admfTexture, int &width_, int &height_, bool needInverse = false)
+#else
+void _parseXtexTexture(std::string content, const admf::Texture& admfTexture, int& width_, int& height_, bool needInverse = false)
+#endif
 {
     bool success = false;
 
     do
     {
-
+        printf("_parseXtexTexture\n");
         admf::TextureFileType textureBinaryType = admf_internal::Texture_internal::getTypeByBinaryData((const unsigned char *)content.c_str(), (admf::ADMF_UINT)content.length());
         auto format = FIF_UNKNOWN;
 
@@ -924,8 +953,29 @@ void _parseXtexTexture(const std::string &content, const admf::Texture &admfText
         }
 
         bool needConvertFormat = format != FIF_PNG;
+        
+#if (defined _WIN32) || (defined __APPLE__)
 
-        FIMEMORY *stream = FreeImage_OpenMemory();
+#else
+		try
+		{
+			std::vector<uchar> data = std::vector<uchar>(content.c_str(), content.c_str() + content.length());
+			cv::Mat srcImage = cv::imdecode(data, cv::IMREAD_COLOR);
+			std::vector<uchar> buffer;
+			buffer.resize(100 * 1024 * 1024);
+			cv::imencode(".png", srcImage, buffer);
+			std::string content_(buffer.begin(), buffer.end());
+			content = content_;
+            format = FIF_PNG;
+            printf("opencv convert success");
+		}
+		catch (...)
+		{
+			printf("opencv convert failed");
+		}
+
+#endif
+        FIMEMORY* stream = FreeImage_OpenMemory();
         FreeImage_WriteMemory(content.c_str(), 1, (unsigned)content.length(), stream);
         FreeImage_SeekMemory(stream, 0, SEEK_SET);
         FIBITMAP *bitmap = FreeImage_LoadFromMemory(format, stream);
