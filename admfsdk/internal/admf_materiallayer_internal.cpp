@@ -31,6 +31,7 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
     std::string enabledKey = getNewKey("enabled");
+    std::string nameKey = getNewKey("name");
 
     while (bson_iter_next(&child))
     {
@@ -61,7 +62,10 @@ void MaterialLayer_internal::load(bson_iter_t *iter) //save
         else if (keyName == enabledKey)
         {
             enabled_ = (ADMF_BYTE)bson_iter_as_int64(&child);
-
+        }
+        else if (keyName == nameKey)
+        {
+            name_ = std::make_shared<String_internal>(admfIndex_, &child);
         }
     }
 }
@@ -81,6 +85,8 @@ void MaterialLayer_internal::initMissed()
         basic_ = std::make_shared<LayerBasic_internal>(admfIndex_);
     if (!spec_)
         spec_ = std::make_shared<LayerSpec_internal>(admfIndex_);
+    if (!name_)
+        name_ = std::make_shared<String_internal>(admfIndex_);
 }
 
 #ifdef ADMF_EDIT
@@ -92,6 +98,7 @@ void MaterialLayer_internal::save(bson_t *doc)
     std::string basicKey = getNewKey("basic");
     std::string specKey = getNewKey("spec");
     std::string enabledKey = getNewKey("enabled");
+    std::string nameKey = getNewKey("name");
 
     ADMF_BSON_APPEND_STRING(doc, typeKey, type_);
     ADMF_BSON_APPEND_STRING(doc, shaderKey, shader_);
@@ -99,6 +106,7 @@ void MaterialLayer_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, basicKey, basic_);
     ADMF_BSON_APPEND_DOCUMENT(doc, specKey, spec_);
     ADMF_BSON_APPEND_INT32(doc, enabledKey, enabled_);
+    ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
 }
 #endif
 String MaterialLayer_internal::getType() //"Fabric",
@@ -108,6 +116,11 @@ String MaterialLayer_internal::getType() //"Fabric",
 String MaterialLayer_internal::getShader() //着色类型
 {
     return String(shader_);
+}
+
+String MaterialLayer_internal::getName()
+{
+    return name_;
 }
 
 BinaryData MaterialLayer_internal::getPreview() //content of "/preview.png"
@@ -200,6 +213,9 @@ void LayerRefraction_internal::load(bson_iter_t *iter) //save
         return;
     std::string colorKey = getNewKey("color");
     std::string glossinessKey = getNewKey("glossiness");
+    std::string textureKey = getNewKey("texture");
+    std::string valueKey = getNewKey("value");
+    
     while (bson_iter_next(&child))
     {
         std::string keyName = bson_iter_key(&child);
@@ -213,6 +229,15 @@ void LayerRefraction_internal::load(bson_iter_t *iter) //save
         {
             glossiness_ = (ADMF_FLOAT)bson_iter_as_double(&child);
         }
+        else if (keyName == textureKey)
+        {
+            texture_ = std::make_shared<Texture_internal>(admfIndex_, &child);
+            texture_->setType(getTextureType());
+        }
+        else if (keyName == valueKey)
+        {
+            value_ = (ADMF_FLOAT)bson_iter_as_double(&child);
+        }
     }
 }
 
@@ -220,21 +245,26 @@ void LayerRefraction_internal::initMissed()
 {
     if (!color_)
         color_ = std::make_shared<ColorRGB_internal>(admfIndex_);
+    if (!texture_)
+    {
+        texture_ = std::make_shared<Texture_internal>(admfIndex_);
+        texture_->setType(getTextureType());
+    }
 }
 #ifdef ADMF_EDIT
 void LayerRefraction_internal::save(bson_t *doc)
 {
     std::string colorKey = getNewKey("color");
     std::string glossinessKey = getNewKey("glossiness");
+    std::string textureKey = getNewKey("texture");
+    std::string valueKey = getNewKey("value");
     ADMF_BSON_APPEND_DOCUMENT(doc, colorKey, color_);
     ADMF_BSON_APPEND_DOUBLE(doc, glossinessKey, glossiness_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);
+    ADMF_BSON_APPEND_DOUBLE(doc, valueKey, value_);
 }
 #endif
 
-ColorRGB LayerRefraction_internal::getColor()
-{
-    return ColorRGB(color_);
-}
 
 void LayerBasic_internal::load(bson_iter_t *iter) //save
 {
@@ -259,6 +289,20 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
     std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
     std::string ambientOcclusionKey = getNewKey("ambientOcclusion");
     std::string heightKey = getNewKey("height");
+    
+    
+    std::string clearCoatNormalKey = getNewKey("clearCoatNormal");
+    std::string clearCoatRoughnessKey = getNewKey("clearCoatRoughness");
+    std::string clearCoatValueKey = getNewKey("clearCoatValue");
+    std::string sheenTintKey = getNewKey("sheenTint");
+    std::string sheenValueKey = getNewKey("sheenValue");
+    std::string specularTintKey = getNewKey("specularTint");
+    std::string subSurfaceColorKey = getNewKey("subSurfaceColor");
+    std::string subSurfaceRadiusKey = getNewKey("subSurfaceRadius");
+    std::string subSurfaceValueKey = getNewKey("subSurfaceValue");
+    std::string transmissionKey = getNewKey("transmission");
+    
+    
     std::string transformKey = getNewKey("transform");
     
 
@@ -305,6 +349,26 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
             transform_ = std::make_shared<LayerTransform_internal>(admfIndex_, &child);
         else if (keyName == ambientOcclusionKey)
             ambientOcclusion_ = std::make_shared<AmbientOcclusion_internal>(admfIndex_, &child);
+        else if (keyName == clearCoatNormalKey)
+            clearCoatNormal_ = std::make_shared<ClearCoatNormal_internal>(admfIndex_, &child);
+        else if (keyName == clearCoatRoughnessKey)
+            clearCoatRoughness_ = std::make_shared<ClearCoatRoughness_internal>(admfIndex_, &child);
+        else if (keyName == clearCoatValueKey)
+            clearCoatValue_ = std::make_shared<ClearCoatValue_internal>(admfIndex_, &child);
+        else if (keyName == sheenTintKey)
+            sheenTint_= std::make_shared<SheenTint_internal>(admfIndex_, &child);
+        else if (keyName == sheenValueKey)
+            sheenValue_= std::make_shared<SheenValue_internal>(admfIndex_, &child);
+        else if (keyName == specularTintKey)
+            specularTint_ = std::make_shared<SpecularTint_internal>(admfIndex_, &child);
+        else if (keyName == subSurfaceColorKey)
+            subSurfaceColor_ = std::make_shared<SubSurfaceColor_internal>(admfIndex_, &child);
+        else if (keyName == subSurfaceRadiusKey)
+            subSurfaceRadius_ = std::make_shared<SubSurfaceRadius_internal>(admfIndex_, &child);
+        else if (keyName == subSurfaceValueKey)
+            subSurfaceValue_ = std::make_shared<SubSurfaceValue_internal>(admfIndex_, &child);
+        else if (keyName == transmissionKey)
+            transmission_ = std::make_shared<Transmission_internal>(admfIndex_, &child);
         else if (keyName == heightKey)
             height_ = std::make_shared<Height_internal>(admfIndex_, &child);
     }
@@ -336,6 +400,28 @@ void LayerBasic_internal::initMissed()
         ambientOcclusion_ = std::make_shared<AmbientOcclusion_internal>(admfIndex_);
     if (!height_)
         height_ = std::make_shared<Height_internal>(admfIndex_);
+    if (!clearCoatNormal_)
+        clearCoatNormal_ = std::make_shared<ClearCoatNormal_internal>(admfIndex_);
+    if (!clearCoatRoughness_)
+        clearCoatRoughness_ = std::make_shared<ClearCoatRoughness_internal>(admfIndex_);
+    if (!clearCoatValue_)
+        clearCoatValue_ = std::make_shared<ClearCoatValue_internal>(admfIndex_);
+    if (!sheenTint_)
+        sheenTint_ = std::make_shared<SheenTint_internal>(admfIndex_);
+    if (!sheenValue_)
+        sheenValue_ = std::make_shared<SheenValue_internal>(admfIndex_);
+    if (!specularTint_)
+        specularTint_ = std::make_shared<SpecularTint_internal>(admfIndex_);
+    if (!subSurfaceColor_)
+        subSurfaceColor_ = std::make_shared<SubSurfaceColor_internal>(admfIndex_);
+    if (!subSurfaceRadius_)
+        subSurfaceRadius_ = std::make_shared<SubSurfaceRadius_internal>(admfIndex_);
+    if (!subSurfaceValue_)
+        subSurfaceValue_ = std::make_shared<SubSurfaceValue_internal>(admfIndex_);
+    if (!transmission_)
+        transmission_ = std::make_shared<Transmission_internal>(admfIndex_);
+
+    
     if (!transform_)
         transform_ = std::make_shared<LayerTransform_internal>(admfIndex_);
 
@@ -355,6 +441,18 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string anisotropyRotationKey = getNewKey("anisotropyRotation");
     std::string ambientOcclusionKey = getNewKey("ambientOcclusion");
     std::string heightKey = getNewKey("height");
+    
+    std::string clearCoatNormalKey = getNewKey("clearCoatNormal");
+    std::string clearCoatRoughnessKey = getNewKey("clearCoatRoughness");
+    std::string clearCoatValueKey = getNewKey("clearCoatValue");
+    std::string sheenTintKey = getNewKey("sheenTint");
+    std::string sheenValueKey = getNewKey("sheenValue");
+    std::string specularTintKey = getNewKey("specularTint");
+    std::string subSurfaceColorKey = getNewKey("subSurfaceColor");
+    std::string subSurfaceRadiusKey = getNewKey("subSurfaceRadius");
+    std::string subSurfaceValueKey = getNewKey("subSurfaceValue");
+    std::string transmissionKey = getNewKey("transmission");
+    
     std::string transformKey = getNewKey("transform");
 
 
@@ -370,6 +468,18 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, anisotropyRotationKey, anisotropyRotation_);
     ADMF_BSON_APPEND_DOCUMENT(doc, ambientOcclusionKey, ambientOcclusion_);
     ADMF_BSON_APPEND_DOCUMENT(doc, heightKey, height_);
+    
+    ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatNormalKey, clearCoatNormal_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatRoughnessKey, clearCoatRoughness_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatValueKey, clearCoatValue_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, sheenTintKey, sheenTint_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, sheenValueKey, sheenValue_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, specularTintKey, specularTint_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, subSurfaceColorKey, subSurfaceColor_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, subSurfaceRadiusKey, subSurfaceRadius_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, subSurfaceValueKey, subSurfaceValue_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, transmissionKey, transmission_);
+    
     ADMF_BSON_APPEND_DOCUMENT(doc, transformKey, transform_);
 }
 #endif
@@ -428,6 +538,56 @@ Height LayerBasic_internal::getHeight()
 Emissive LayerBasic_internal::getEmissive()
 {
     return Emissive(emissive_);
+}
+
+ClearCoatNormal LayerBasic_internal::getClearCoatNormal()
+{
+    return ClearCoatNormal(clearCoatNormal_);
+}
+
+ClearCoatRoughness LayerBasic_internal::getClearCoatRoughness()
+{
+    return ClearCoatRoughness(clearCoatRoughness_);
+}
+
+ClearCoatValue LayerBasic_internal::getClearCoatValue()
+{
+   return ClearCoatValue(clearCoatValue_);
+}
+
+SheenTint LayerBasic_internal::getSheenTint()
+{
+    return SheenTint(sheenTint_);
+}
+
+SheenValue LayerBasic_internal::getSheenValue()
+{
+    return SheenValue(sheenValue_);
+}
+
+SpecularTint LayerBasic_internal::getSpecularTint()
+{
+    return SpecularTint(specularTint_);
+}
+
+SubSurfaceColor LayerBasic_internal::getSubSurfaceColor()
+{
+    return SubSurfaceColor(subSurfaceColor_);
+}
+
+SubSurfaceRadius LayerBasic_internal::getSubSurfaceRadius()
+{
+    return SubSurfaceRadius(subSurfaceRadius_);
+}
+
+SubSurfaceValue LayerBasic_internal::getSubSurfaceValue()
+{
+    return SubSurfaceValue(subSurfaceValue_);
+}
+
+Transmission LayerBasic_internal::getTransmission()
+{
+    return Transmission(transmission_);
 }
 
 LayerTransform LayerBasic_internal::getTransform()

@@ -108,7 +108,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\..\src\main.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -116,7 +116,7 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -134,7 +134,7 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -152,7 +152,7 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +170,7 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>pthread;FreeImage_linux;JXR_linux;OpenEXR_linux;OpenJPEG_linux;RawLite_linux;TIFF_linux;WebP_linux;Zlib_linux;opencv_imgcodecs;opencv_imgproc;opencv_core;zlib;libpng;libjpeg-turbo;dl</LibraryDependencies>
-      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LINUX_ROOT)/4ddat_to_admf/3rd/FreeImage/lib/linux/;$(LINUX_ROOT)/changecolor/3rd/opencv/lib/linux;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">

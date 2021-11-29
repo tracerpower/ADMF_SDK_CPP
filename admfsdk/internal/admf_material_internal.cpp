@@ -41,6 +41,7 @@ void Material_internal::load(bson_iter_t *iter) //save
     std::string metadataKey = getNewKey("metadata");
     
     
+    
     while (bson_iter_next (&child)) {
         std::string keyName = bson_iter_key (&child);
         assert(bson_iter_value(&child) != nullptr);
@@ -96,6 +97,7 @@ void Material_internal::load(bson_iter_t *iter) //save
            //MaterialMetaData
             metaData_ = std::make_shared<MaterialMetaData_internal>(admfIndex_, &child);
         }
+
     }
 }
 
@@ -111,6 +113,8 @@ void Material_internal::initMissed()
         name_ = std::make_shared<String_internal>(admfIndex_);
     if (!metaData_)
         metaData_ = std::make_shared<MaterialMetaData_internal>(admfIndex_);
+    
+    
 }
 
 #ifdef ADMF_EDIT
@@ -124,6 +128,7 @@ void Material_internal::save(bson_t* doc)
     std::string idKey = getNewKey("id");
     std::string nameKey = getNewKey("name");
     std::string metadataKey = getNewKey("metadata");
+    
 
 
     ADMF_BSON_APPEND_ARRAY(doc, layersKey, layerArray_, MaterialLayer_internal);
@@ -134,6 +139,7 @@ void Material_internal::save(bson_t* doc)
     ADMF_BSON_APPEND_STRING(doc, idKey, id_);
     ADMF_BSON_APPEND_STRING(doc, nameKey, name_);
     ADMF_BSON_APPEND_DOCUMENT(doc, metadataKey, metaData_);
+
    
 }
 #endif
@@ -175,6 +181,7 @@ MaterialMetaData Material_internal::getMetaData()
 {
     return MaterialMetaData(metaData_);
 }
+
 
 void MaterialDevice_internal::load(bson_iter_t *iter) //save
 {

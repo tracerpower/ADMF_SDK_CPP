@@ -6,6 +6,14 @@ Ziplib : https://github.com/ParadoxGameConverters/ZipLib 有修改
 
 encrypt: base64 + xxtea (暂未使用)
 
-# 最新版本
+# ADMF Specification
 
-请切换到 1.1 分支使用（后续 1.1 会合并到 master）
+[Material](./doc/Material.md)
+
+[Custom](./doc/Custom.md)
+
+[Version](./doc/Version.md)
+
+# ChangeLog
+
+[V1.1](./doc/V1.1.md)

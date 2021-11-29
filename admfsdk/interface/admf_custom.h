@@ -12,19 +12,17 @@
 #ifndef admf_custom_h
 #define admf_custom_h
 #include <string>
+#include <unordered_map>
 namespace admf
 {
     /// 用户自定义数据
     class Custom_
     {
-        ///    获取Json数据
-        ///    @return    返回字符串数据结构
-        virtual std::string getJson() = 0;
-#ifdef ADMF_EDIT
     public:
-        ///    设置Json数据
-        ///    @param json Json数据
-        virtual void setJson(const char *json) = 0;
+#ifdef ADMF_EDIT
+        virtual std::unordered_map<std::string, std::string>& getValueMap() = 0;
+#else
+        virtual const std::unordered_map<std::string, std::string>& getValueMap() = 0;
 #endif
     };
 

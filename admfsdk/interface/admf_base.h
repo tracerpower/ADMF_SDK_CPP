@@ -14,6 +14,9 @@
 
 #define ADMF_MAX_STR_LEN (256)
 
+#define ADMF_SDK_VERSION "1.1"  //每次内容调整后升级, 例如增加了新的贴图
+#define ADMF_SCHEMA "1.0" //文件格式，例如json和二进制的格式排版， 如果只是内容增加
+
 #include <memory>
 #include <string>
 namespace admf
@@ -61,6 +64,17 @@ namespace admf
         TEX_TYPE_EMISSIVE, ///<自发光贴图
         TEX_TYPE_AO, ///<AO贴图
         TEX_TYPE_HEIGHT, ///<HEIGHT
+        TEX_TYPE_CLEARCOAT_NORMAL,
+        TEX_TYPE_CLEARCOAT_ROUGHNESS,
+        TEX_TYPE_CLEARCOAT_VALUE,
+        TEX_TYPE_SHEEN_TINT,
+        TEX_TYPE_SHEEN_VALUE,
+        TEX_TYPE_SPECULAR_TINT,
+        TEX_TYPE_SUBSURFACE_COLOR,
+        TEX_TYPE_SUBSURFACE_RADIUS,
+        TEX_TYPE_SUBSURFACE_VALUE,
+        TEX_TYPE_TRANSMISSION,
+        TEX_TYPE_IOR,
         TEX_TYPE_UNKNOWN     ///<未知类型
     };
 
@@ -73,6 +87,7 @@ namespace admf
     template <typename T>
     using Array = std::shared_ptr<Array_<T>>;
 
+    ADMF_DEF(StringReadOnly);
     ADMF_DEF(String);
     ADMF_DEF(Vec2);
     ADMF_DEF(ColorRGB);
@@ -100,7 +115,8 @@ namespace admf
     ADMF_DEF(BaseColorDataMulti);
     ADMF_DEF(BaseColorDataMultiBlock);
     ADMF_DEF(BaseColorDataMultiBlockMask);
-    ADMF_DEF(BaseColorChangeColorData);
+    //ADMF_DEF(BaseColorChangeColorData);
+    //放入Custom字段
 
     ADMF_DEF(BaseColor);
     ADMF_DEF(Normal);
@@ -114,9 +130,23 @@ namespace admf
     ADMF_DEF(Emissive);
     ADMF_DEF(AmbientOcclusion);
     ADMF_DEF(Height);
+    ADMF_DEF(ClearCoatNormal);
+    
+    
+    ADMF_DEF(ClearCoatRoughness);
+    ADMF_DEF(ClearCoatValue);
+    ADMF_DEF(SheenTint);
+    ADMF_DEF(SheenValue);
+    ADMF_DEF(SpecularTint);
+    ADMF_DEF(SubSurfaceColor);
+    ADMF_DEF(SubSurfaceRadius);
+    ADMF_DEF(SubSurfaceValue);
+    ADMF_DEF(Transmission);
 
+    
+    
     /// 字符串类
-    class String_
+    class StringReadOnly_
     {
     public:
         virtual bool isEmpty() = 0;
@@ -127,8 +157,15 @@ namespace admf
         ///      @param buff 传入的指针
         ///    @see ADMFUINT
         virtual ADMF_UINT getString(ADMF_CHAR *buff, ADMF_UINT) = 0;
-
+        
         virtual const std::string& getInternalString() = 0;
+        
+
+    };
+
+    /// 字符串类
+    class String_:public StringReadOnly_
+    {
 
 #ifdef ADMF_EDIT
     public:
@@ -219,6 +256,8 @@ namespace admf
         ///    @return    返回导出结果
         ///    @see ADMFRESULT
         virtual ADMF_RESULT exportToFile(const char *filePath) = 0;
+        
+        virtual bool isEmpty() = 0;
 
 #ifdef ADMF_EDIT
     public:

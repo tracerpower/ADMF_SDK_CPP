@@ -48,7 +48,7 @@ namespace admf
     public:
 
         virtual BaseColorData getData() = 0;
-        virtual BaseColorChangeColorData getChangeColorData() = 0;
+        //virtual BaseColorChangeColorData getChangeColorData() = 0;
 
     };
 
@@ -75,6 +75,10 @@ namespace admf
         ///     获取颜色
         ///    @return    返回颜色
         virtual ColorRGB getColor() = 0;
+        virtual admf::ADMF_FLOAT getValue() = 0;
+#ifdef ADMF_EDIT
+        virtual void setValue(admf::ADMF_FLOAT value)  = 0;
+#endif
     };
     /// 光泽贴图类
     class Glossiness_ : public TextureAndValueContainer
@@ -111,18 +115,61 @@ namespace admf
     };
     
     /// Height
-    class Height_: public TextureContainer
+    class Height_: public TextureAndValueContainer
     {
-
-        virtual admf::ADMF_FLOAT getValue() = 0;
+    public:
         virtual admf::ADMF_FLOAT getLevel() = 0;
 #ifdef ADMF_EDIT
     public:
-        virtual void setValue(admf::ADMF_FLOAT value) = 0;
         virtual void setLevel(admf::ADMF_FLOAT level) = 0;
 #endif
     };
+    
+    
+    class ClearCoatNormal_: public TextureContainer
+    {
+    };
 
+    class ClearCoatRoughness_: public TextureAndValueContainer
+    {
+    };
+    
+    class ClearCoatValue_: public TextureAndValueContainer
+    {
+    };
+    
+    
+    class SheenTint_: public TextureAndValueContainer
+    {
+    };
+    
+    class SheenValue_: public TextureAndValueContainer
+    {
+    };
+    
+    class SpecularTint_: public TextureAndValueContainer
+    {
+    };
+    
+
+    
+    class SubSurfaceColor_: public TextureContainer
+    {
+    public:
+        virtual ColorRGB getColor() = 0;
+    };
+    
+    class SubSurfaceRadius_: public TextureAndValueContainer
+    {
+    };
+    
+    class SubSurfaceValue_: public TextureAndValueContainer
+    {
+    };
+    
+    class Transmission_: public TextureAndValueContainer
+    {
+    };
 
 }
 #endif /* admf_material_h */

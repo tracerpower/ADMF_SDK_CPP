@@ -36,6 +36,7 @@ namespace admf_internal {
         virtual admf::String getName() override; //"PANTONE 20-0060TPM",
 
         virtual admf::MaterialMetaData getMetaData() override;
+        
 
     private:
         std::shared_ptr<Array_internal<admf::MaterialLayer>> layerArray_;
@@ -47,6 +48,9 @@ namespace admf_internal {
         std::shared_ptr<String_internal> id_;
         std::shared_ptr<String_internal> name_;
         std::shared_ptr<MaterialMetaData_internal> metaData_;
+        
+        
+
         
 #ifdef ADMF_EDIT
         virtual void setCreatedTime(admf::ADMF_DATE date) override {createTime_ = date;};  //"2018-11-08T12:35:37",
