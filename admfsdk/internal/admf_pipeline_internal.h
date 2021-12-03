@@ -58,6 +58,8 @@ namespace admf_internal
     class Emissive_internal : public admf::Emissive_, public Base_internal
     {
         ADMF_INTERNAL_CLASS_CONSTRUCTOR(Emissive_internal);
+        
+        friend class LayerBasic_internal;
 
     public:
         virtual admf::Texture getTexture() override;
@@ -65,11 +67,13 @@ namespace admf_internal
         virtual admf::ColorRGB getColor() override;
         virtual admf::ADMF_FLOAT getValue() override { return value_; };
 #ifdef ADMF_EDIT
-        virtual void setValue(admf::ADMF_FLOAT value) override
-        {
-            value_ = value;
-        }
+        virtual void setValue(admf::ADMF_FLOAT value) override { value_ = value;}
+#else
+    private:
+        void setValue(admf::ADMF_FLOAT value)  { value_ = value;}
 #endif
+        
+
 
     private:
         std::shared_ptr<Texture_internal> texture_;
