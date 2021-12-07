@@ -53,19 +53,19 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "0"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Downloads/&#x6539;&#x8272;admf.admf&quot;"
-            isEnabled = "YES">
+            argument = "&quot;/Users/yushihang/Downloads/ead8e28889b7776012c15a7fa6ad037c.admf&quot;"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "1"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/PANTONE-20-0056TPM.4Ddat&quot;"
-            isEnabled = "NO">
+            argument = "&quot;/Users/yushihang/Downloads/c1416d5e74dce76fc22ff64df238714e.4ddat&quot;"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "2"
