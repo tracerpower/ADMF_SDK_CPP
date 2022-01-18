@@ -152,6 +152,10 @@ namespace admf
         virtual SheenTint getSheenTint() = 0;
         
         virtual SheenValue getSheenValue() = 0;
+
+        virtual SheenColor getSheenColor() = 0;
+
+        virtual SheenGloss getSheenGloss() = 0;
         
         virtual SpecularTint getSpecularTint() = 0;
         

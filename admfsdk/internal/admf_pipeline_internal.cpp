@@ -327,7 +327,72 @@ ColorRGB SubSurfaceColor_internal::getColor()
     return ColorRGB(color_);
 }
 
+void SheenColor_internal::load(bson_iter_t* iter) //save
+{
+    if (iter == nullptr)
+        return;
 
+    if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+        return;
+
+    bson_iter_t child;
+    if (!bson_iter_recurse(iter, &child))
+        return;
+
+    std::string textureKey = getNewKey("texture");
+    std::string colorKey = getNewKey("color");
+
+    while (bson_iter_next(&child))
+    {
+        std::string keyName = bson_iter_key(&child);
+        assert(bson_iter_value(&child) != nullptr);
+        /*printf("Found element key: \"%s\"\n", keyName.c_str()); */
+        if (keyName == textureKey)
+        {
+            texture_ = std::make_shared<Texture_internal>(admfIndex_, &child);
+            texture_->setType(getTextureType());
+        }
+        else if (keyName == colorKey)
+        {
+            color_ = std::make_shared<ColorRGB_internal>(admfIndex_, &child);
+        }
+    }
+}
+
+void SheenColor_internal::initMissed()
+{
+    if (!texture_)
+    {
+        texture_ = std::make_shared<Texture_internal>(admfIndex_);
+        texture_->setType(getTextureType());
+    }
+
+    if (!color_)
+        color_ = std::make_shared<ColorRGB_internal>(admfIndex_);
+}
+
+#ifdef ADMF_EDIT
+void SheenColor_internal::save(bson_t* doc)
+{
+    texture_->setType(getTextureType());
+    std::string textureKey = getNewKey("texture");
+    std::string colorKey = getNewKey("color");
+
+
+    ADMF_BSON_APPEND_DOCUMENT(doc, textureKey, texture_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, colorKey, color_);
+
+}
+#endif
+Texture SheenColor_internal::getTexture()
+{
+    return Texture(texture_);
+}
+
+ColorRGB SheenColor_internal::getColor()
+{
+    return ColorRGB(color_);
+}
 
 
 void Height_internal::load(bson_iter_t *iter) //save
@@ -536,6 +601,7 @@ TextureAndValueContainer_Internal_Implementation(ClearCoatRoughness_internal);
 TextureAndValueContainer_Internal_Implementation(ClearCoatValue_internal);
 TextureAndValueContainer_Internal_Implementation(SheenTint_internal);
 TextureAndValueContainer_Internal_Implementation(SheenValue_internal);
+TextureAndValueContainer_Internal_Implementation(SheenGloss_internal);
 TextureAndValueContainer_Internal_Implementation(SpecularTint_internal);
 TextureAndValueContainer_Internal_Implementation(SubSurfaceRadius_internal);
 TextureAndValueContainer_Internal_Implementation(SubSurfaceValue_internal);

@@ -118,6 +118,17 @@ namespace admf_internal
         std::shared_ptr<ColorRGB_internal> color_;
     };
 
+	class SheenColor_internal : public admf::SheenColor_, public Base_internal
+	{
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(SheenColor_internal);
+	public:
+        virtual admf::Texture getTexture() override;
+        virtual admf::TEX_TYPE getTextureType() override { return admf::TEX_TYPE_SHEEN_COLOR; };
+        virtual admf::ColorRGB getColor() override;
+    private:
+        std::shared_ptr<Texture_internal> texture_;
+        std::shared_ptr<ColorRGB_internal> color_;
+	};
 #ifdef ADMF_EDIT
 #define SetValue_Declaration() \
     virtual void setValue(admf::ADMF_FLOAT value) override { value_ = value; };
@@ -176,6 +187,7 @@ namespace admf_internal
     TextureAndValueContainer_Internal_Declaration(ClearCoatValue_, TEX_TYPE_CLEARCOAT_VALUE, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SheenTint_, TEX_TYPE_SHEEN_TINT, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SheenValue_, TEX_TYPE_SHEEN_VALUE, 0.0f);
+    TextureAndValueContainer_Internal_Declaration(SheenGloss_, TEX_TYPE_SHEEN_GLOSS, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SpecularTint_, TEX_TYPE_SPECULAR_TINT, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SubSurfaceRadius_, TEX_TYPE_SUBSURFACE_RADIUS, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SubSurfaceValue_, TEX_TYPE_SUBSURFACE_VALUE, 0.0f);
