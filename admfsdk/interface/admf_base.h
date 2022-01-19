@@ -69,6 +69,8 @@ namespace admf
         TEX_TYPE_CLEARCOAT_VALUE,
         TEX_TYPE_SHEEN_TINT,
         TEX_TYPE_SHEEN_VALUE,
+        TEX_TYPE_SHEEN_COLOR,
+        TEX_TYPE_SHEEN_GLOSS,
         TEX_TYPE_SPECULAR_TINT,
         TEX_TYPE_SUBSURFACE_COLOR,
         TEX_TYPE_SUBSURFACE_RADIUS,
@@ -137,6 +139,8 @@ namespace admf
     ADMF_DEF(ClearCoatValue);
     ADMF_DEF(SheenTint);
     ADMF_DEF(SheenValue);
+    ADMF_DEF(SheenColor);
+    ADMF_DEF(SheenGloss);
     ADMF_DEF(SpecularTint);
     ADMF_DEF(SubSurfaceColor);
     ADMF_DEF(SubSurfaceRadius);

@@ -65,6 +65,14 @@ Material 格式 <font color="gray">(部分字段有注释)</font>
           },
           //color:色卡信息
           "color": {
+            /*
+            * 注意: 在存在多个色卡定义时， 例如同时存在单色或者多色色卡， 或者单色/多色色卡数组里有组元素时
+            * 默认显示的改色信息，应该由type+index共同决定，
+            * 如type+index对应的色卡数组下标不存在，按照下列顺序进行匹配
+            * 1. 对应type(solid/multi)的第一个色卡,即认为index=0
+            * 2. solid类型的第一个色卡 即 type = "solid", index=0
+            * 3. 原色色卡，即认为默认色卡为type = "solid"且isOriginal为1
+            */
             "type": "solid", //当前色卡类型，solid为纯色色卡，multi为多色改色色卡(非multi的都认为是solid)
             "index": 0, //和type一起生效，下面solid或者multi数组里的第index个色卡为当前色卡(业务上未指定色卡时，使用此色卡进行渲染)
             "solid": {

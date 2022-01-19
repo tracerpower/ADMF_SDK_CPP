@@ -138,7 +138,12 @@ namespace admf
     {
     };
     
-    
+    // note: SheenTint_ and SheenValue_ is added refer to u3m format v1.1, and is used only in u3m_to_admf project
+	// we do not use these two in our render system(RHI)
+	// Instead we use a V-Ray style sheen implementation. We add 2 classes: SheenColor_ and SheenGloss_ to contain these infos
+	// There's no conversion between u3m style sheen and V-Ray style sheen for now.
+	// The only reason SheenTint_ and SheenValue_ exists is for data integrity. Developers working with RHI should not use these 2 values.
+	// xd 2022/01/17
     class SheenTint_: public TextureAndValueContainer
     {
     };
@@ -146,7 +151,18 @@ namespace admf
     class SheenValue_: public TextureAndValueContainer
     {
     };
-    
+
+	class SheenColor_ : public TextureContainer
+	{
+    public:
+        virtual admf::ColorRGB getColor() = 0;
+	};
+
+	class SheenGloss_ : public TextureAndValueContainer
+	{
+		
+	};
+	
     class SpecularTint_: public TextureAndValueContainer
     {
     };
