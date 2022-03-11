@@ -53,19 +53,19 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "0"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Downloads/ead8e28889b7776012c15a7fa6ad037c.admf&quot;"
-            isEnabled = "NO">
+            argument = "&quot;/Users/yushihang/Documents/test.admf&quot;"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Downloads/c1416d5e74dce76fc22ff64df238714e.4ddat&quot;"
-            isEnabled = "YES">
+            argument = "&quot;/Volumes/Data/download/feishu/3.4Ddat&quot;"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "2"
@@ -76,11 +76,11 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/1.admf"
+            argument = "/Volumes/Data/temp/1/1.admf"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/yushihang/Documents/&#x672a;&#x547d;&#x540d;&#x6587;&#x4ef6;&#x5939;/temp/1/out"
+            argument = "/Volumes/Data/temp/1/out"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

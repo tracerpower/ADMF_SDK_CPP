@@ -219,7 +219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho '123'\necho ${BUILT_PRODUCTS_DIR}\necho ${PRODUCT_NAME}\ncp ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME} '/Users/yushihang/Documents/未命名文件夹/temp/1/'\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho '123'\necho ${BUILT_PRODUCTS_DIR}\necho ${PRODUCT_NAME}\ncp ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME} '/Volumes/Data/temp/1'\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
