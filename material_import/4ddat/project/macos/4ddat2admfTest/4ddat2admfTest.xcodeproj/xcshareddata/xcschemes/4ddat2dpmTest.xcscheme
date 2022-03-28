@@ -56,7 +56,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/yushihang/Documents/test.admf&quot;"
+            argument = "&quot;/Volumes/Data/download/feishu/30&#x91d1;&#x5c5e;&#x4e1d;.admf&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -64,7 +64,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Volumes/Data/download/feishu/3.4Ddat&quot;"
+            argument = "&quot;/Users/yushihang/Downloads/c1416d5e74dce76fc22ff64df238714e.4ddat&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
