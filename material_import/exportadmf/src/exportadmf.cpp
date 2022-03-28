@@ -79,7 +79,7 @@ extern "C" {
         }
     }
     
-    bool ExportImageDataToFile(const unsigned char* buffer, const std::string& destPath, int width, int height, int channel, const int elementSize) {
+    bool ExportRawImageDataToFile(const unsigned char* buffer, const std::string& destPath, int width, int height, int channel, const int elementSize) {
         FREE_IMAGE_TYPE imageType = FIT_UNKNOWN;
         
         switch (channel)
@@ -122,6 +122,41 @@ extern "C" {
                                                           channel * elementSize * 8, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK,
                                                           true);
         
+        
+   
+        
+        const int SizeLimit = 2048;
+        
+        //先写流水账， 后面再优化
+        if (width > SizeLimit || height > SizeLimit)
+        {
+            
+            double scaleW = ((double)SizeLimit) / width;
+            double scaleH = ((double)SizeLimit) / height;
+            double scale = std::min(scaleW, scaleH);
+            
+            int newWidth = width * scale;
+            int newHeight = height * scale;
+            
+            newWidth = std::max(2, newWidth);
+            newHeight = std::max(2, newHeight);
+            
+            newWidth = std::min(2048, newWidth);
+            newHeight = std::min(2048, newHeight);
+            
+            if (newWidth % 2 == 1)
+                newWidth ++;
+            if (newHeight % 2 == 1)
+                newHeight ++;
+            
+            FIBITMAP* newBitMap = FreeImage_Rescale(bitmap, newWidth, newHeight);
+            FreeImage_Unload(bitmap);
+            
+            bitmap = newBitMap;
+        }
+        
+        
+        
         std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> time_span = t2-t1;
         printf("FreeImage_ConvertFromRawBitsEx:%f\n", time_span.count());
@@ -149,6 +184,88 @@ extern "C" {
         printf("FreeImage_Unload:%f\n", time_span.count());
         return true;
     }
+    
+    
+    bool ExportImageDataToFile(const unsigned char* buffer, const unsigned int bufferLength, admf::TextureFileType textureBinaryType, const std::string& destPath) {
+        
+        FREE_IMAGE_FORMAT format = FIF_PNG;
+        
+        switch (textureBinaryType)
+        {
+        case admf::TextureFileType::PNG:
+            format = FIF_PNG;
+            break;
+        case admf::TextureFileType::JPG:
+            format = FIF_JPEG;
+            break;
+        case admf::TextureFileType::GIF:
+            format = FIF_GIF;
+            break;
+        case admf::TextureFileType::TIFF:
+            format = FIF_TIFF;
+            break;
+            
+        default:
+            return false;
+        }
+        
+        FIMEMORY *stream = FreeImage_OpenMemory();
+        FreeImage_WriteMemory(buffer, 1, bufferLength, stream);
+        FreeImage_SeekMemory(stream, 0, SEEK_SET);
+        FIBITMAP *bitmap = FreeImage_LoadFromMemory(format, stream);
+        FreeImage_CloseMemory(stream);
+        
+    
+        
+        
+        const int SizeLimit = 2048;
+        
+        int width = FreeImage_GetWidth(bitmap);
+        int height = FreeImage_GetHeight(bitmap);
+        //先写流水账， 后面再优化
+        if (width > SizeLimit || height > SizeLimit)
+        {
+            
+            double scaleW = ((double)SizeLimit) / width;
+            double scaleH = ((double)SizeLimit) / height;
+            double scale = std::min(scaleW, scaleH);
+            
+            int newWidth = width * scale;
+            int newHeight = height * scale;
+            
+            newWidth = std::max(2, newWidth);
+            newHeight = std::max(2, newHeight);
+            
+            newWidth = std::min(2048, newWidth);
+            newHeight = std::min(2048, newHeight);
+            
+            if (newWidth % 2 == 1)
+                newWidth ++;
+            if (newHeight % 2 == 1)
+                newHeight ++;
+            
+            FIBITMAP* newBitMap = FreeImage_Rescale(bitmap, newWidth, newHeight);
+            FreeImage_Unload(bitmap);
+            
+            bitmap = newBitMap;
+        }
+        
+        
+
+        if (!bitmap) {
+            return false;
+        }
+        
+        
+        bool bSuccess = FreeImage_Save(FIF_PNG, bitmap, destPath.c_str(), PNG_DEFAULT);
+
+
+        FreeImage_Unload(bitmap);
+
+        return bSuccess;
+    }
+    
+
     
     bool hasSuffix(std::string const &fullString, std::string const &suffix) {
         if (fullString.length() >= suffix.length()) {
@@ -239,20 +356,24 @@ extern "C" {
             std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             if (textureBinaryType != admf::TextureFileType::RAW)
             {
-                auto myfile = std::fstream(texturePath, std::ios::out | std::ios::binary);
-                myfile.write((char*)dataBuff, dataLen);
-                myfile.close();
+                bool exportResult = ExportImageDataToFile(dataBuff, dataLen, textureBinaryType, texturePath);
+                if (!exportResult){
+                    auto myfile = std::fstream(texturePath, std::ios::out | std::ios::binary);
+                    myfile.write((char*)dataBuff, dataLen);
+                    myfile.close();
+                }
+    
             }
             else
             {
-                ExportImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
+                ExportRawImageDataToFile((unsigned char*)dataBuff, texturePath, texture->getWidth(), texture->getHeight(), texture->getChannels(), texture->getElementSize());
             }
             
             
             
             std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> time_span = t2-t1;
-            printf("ExportImageDataToFile:%f\n", time_span.count());
+            printf("ExportRawImageDataToFile:%f\n", time_span.count());
             
             if (needExportDiffuse)
             {
