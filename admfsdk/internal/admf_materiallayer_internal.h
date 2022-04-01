@@ -115,6 +115,7 @@ namespace admf_internal {
         virtual admf::ClearCoatNormal getClearCoatNormal() override;
         virtual admf::ClearCoatRoughness getClearCoatRoughness() override;
         virtual admf::ClearCoatValue getClearCoatValue() override;
+        virtual admf::ClearCoatColor getClearCoatColor() override;
         virtual admf::SheenTint getSheenTint() override;
         virtual admf::SheenValue getSheenValue() override;
         virtual admf::SheenColor getSheenColor() override;
@@ -145,6 +146,7 @@ namespace admf_internal {
         std::shared_ptr<ClearCoatNormal_internal> clearCoatNormal_;
         std::shared_ptr<ClearCoatRoughness_internal> clearCoatRoughness_;
         std::shared_ptr<ClearCoatValue_internal> clearCoatValue_;
+        std::shared_ptr<ClearCoatColor_internal> clearCoatColor_;
         std::shared_ptr<SheenTint_internal> sheenTint_;
         std::shared_ptr<SheenValue_internal> sheenValue_;
         std::shared_ptr<SheenColor_internal> sheenColor_;

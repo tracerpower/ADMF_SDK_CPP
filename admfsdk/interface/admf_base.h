@@ -67,6 +67,7 @@ namespace admf
         TEX_TYPE_CLEARCOAT_NORMAL,
         TEX_TYPE_CLEARCOAT_ROUGHNESS,
         TEX_TYPE_CLEARCOAT_VALUE,
+        TEX_TYPE_CLEARCOAT_COLOR,
         TEX_TYPE_SHEEN_TINT,
         TEX_TYPE_SHEEN_VALUE,
         TEX_TYPE_SHEEN_COLOR,
@@ -137,6 +138,7 @@ namespace admf
     
     ADMF_DEF(ClearCoatRoughness);
     ADMF_DEF(ClearCoatValue);
+    ADMF_DEF(ClearCoatColor);
     ADMF_DEF(SheenTint);
     ADMF_DEF(SheenValue);
     ADMF_DEF(SheenColor);

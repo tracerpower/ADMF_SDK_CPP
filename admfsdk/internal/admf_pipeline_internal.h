@@ -129,6 +129,20 @@ namespace admf_internal
         std::shared_ptr<Texture_internal> texture_;
         std::shared_ptr<ColorRGB_internal> color_;
 	};
+
+    class ClearCoatColor_internal : public admf::ClearCoatColor_, public Base_internal
+    {
+        ADMF_INTERNAL_CLASS_CONSTRUCTOR(ClearCoatColor_internal);
+
+    public:
+        virtual admf::Texture getTexture() override;
+        virtual admf::TEX_TYPE getTextureType() override { return admf::TEX_TYPE_CLEARCOAT_COLOR; };
+        virtual admf::ColorRGB getColor() override;
+
+    private:
+        std::shared_ptr<Texture_internal> texture_;
+        std::shared_ptr<ColorRGB_internal> color_;
+    };
 #ifdef ADMF_EDIT
 #define SetValue_Declaration() \
     virtual void setValue(admf::ADMF_FLOAT value) override { value_ = value; };

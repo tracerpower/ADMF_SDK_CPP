@@ -294,6 +294,7 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
     std::string clearCoatNormalKey = getNewKey("clearCoatNormal");
     std::string clearCoatRoughnessKey = getNewKey("clearCoatRoughness");
     std::string clearCoatValueKey = getNewKey("clearCoatValue");
+    std::string clearCoatColorKey = getNewKey("clearCoatColor");
     std::string sheenTintKey = getNewKey("sheenTint");
     std::string sheenValueKey = getNewKey("sheenValue");
     std::string sheenColorKey = getNewKey("sheenColor");
@@ -322,13 +323,13 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
                 emissive_ = std::make_shared<Emissive_internal>(admfIndex_);
                 emissive_->setValue(emissiveValue);
             }
-            
+
             else {
                 emissive_ = std::make_shared<Emissive_internal>(admfIndex_, &child);
             }
 
         }
-    
+
         else if (keyName == basecolorKey)
             base_ = std::make_shared<BaseColor_internal>(admfIndex_, &child);
         else if (keyName == normalKey)
@@ -357,6 +358,8 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
             clearCoatRoughness_ = std::make_shared<ClearCoatRoughness_internal>(admfIndex_, &child);
         else if (keyName == clearCoatValueKey)
             clearCoatValue_ = std::make_shared<ClearCoatValue_internal>(admfIndex_, &child);
+        else if (keyName == clearCoatColorKey)
+            clearCoatColor_ = std::make_shared<ClearCoatColor_internal>(admfIndex_, &child);
         else if (keyName == sheenTintKey)
             sheenTint_= std::make_shared<SheenTint_internal>(admfIndex_, &child);
         else if (keyName == sheenValueKey)
@@ -412,6 +415,8 @@ void LayerBasic_internal::initMissed()
         clearCoatRoughness_ = std::make_shared<ClearCoatRoughness_internal>(admfIndex_);
     if (!clearCoatValue_)
         clearCoatValue_ = std::make_shared<ClearCoatValue_internal>(admfIndex_);
+    if (!clearCoatColor_)
+        clearCoatColor_ = std::make_shared<ClearCoatColor_internal>(admfIndex_);
     if (!sheenTint_)
         sheenTint_ = std::make_shared<SheenTint_internal>(admfIndex_);
     if (!sheenValue_)
@@ -455,6 +460,7 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string clearCoatNormalKey = getNewKey("clearCoatNormal");
     std::string clearCoatRoughnessKey = getNewKey("clearCoatRoughness");
     std::string clearCoatValueKey = getNewKey("clearCoatValue");
+    std::string clearCoatColorKey = getNewKey("clearCoatColor");
     std::string sheenTintKey = getNewKey("sheenTint");
     std::string sheenValueKey = getNewKey("sheenValue");
     std::string sheenColorKey = getNewKey("sheenColor");
@@ -484,6 +490,7 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatNormalKey, clearCoatNormal_);
     ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatRoughnessKey, clearCoatRoughness_);
     ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatValueKey, clearCoatValue_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, clearCoatColorKey, clearCoatColor_);
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenTintKey, sheenTint_);
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenValueKey, sheenValue_);
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenColorKey, sheenColor_);
@@ -567,6 +574,11 @@ ClearCoatRoughness LayerBasic_internal::getClearCoatRoughness()
 ClearCoatValue LayerBasic_internal::getClearCoatValue()
 {
    return ClearCoatValue(clearCoatValue_);
+}
+
+ClearCoatColor LayerBasic_internal::getClearCoatColor()
+{
+    return ClearCoatColor(clearCoatColor_);
 }
 
 SheenTint LayerBasic_internal::getSheenTint()

@@ -148,6 +148,8 @@ namespace admf
         virtual ClearCoatRoughness getClearCoatRoughness() = 0;
         
         virtual ClearCoatValue getClearCoatValue() = 0;
+
+        virtual ClearCoatColor getClearCoatColor() = 0;
         
         virtual SheenTint getSheenTint() = 0;
         
@@ -167,7 +169,7 @@ namespace admf
         
         virtual Transmission getTransmission() = 0;
         
-
+        
 
     };
 
