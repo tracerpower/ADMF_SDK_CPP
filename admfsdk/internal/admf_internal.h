@@ -96,6 +96,7 @@ namespace admf_internal
 {
     
     extern std::string getNewKey(const std::string& origKey);
+    extern char* getNewKey_(const char* origKey);
     extern std::string getBsonString(const bson_iter_t *iter);
     extern unsigned int filesize(const std::string& filename);
     extern bool copyFile(const char* src, const char* dest);
@@ -130,9 +131,10 @@ namespace admf_internal
 
     bool bson_iter_can_convert_to_double (const bson_iter_t *iter);
 
-    
+    extern admf::ADMF_UINT g_descriptionSizeLimit;
+    extern admf::ADMF_UINT g_binarySizeLimit;
 }
 
 
-extern admf::ADMF_UINT g_binarySizeLimit;
+
 #endif /* admf_internal_h */
