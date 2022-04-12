@@ -18,6 +18,7 @@ namespace admf
         /// 物理数据构成类
         class PhysicsComposition_
         {
+        public:
                 ///     获取物理信息名字
                 ///    @return    返回物理信息名字
                 virtual String getName() = 0;         //"Cotton"
