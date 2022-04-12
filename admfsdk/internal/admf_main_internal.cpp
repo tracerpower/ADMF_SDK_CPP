@@ -24,12 +24,12 @@ const unsigned int BsonHeadLen = 16;
 
 ADMFInternalIndexMap ADMF_internal::admfIndexMap;
 
-const char *bsonZipName = "description";
+constexpr const char* bsonZipName = "description";
 
-std::string __pwd__;
+static std::string __pwd__;
 
-ADMF_UINT g_descriptionSizeLimit = 20 * 1024 * 1024;
-ADMF_UINT g_binarySizeLimit = 100 * 1024 * 1024;
+ADMF_UINT admf_internal::g_descriptionSizeLimit = 20 * 1024 * 1024;
+ADMF_UINT admf_internal::g_binarySizeLimit = 100 * 1024 * 1024;
 
 unsigned int admf_internal::filesize(const std::string &filename)
 {
@@ -56,7 +56,7 @@ std::string admf_internal::getNewKey(const std::string &origKey)
 #endif
 }
 
-extern "C" char* getNewKey_(const char* origKey)
+char* admf_internal::getNewKey_(const char* origKey)
 {
 #ifdef ADMF_NEED_ENCRYPT
     std::string decode_base64 = base64_decode(origKey, strlen(origKey));
