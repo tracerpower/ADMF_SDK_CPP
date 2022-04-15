@@ -299,7 +299,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../3rd;../../3rd/bson;../../admfsdk/interface;../../3rd/ZipLib;../../3rd/encrypt</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../3rd;$(ProjectDir)../../3rd/bson;$(ProjectDir)../../admfsdk/interface;$(ProjectDir)../../3rd/ZipLib;$(ProjectDir)../../3rd/encrypt</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -323,7 +323,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../3rd;../../3rd/bson;../../admfsdk/interface;../../3rd/ZipLib;../../3rd/encrypt</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../3rd;$(ProjectDir)../../3rd/bson;$(ProjectDir)../../admfsdk/interface;$(ProjectDir)../../3rd/ZipLib;$(ProjectDir)../../3rd/encrypt</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
