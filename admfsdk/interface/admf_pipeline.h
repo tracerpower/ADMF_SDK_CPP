@@ -168,6 +168,11 @@ namespace admf
 	{
 		
 	};
+
+    class SheenRoughness_ : public TextureAndValueContainer
+    {
+
+    };
 	
     class SpecularTint_: public TextureAndValueContainer
     {

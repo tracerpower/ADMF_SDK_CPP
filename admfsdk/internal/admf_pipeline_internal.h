@@ -202,6 +202,7 @@ namespace admf_internal
     TextureAndValueContainer_Internal_Declaration(SheenTint_, TEX_TYPE_SHEEN_TINT, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SheenValue_, TEX_TYPE_SHEEN_VALUE, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SheenGloss_, TEX_TYPE_SHEEN_GLOSS, 0.0f);
+    TextureAndValueContainer_Internal_Declaration(SheenRoughness_, TEX_TYPE_SHEEN_ROUGHNESS, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SpecularTint_, TEX_TYPE_SPECULAR_TINT, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SubSurfaceRadius_, TEX_TYPE_SUBSURFACE_RADIUS, 0.0f);
     TextureAndValueContainer_Internal_Declaration(SubSurfaceValue_, TEX_TYPE_SUBSURFACE_VALUE, 0.0f);

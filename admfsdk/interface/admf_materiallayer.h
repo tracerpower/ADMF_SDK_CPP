@@ -159,6 +159,8 @@ namespace admf
 
         virtual SheenGloss getSheenGloss() = 0;
         
+        virtual SheenRoughness getSheenRoughness() = 0;
+
         virtual SpecularTint getSpecularTint() = 0;
         
         virtual SubSurfaceColor getSubSurfaceColor() = 0;

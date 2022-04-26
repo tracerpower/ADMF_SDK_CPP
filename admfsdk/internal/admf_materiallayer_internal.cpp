@@ -299,6 +299,7 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
     std::string sheenValueKey = getNewKey("sheenValue");
     std::string sheenColorKey = getNewKey("sheenColor");
     std::string sheenGlossKey = getNewKey("sheenGloss");
+    std::string sheenRoughnessKey = getNewKey("sheenRoughness");
     std::string specularTintKey = getNewKey("specularTint");
     std::string subSurfaceColorKey = getNewKey("subSurfaceColor");
     std::string subSurfaceRadiusKey = getNewKey("subSurfaceRadius");
@@ -361,13 +362,15 @@ void LayerBasic_internal::load(bson_iter_t *iter) //save
         else if (keyName == clearCoatColorKey)
             clearCoatColor_ = std::make_shared<ClearCoatColor_internal>(admfIndex_, &child);
         else if (keyName == sheenTintKey)
-            sheenTint_= std::make_shared<SheenTint_internal>(admfIndex_, &child);
+            sheenTint_ = std::make_shared<SheenTint_internal>(admfIndex_, &child);
         else if (keyName == sheenValueKey)
-            sheenValue_= std::make_shared<SheenValue_internal>(admfIndex_, &child);
+            sheenValue_ = std::make_shared<SheenValue_internal>(admfIndex_, &child);
         else if (keyName == sheenColorKey)
             sheenColor_ = std::make_shared<SheenColor_internal>(admfIndex_, &child);
         else if (keyName == sheenGlossKey)
             sheenGloss_ = std::make_shared<SheenGloss_internal>(admfIndex_, &child);
+        else if (keyName == sheenRoughnessKey)
+            sheenRoughness_ = std::make_shared<SheenRoughness_internal>(admfIndex_, &child);
         else if (keyName == specularTintKey)
             specularTint_ = std::make_shared<SpecularTint_internal>(admfIndex_, &child);
         else if (keyName == subSurfaceColorKey)
@@ -425,6 +428,8 @@ void LayerBasic_internal::initMissed()
         sheenColor_ = std::make_shared<SheenColor_internal>(admfIndex_);
     if (!sheenGloss_)
         sheenGloss_ = std::make_shared<SheenGloss_internal>(admfIndex_);
+    if (!sheenRoughness_)
+        sheenRoughness_ = std::make_shared<SheenRoughness_internal>(admfIndex_);
     if (!specularTint_)
         specularTint_ = std::make_shared<SpecularTint_internal>(admfIndex_);
     if (!subSurfaceColor_)
@@ -465,6 +470,7 @@ void LayerBasic_internal::save(bson_t *doc)
     std::string sheenValueKey = getNewKey("sheenValue");
     std::string sheenColorKey = getNewKey("sheenColor");
     std::string sheenGlossKey = getNewKey("sheenGloss");
+    std::string sheenRoughnessKey = getNewKey("sheenRoughness");
     std::string specularTintKey = getNewKey("specularTint");
     std::string subSurfaceColorKey = getNewKey("subSurfaceColor");
     std::string subSurfaceRadiusKey = getNewKey("subSurfaceRadius");
@@ -495,6 +501,7 @@ void LayerBasic_internal::save(bson_t *doc)
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenValueKey, sheenValue_);
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenColorKey, sheenColor_);
     ADMF_BSON_APPEND_DOCUMENT(doc, sheenGlossKey, sheenGloss_);
+    ADMF_BSON_APPEND_DOCUMENT(doc, sheenRoughnessKey, sheenRoughness_);
     ADMF_BSON_APPEND_DOCUMENT(doc, specularTintKey, specularTint_);
     ADMF_BSON_APPEND_DOCUMENT(doc, subSurfaceColorKey, subSurfaceColor_);
     ADMF_BSON_APPEND_DOCUMENT(doc, subSurfaceRadiusKey, subSurfaceRadius_);
@@ -599,6 +606,11 @@ SheenColor LayerBasic_internal::getSheenColor()
 SheenGloss LayerBasic_internal::getSheenGloss()
 {
     return SheenGloss(sheenGloss_);
+}
+
+SheenRoughness LayerBasic_internal::getSheenRoughness()
+{
+    return SheenRoughness(sheenRoughness_);
 }
 
 SpecularTint LayerBasic_internal::getSpecularTint()

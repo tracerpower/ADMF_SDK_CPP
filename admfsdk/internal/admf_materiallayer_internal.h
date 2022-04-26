@@ -120,6 +120,7 @@ namespace admf_internal {
         virtual admf::SheenValue getSheenValue() override;
         virtual admf::SheenColor getSheenColor() override;
         virtual admf::SheenGloss getSheenGloss() override;
+        virtual admf::SheenRoughness getSheenRoughness() override;
         virtual admf::SpecularTint getSpecularTint() override;
         virtual admf::SubSurfaceColor getSubSurfaceColor() override;
         virtual admf::SubSurfaceRadius getSubSurfaceRadius() override;
@@ -151,6 +152,7 @@ namespace admf_internal {
         std::shared_ptr<SheenValue_internal> sheenValue_;
         std::shared_ptr<SheenColor_internal> sheenColor_;
         std::shared_ptr<SheenGloss_internal> sheenGloss_;
+        std::shared_ptr<SheenRoughness_internal> sheenRoughness_;
         std::shared_ptr<SpecularTint_internal> specularTint_;
         std::shared_ptr<SubSurfaceColor_internal> subSurfaceColor_;
         std::shared_ptr<SubSurfaceRadius_internal> subSurfaceRadius_;
